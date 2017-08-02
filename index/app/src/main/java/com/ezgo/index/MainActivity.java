@@ -90,6 +90,11 @@ public class MainActivity extends AppCompatActivity
         defultFragment.replace(R.id.main_frame, new MainFragment());
         defultFragment.commit();
 
+        //--------------test--------------------------
+        getWorksheet.getJSON();
+
+        //Log.v("Test2","abc"+getWorksheet.getOption()[0]);
+
     }
 
     //--------------------------------------------------兌換獎品-----------------------------------------

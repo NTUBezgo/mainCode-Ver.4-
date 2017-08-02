@@ -16,6 +16,7 @@
     <dimen name="cardtextsmallSize">16dp</dimen>
     <dimen name="imageLeftMargin">5dp</dimen>
     <dimen name="imageRightMargin">15dp</dimen>
+    <dimen name="title_margintop">15dp</dimen>
 
     <!--NavigationView icon size-->
     <dimen name="design_navigation_icon_size" tools:override="true">25dp</dimen>
