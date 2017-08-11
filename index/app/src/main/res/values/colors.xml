@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#44913e</color>
+    <color name="colorPrimaryDark">#295e29</color>
+    <color name="colorAccent">#295e29</color>
+    <color name="backgroundGreen">#76b76c</color>
+
+    <color name="whiteColor">#ffffff</color>
+    <color name="redColor">#c24a58</color>
+
+    <color name="action_background">#d5ffc6</color>
+    <color name="drawer_background">#b2000000</color>
+
+    <color name="alertTextt">#142e14</color>
+    <color name="alertBackground">#b3feb3</color>
+
+    <color name="worksheetImag1">#c2e7e7e7</color>
+
+    <color name="worksheet_background">#d8e8c3</color>
+
+</resources>
