@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_worksheet"
+        android:icon="@drawable/worksheet"
+        android:title="@string/action_worksheet"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_area"
+        android:icon="@drawable/area"
+        android:title="@string/action_area"
+        app:showAsAction="always"/>
+
+</menu>

@@ -1,0 +1,102 @@
+<resources>
+    <string name="app_name">臺北動物園EZGo-旺事如意</string>
+    <string name="app_title">旺事如意</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- 測試用 -->
+    <string name="test_text">(目前版本為測試用,無實際兌換效力)</string>
+
+    <!-- activity_main_drawer.xml 側邊清單-->
+    <string name="nav_map">地圖導覽</string>
+    <string name="nav_worksheet">本期闖關單</string>
+    <string name="nav_dogInfo">旺哥小檔案</string>
+    <string name="nav_info">闖關說明</string>
+    <string name="nav_font">切換注音</string>
+    <string name="nav_contact">關於我們</string>
+
+    <!-- main.xml 切換按鈕-->
+    <string name="action_worksheet">闖關單</string>
+    <string name="action_area">館區</string>
+
+    <!-- 提示用 -->
+    <string name="notice_gps">請開啟GPS</string>
+    <string name="notice_end">確定要結束嗎?</string>
+    <string name="notice_sure">確定</string>
+    <string name="notice_cancel">取消</string>
+    <string name="notice_network">請檢查網路是否有開啟</string>
+
+    <!-- MyData.java -->
+    <!--
+    <string name="mydata_">臺灣動物區</string>
+    <string name="mydata_">兒童動物區</string>
+    <string name="mydata_">亞洲熱帶雨林區</string>
+    <string name="mydata_">沙漠動物區</string>
+    <string name="mydata_">澳洲動物區</string>
+    <string name="mydata_">非洲動物區</string>
+    <string name="mydata_">溫帶動物區</string>
+    <string name="mydata_">鳥園區</string>
+    <string name="mydata_">企鵝館</string>
+    <string name="mydata_">無尾熊館</string>
+    <string name="mydata_">兩棲爬蟲動物館</string>
+    <string name="mydata_">昆蟲館</string>
+    <string name="mydata_">大貓熊館</string>-->
+    <string name="mydata_hyena">斑點鬣狗</string>
+    <string name="mydata_bear">臺灣黑熊</string>
+    <string name="mydata_wolf">北美灰狼</string>
+    <string name="mydata_prairiedog">黑尾草原犬鼠</string>
+    <string name="mydata_kookaburra">笑翠鳥</string>
+    <string name="mydata_deer">山羌</string>
+    <string name="mydata_EC">教育中心</string>
+
+
+    <!-- ArActivity.java -->
+    <string name="notice_goto">前往:</string>
+    <string name="notice_EC">已經到達教育中心囉!</string>
+    <string name="notice_enterRange">已經進入答題範圍囉!</string>
+
+    <!-- activity_ar.xml 導航介面 -->
+    <string name="ar_endBtn">結束導航</string>
+    <string name="ar_startQ">開始答題!</string>
+
+    <!-- activity_endguide.xml 說明頁 -->
+    <string name="endguide_startMain">開始闖關</string>
+
+    <!-- activity_worksheet.xml 闖關單題目 -->
+    <string name="worksheet_btnResume">重新整理</string>
+    <string name="worksheet_btnNextquest">顯示下一題</string>
+    <string name="worksheet_btnChk">確定</string>
+
+    <!-- fragment_about.xml 關於 -->
+    <string name="about_zoo">聯絡方式:02-2938-2300</string>
+    <string name="about_imd">聯絡方式:106505ezgo@gmail.com</string>
+
+    <!-- fragment_main.xml 主畫面地圖 -->
+    <string name="main_startAr">開始導航</string>
+
+    <!-- fragment_reward.xml 獎品兌換 -->
+    <string name="reward_text">完成闖關單囉~</string>
+    <string name="reward_exchange">兌換獎品</string>
+
+    <!-- RewardFragment.java 獎品兌換-->
+    <string name="reward_notice">請至服務台兌換</string>
+    <string name="reward_done">已兌換獎品</string>
+
+    <!-- fragment_worksheet.xml 本期闖關單 -->
+    <string name="worksheet_btnStartExchange">領取獎品</string>
+
+    <!-- WorkSheetFragment.java 本期闖關單 -->
+    <string name="worksheet_gotoMap">請至此動物區尋找題目與答案</string>
+
+    <!-- reward_alert.xml 兌換彈出視窗 -->
+    <string name="alert_name">點下[立即兌換]視同已兌換,
+請確定人已經在服務台</string>
+    <string name="alert_wait">稍後</string>
+    <string name="alert_go">立即兌換</string>
+
+    <!-- reward_alert_1.xml 兌換彈出視窗1 -->
+    <string name="alert_name1">兌換獎品請記得到服務台兌換喔~</string>
+    <string name="alert_name2">我了解了</string>
+
+</resources>
