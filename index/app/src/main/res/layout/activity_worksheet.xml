@@ -4,95 +4,108 @@
     android:id="@+id/activity_worksheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="5dp"
+    android:paddingBottom="10dp"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    android:paddingTop="10dp"
+    android:paddingTop="15dp"
     tools:context="com.ezgo.index.WorksheetActivity"
     android:background="@color/worksheet_background"
     android:orientation="vertical">
 
-
-    <!-- 以下註解是上面會留100dp的空白
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_weight="7.00"
-        android:orientation="horizontal">
-
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:id="@+id/ImgViewTop"
-            android:gravity="center"
-            android:layout_marginRight="10dp" />
-    </LinearLayout>
--->
     <ImageView
+        android:id="@+id/ImgViewTop"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:id="@+id/ImgViewTop"
         android:gravity="center"
-        android:layout_marginRight="10dp" />
+        android:layout_marginTop="10dp"/>
 
     <TextView
         android:id="@+id/title"
+        android:textColor="#000000"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:textColor="#042508"
         android:textStyle="bold"
-        android:gravity="center_vertical|left"
-        android:layout_marginTop="5dp"
-        android:layout_weight="2.09" />
+        android:gravity="center_vertical"/>
 
-    <TextView
-        android:id="@+id/textDescription"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:id="@+id/textDetail"
         android:layout_width="match_parent"
-        android:textColor="#042508"
-        android:gravity="center_vertical|left"
-        android:layout_marginTop="5dp"
-        android:layout_weight="2.09" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="30dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/textHint"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textColor="#000000"/>
+
+        <ScrollView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <TextView
+                android:id="@+id/textDescription"
+                android:textColor="#000000"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"/>
+
+        </ScrollView>
+
+    </LinearLayout>
+
 
     <RadioGroup
         android:id="@+id/rg"
         android:layout_height="wrap_content"
-        android:layout_weight="7.83"
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="40dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="10dp"
         android:orientation="vertical">
-
     </RadioGroup>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:id="@+id/ImgViewBottom"
-        android:gravity="center"
-        android:layout_marginRight="10dp" />
 
-    <Button
-        android:id="@+id/btnResume"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/worksheet_btnResume"
-        android:textSize="30dp" />
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnNextquest"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/worksheet_btnNextquest"
-        android:textSize="30dp" />
+        <ImageView
+            android:id="@+id/ImgViewBottom"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"/>
 
-    <Button
-        android:id="@+id/btnChk"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/worksheet_btnChk"
-        android:textSize="30dp" />
+        <Button
+            android:id="@+id/btnResume"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/worksheet_btnResume"
+            android:layout_gravity="bottom"
+            android:textSize="30dp" />
+
+        <Button
+            android:id="@+id/btnNextquest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/worksheet_btnNextquest"
+            android:layout_gravity="bottom"
+            android:textSize="30dp" />
+
+        <Button
+            android:id="@+id/btnChk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/worksheet_btnChk"
+            android:layout_gravity="bottom"
+            android:textSize="30dp" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

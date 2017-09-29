@@ -67,8 +67,6 @@ public class worksheetAsyncTask extends AsyncTask<String, Integer, String> {
             conn.connect();
             inputStream = conn.getInputStream();
 
-
-
             if (statusCode >= 200 && statusCode < 400) {
                 // Create an InputStream in order to extract the response object
                 inputStream = conn.getInputStream();

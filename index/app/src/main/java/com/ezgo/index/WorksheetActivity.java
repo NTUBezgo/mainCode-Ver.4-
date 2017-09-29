@@ -4,13 +4,12 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -22,7 +21,6 @@ import com.ezgo.index.MyAsyncTask.worksheetUpdateAsyncTask;
 public class WorksheetActivity extends AppCompatActivity {
     //---------每隻動物最多有3題題目
     private static final int maxQuestionLength = 3;
-    private static final int QuestionLength = 15;
     //---------判斷傳進來的值是哪一張圖片
     private static int imgNo ;
     //---------使用者的資料
@@ -31,11 +29,13 @@ public class WorksheetActivity extends AppCompatActivity {
     private static String[] option = new String[100];
     private static String[] recordQuestion_id = new String[100];
     private static String[] optionQuestion_id = new String[100];
-    private static byte[] token = new byte[100];
+    private static String[] recordDone = new String[100];
     private static int[] worksheetImg = new int[5];
     private static String[] nowAnser = new String[5];
-    //---------取得字串的長度上限
+    //---------取得總共有幾個選項(每一題有多個選項)這裡指所有題目共有幾個選項
     private static int optionLength = 0;
+    //---------取得總共有幾題題目
+    private static int questionLength = 0;
     //---------目前題目在第0題，要從地理圍欄傳入該動物是哪隻動物(詳見postIndex) range:0-14
     private static int index = 0;
     //---------判斷使用者是否有點下正確答案的radioButton
@@ -43,12 +43,12 @@ public class WorksheetActivity extends AppCompatActivity {
     //---------判斷使用者已經回答幾題range:0-2 當=3時會被重置為0
     private static int count = 0;
     //---------用於答對或答錯後顯示什麼提示訊息
-    private static  String showCurrent = "恭喜您答對了，這題答案是： ";
-    private static  String showFail = "很可惜，答錯了，這題答案是： ";
+    private static  String showCurrent = "恭喜您答對了";
+    private static  String showFail = "很可惜答錯了";
 
     /*
     目前的邏輯：
-    陣列長度：0 1 2 3 4 5 6 7 8 9 10 11 12 13 14
+    陣列長度：0 1 2 3 4 5 6 7 8 9 10 11 12 13 14ttttttttttttttttttttt
     陣列內容：1 1 1 2 2 3 3 3 4 4  4  4  5  5  6
     判斷 陣列長度的 0 跟1的陣列內容是否重複，重複代表是同一題。
     */
@@ -67,6 +67,8 @@ public class WorksheetActivity extends AppCompatActivity {
     public RadioGroup rg;
     private TextView textView;
     private TextView textDescription;
+    private TextView textHint;
+    private LinearLayout textDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +77,7 @@ public class WorksheetActivity extends AppCompatActivity {
         //-------------連接資料庫來取得值，不需要更改
         getWorksheet.getJSON();
         //------------------取得使用者ID
-        user_id =getWorksheet.getUser_id();
+        user_id = getWorksheet.getUser_id();
         //------------------
         worksheetImg = MyData.getWorksheetImg();
         rg  = (RadioGroup) findViewById(R.id.rg);
@@ -83,13 +85,18 @@ public class WorksheetActivity extends AppCompatActivity {
         imageTop = (ImageView) findViewById(R.id.ImgViewTop);
         imageBottom = (ImageView) findViewById(R.id.ImgViewBottom);
         textView = (TextView) findViewById(R.id.title);
-        textView.setTextSize(23.0f);
+        textView.setTextSize(24.0f);
         textDescription = (TextView) findViewById(R.id.textDescription);
+        textHint = (TextView) findViewById(R.id.textHint);
+        textDescription.setTextSize(20.0f);
+        textHint.setTextSize(22.0f);
         mBtnChk = (Button)findViewById(R.id.btnChk);
         mBtnResume = (Button)findViewById(R.id.btnResume);
         mBtnNextquest = (Button)findViewById(R.id.btnNextquest);
 
+        textDetail = (LinearLayout) findViewById(R.id.textDetail);
         mBtnNextquest.setVisibility(View.GONE);
+        textDetail.setVisibility(View.GONE);
 
         //判斷目前該顯示哪一張圖片
         switch (imgNo){
@@ -114,6 +121,10 @@ public class WorksheetActivity extends AppCompatActivity {
                 imageBottom.setVisibility(View.GONE);
                 imageTop.setImageResource(worksheetImg[4]);
                 break;
+            case 5:
+                imageBottom.setVisibility(View.GONE);
+                imageTop.setImageResource(worksheetImg[5]);
+                break;
         }
 
         getData();
@@ -129,45 +140,46 @@ public class WorksheetActivity extends AppCompatActivity {
                 if (v.getId() == mBtnChk.getId()) {
                     //-------判斷使用者是否有選擇正確的答案
                     //清除radioButton 相信你看到這頁會有問題
-                    if(rg != null){
-                        rg.removeAllViews();
-                    }
-                    if (!checkToken(index)) {
-                        mBtnNextquest.setVisibility(View.VISIBLE);
-                        mBtnChk.setVisibility(View.GONE);
-                        boolean yesNo = false;
+                    if (!checkRecordDone(index)) {
                         if (Ans == 1) {
+                            if(rg != null){
+                                rg.removeAllViews();
+                            }
+                            mBtnNextquest.setVisibility(View.VISIBLE);
+                            mBtnChk.setVisibility(View.GONE);
+                            textDetail.setVisibility(View.VISIBLE);
                             //進行上傳動作
                             updateAns();
                             //showNextQuest();
+                            textHint.setText(showCurrent );
+                            //資料庫內預設沒有解釋的時候顯示無
                             if(getWorksheet.getDescription(index).equals("無")){
-                                textDescription.setText(showCurrent + nowAnser[Integer.valueOf( getWorksheet.getAnswer(index))]);
                             }else{
-                                textDescription.setText(showCurrent +
-                                        nowAnser[Integer.valueOf( getWorksheet.getAnswer(index))] +
-                                        "\n解釋："+ getWorksheet.getDescription(index));
+                                textDescription.setText(
+                                        "\n"+ getWorksheet.getDescription(index));
                             }
-                            Toast.makeText(WorksheetActivity.this, "恭喜您答對了！", Toast.LENGTH_SHORT).show();
                         } else if(Ans ==0){
+                            if(rg != null){
+                                rg.removeAllViews();
+                            }
+                            mBtnNextquest.setVisibility(View.VISIBLE);
+                            mBtnChk.setVisibility(View.GONE);
+                            textDetail.setVisibility(View.VISIBLE);
                             updateAns();
                             //showNextQuest();
+                            textHint.setText(showFail);
                             if(getWorksheet.getDescription(index).equals("無")){
-                                textDescription.setText(showFail +
-                                        nowAnser[Integer.valueOf( getWorksheet.getAnswer(index))]);
                             }else{
-                                textDescription.setText(showFail +
-                                        nowAnser[Integer.valueOf( getWorksheet.getAnswer(index))] +
-                                        "\n解釋："+ getWorksheet.getDescription(index));
+                                textDescription.setText(
+                                        "\n"+ getWorksheet.getDescription(index));
                             }
-                            Toast.makeText(WorksheetActivity.this, "您答錯囉", Toast.LENGTH_SHORT).show();
                         }else{
-                            Toast.makeText(WorksheetActivity.this, "您還沒選擇答案喔！", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(WorksheetActivity.this, R.string.worksheet_notice1, Toast.LENGTH_SHORT).show();
                         }
-                        for(int i = 0;i<4;i++){
-                            Log.v("nowAnser",getWorksheet.getAnswer(index)+"nowAnser:" +  nowAnser[Integer.valueOf(i)]);
-                        }
+
                     } else {
-                        Toast.makeText(WorksheetActivity.this, "這題答過囉，...", Toast.LENGTH_SHORT).show();
+                        showNextQuest();
+                        Toast.makeText(WorksheetActivity.this, R.string.worksheet_notice2, Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -185,6 +197,8 @@ public class WorksheetActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 textDescription.setText("");
+                textHint.setText("");
+                textDetail.setVisibility(View.GONE);
                 showNextQuest();
             }
         });
@@ -209,18 +223,14 @@ public class WorksheetActivity extends AppCompatActivity {
             index += 1;
             Ans = 2;
         }
-                /*
-                //測試用，可以顯示所有題目
-                if(true){
-                    //------------顯示下一題
-                    index += optionCount[count-1];
-                   // Log.v("index ",index + "");
-                   // Log.v("count ",count-1 + "");
-                   // Log.v("count ",optionCount[count-1] + "");
-                    Ans = 2;
-                    showData();
-                }
-                */
+        /*
+        //測試用，可以顯示所有題目
+        if(true){
+            //------------顯示下一題
+            index += 1;
+            Ans = 2;
+        }
+        */
         else{
             //-------------在這裡撰寫回首頁的程式碼
             Intent intent = new Intent();
@@ -230,29 +240,24 @@ public class WorksheetActivity extends AppCompatActivity {
             finish();
             index = 0;
             count =0;
-            Toast.makeText(WorksheetActivity.this,"答題結束" , Toast.LENGTH_SHORT).show();
+            //Toast.makeText(WorksheetActivity.this,"答題結束" , Toast.LENGTH_SHORT).show();
         }
         showData();
         //count=3等於使用者已回答三題，else表示使用者要回首頁了
     }
 
-    public static boolean checkToken(int index){
-        // Log.v("optionArr：",""+getWorksheet.getToken(i));
-        if(getWorksheet.getToken(index) == 1){
-            return true;
-        }else{
-            return false;
-        }
+    public static boolean checkRecordDone(int index){
+        return getWorksheet.getRecordDone(index) .equals("1");
     }
     //-------------------取得這位使用者的問答題
     private void getData() {
+        questionLength = getWorksheet.getQuestionLength();
         optionLength = getWorksheet.getOptionLength();
-
-        for (int i = 0; i < QuestionLength; i++) {
+        for (int i = 0; i < questionLength; i++) {
             question[i] = getWorksheet.getQuestion(i);
             description[i] = getWorksheet.getDescription(i);
             recordQuestion_id[i] = getWorksheet.getRecord_Question_id(i);
-            token[i] = getWorksheet.getToken(i);
+            recordDone[i] = getWorksheet.getRecordDone(i);
         }
         for (int i = 0; i < optionLength; i++) {
             option[i] = getWorksheet.getOption(i);
@@ -280,6 +285,9 @@ public class WorksheetActivity extends AppCompatActivity {
             int i =0;
             while(optionQuestion_id[sign].equals(recordQuestion_id[index])){
                 rb = new RadioButton(this);
+                if(optionQuestion_id[sign + 1] == null){
+                    optionQuestion_id[sign + 1] = "100";
+                }
                 if(optionQuestion_id[sign].equals(optionQuestion_id[sign + 1])){
                     rb.setId(1 + i);             //id = 1,2,3
                     rb.setText(option[sign]);
@@ -312,7 +320,7 @@ public class WorksheetActivity extends AppCompatActivity {
         } else {
             mBtnChk.setVisibility(View.GONE);
             mBtnResume.setVisibility(View.VISIBLE);
-            textView.setText("請重新整理頁面！");
+            textView.setText(getString(R.string.worksheet_reload));
         }
 
     }
@@ -329,7 +337,7 @@ public class WorksheetActivity extends AppCompatActivity {
             myNavigationAsyncTask.execute(Common.updateAnsUrl + user_id , recordQuestion_id[index] ,Ans+"" );  //question_id[index]標註這題是哪一題, Ans為答案是否正確
             //Log.v("user_id:", user_id + "question[index]:"+ question_id[index] +"Ans:" +Ans+ "index" + index );  //question_id[index]標註這題是哪一題, Ans為答案是否正確
         } else {
-            Toast.makeText(WorksheetActivity.this, "連線已取消", Toast.LENGTH_SHORT).show();
+            Toast.makeText(WorksheetActivity.this, "The connection has been canceled", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -391,46 +399,4 @@ public class WorksheetActivity extends AppCompatActivity {
         imgNo = pCount;
         index = pCount*3;
     }
-
-    /*----------暫時不用他了。
-    //建立監聽器，判斷使用者點擊哪一個按鈕
-    private CompoundButton.OnClickListener mOnClickListener = new CompoundButton.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch(rg.getCheckedRadioButtonId()){
-                case 1:
-                    if(rg.getCheckedRadioButtonId() == getWorksheet.getAnswer(index)) {
-                        Ans = 1;
-                    }else {
-                        Ans = 0;
-                    }
-                    break;
-                case 2:
-                    if(rg.getCheckedRadioButtonId() == getWorksheet.getAnswer(index)) {
-                        Ans = 1;
-                    }else {
-                        Ans = 0;
-                    }
-                    break;
-                case 3:
-                    if(rg.getCheckedRadioButtonId() == getWorksheet.getAnswer(index)) {
-                        Ans = 1;
-                    }else {
-                        Ans = 0;
-                    }
-                    break;
-                case 4:
-                    if(rg.getCheckedRadioButtonId() == getWorksheet.getAnswer(index)) {
-                        Ans = 1;
-                    }else {
-                        Ans = 0;
-                    }
-                    break;
-            }
-            //Log.v("rg",rg.getCheckedRadioButtonId()+"");
-        }
-    };
-    */
-
-
 }

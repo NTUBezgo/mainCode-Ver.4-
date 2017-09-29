@@ -28,33 +28,39 @@
     <string name="notice_network">請檢查網路是否有開啟</string>
 
     <!-- MyData.java -->
-    <!--
-    <string name="mydata_">臺灣動物區</string>
-    <string name="mydata_">兒童動物區</string>
-    <string name="mydata_">亞洲熱帶雨林區</string>
-    <string name="mydata_">沙漠動物區</string>
-    <string name="mydata_">澳洲動物區</string>
-    <string name="mydata_">非洲動物區</string>
-    <string name="mydata_">溫帶動物區</string>
-    <string name="mydata_">鳥園區</string>
-    <string name="mydata_">企鵝館</string>
-    <string name="mydata_">無尾熊館</string>
-    <string name="mydata_">兩棲爬蟲動物館</string>
-    <string name="mydata_">昆蟲館</string>
-    <string name="mydata_">大貓熊館</string>-->
-    <string name="mydata_hyena">斑點鬣狗</string>
-    <string name="mydata_bear">臺灣黑熊</string>
-    <string name="mydata_wolf">北美灰狼</string>
-    <string name="mydata_prairiedog">黑尾草原犬鼠</string>
-    <string name="mydata_kookaburra">笑翠鳥</string>
-    <string name="mydata_deer">山羌</string>
-    <string name="mydata_EC">教育中心</string>
+    <string-array name="AreaMarkers">
+        <item>臺灣動物區</item>
+        <item>兒童動物區</item>
+        <item>亞洲熱帶雨林區</item>
+        <item>沙漠動物區</item>
+        <item>澳洲動物區</item>
+        <item>非洲動物區</item>
+        <item>溫帶動物區</item>
+        <item>鳥園區</item>
+        <item>企鵝館</item>
+        <item>無尾熊館</item>
+        <item>兩棲爬蟲動物館</item>
+        <item>昆蟲館</item>
+        <item>大貓熊館</item>
+    </string-array>
 
+    <string-array name="WorksheetMarkers">
+        <item>斑點鬣狗</item>
+        <item>臺灣黑熊</item>
+        <item>北美灰狼</item>
+        <item>黑尾草原犬鼠</item>
+        <item>笑翠鳥</item>
+        <item>山羌</item>
+        <item>教育中心</item>
+    </string-array>
 
-    <!-- ArActivity.java -->
-    <string name="notice_goto">前往:</string>
-    <string name="notice_EC">已經到達教育中心囉!</string>
-    <string name="notice_enterRange">已經進入答題範圍囉!</string>
+    <!-- WorksheetActivity.java -->
+    <string name="W_reload">請重新整理頁面！</string>
+    <string name="ar_goto">前往:</string>
+    <string name="ar_EC">已經到達教育中心囉!</string>
+    <string name="ar_enterRange">已經進入答題範圍囉!</string>
+    <string name="ar_distence">距離：</string>
+    <string name="ar_meter">公尺</string>
 
     <!-- activity_ar.xml 導航介面 -->
     <string name="ar_endBtn">結束導航</string>
@@ -68,6 +74,13 @@
     <string name="worksheet_btnNextquest">顯示下一題</string>
     <string name="worksheet_btnChk">確定</string>
 
+    <!--WorksheetActivity 闖關單題目 -->
+    <string name="worksheet_hintRight">恭喜您答對了</string>
+    <string name="worksheet_hintWrong">很可惜答錯了</string>
+    <string name="worksheet_reload">請重新整理頁面！</string>
+    <string name="worksheet_notice1">您還沒選擇答案喔！</string>
+    <string name="worksheet_notice2">這題答過囉，...</string>
+
     <!-- fragment_about.xml 關於 -->
     <string name="about_zoo">聯絡方式:02-2938-2300</string>
     <string name="about_imd">聯絡方式:106505ezgo@gmail.com</string>
@@ -76,7 +89,6 @@
     <string name="main_startAr">開始導航</string>
 
     <!-- fragment_reward.xml 獎品兌換 -->
-    <string name="reward_text">完成闖關單囉~</string>
     <string name="reward_exchange">兌換獎品</string>
 
     <!-- RewardFragment.java 獎品兌換-->
@@ -88,6 +100,7 @@
 
     <!-- WorkSheetFragment.java 本期闖關單 -->
     <string name="worksheet_gotoMap">請至此動物區尋找題目與答案</string>
+    <string name="worksheet_correct">目前答對題數: </string>
 
     <!-- reward_alert.xml 兌換彈出視窗 -->
     <string name="alert_name">點下[立即兌換]視同已兌換,

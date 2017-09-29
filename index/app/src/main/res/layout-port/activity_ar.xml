@@ -14,6 +14,14 @@
         android:orientation="vertical" >
     </LinearLayout>
 
+    <!-- 顯示離目標動物多少公尺-->
+    <TextView
+        android:id="@+id/textDistence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:textColor="@color/whiteColor" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,7 +54,6 @@
             android:gravity="center"
             android:layout_alignParentRight="true"
             android:visibility="invisible"/>
-
 
     </RelativeLayout>
 

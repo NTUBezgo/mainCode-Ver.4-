@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,10 +21,12 @@ public class NavigationActivity extends Activity {
 
     Context context;
     String getId;
-    public static String user_id;
+    public String user_id;
+    public String recordDone;
+    public String rewardDone;
 
     //----------
-    static boolean tokenChk;
+    static boolean doneChk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,8 @@ public class NavigationActivity extends Activity {
         // Hide the status bar.
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
+
+        WorksheetActivity.postCount(3);
 
         setContentView(R.layout.activity_navigation);
 
@@ -50,50 +53,49 @@ public class NavigationActivity extends Activity {
             public void onFinished(String result) {
                 try{
                     if(result==null){
-                        Toast.makeText(context, R.string.notice_network , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.notice_network, Toast.LENGTH_SHORT).show();
                         return;
                     }
                     JSONObject object = new JSONObject(result);
                     JSONArray jsonArray = object.getJSONArray("result");
                     user_id = jsonArray.getJSONObject(0).getString("user_id");
-
+                    recordDone = jsonArray.getJSONObject(0).getString("done");
                     getWorksheet.postUser_id(user_id);
 
-                    for (int i = 0 ; i < 15; i++){
-                        if((jsonArray.getJSONObject(i).getString("token").equals("1"))){
-                            //Log.e("token:",(jsonArray.getJSONObject(i).getString("token")));
-                            tokenChk = true;
-                            break;
+                    for (int i = 0 ; i < jsonArray.length(); i++){
+                        getWorksheet.postRecordDone(jsonArray.getJSONObject(i).getString("done"),i);
+                        if((jsonArray.getJSONObject(i).getString("done").equals("1") )){
+                            doneChk = true;
                         };
                     }
+
                     //Log.e("user_id :" , user_id);
 
                     //---------------------------跳轉頁面
-                    if(tokenChk){
+                    /*if(doneChk){
                         mHandler.sendEmptyMessageDelayed(GOTO_LOADING_ACTIVITY, 1000); //1秒跳轉
                     }else{
                         mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 1000); //1秒跳轉
-                    }
+                    }*/
+                    mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 1000); //1秒跳轉
 
                 }catch(Exception e){}
             }
         });
 
-        while(getId==null){
-            if(!myNavigationAsyncTask.isCancelled()) {
-                if(getId==null){
-                    getId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID); //取得Android ID
-                    //Log.e("getId :" , getId);
-                    if(getId.equals("9774d56d682e549c")){
-                        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE); //取得Device ID
-                        getId = tm.getDeviceId();
-                    }
+        if(!myNavigationAsyncTask.isCancelled()) {
+            if(getId==null){
+                getId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID); //取得Android ID
+                //Log.e("getId :" , getId);
+                if(getId.equals("9774d56d682e549c")){
+                    TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE); //取得Device ID
+                    getId = tm.getDeviceId();
                 }
-            } else {
-                Toast.makeText(context, "The connection has been canceled", Toast.LENGTH_SHORT).show();
             }
-            myNavigationAsyncTask.execute(Common.updateUserUrl, getId); //第一個參數是Common的網址,第二個是要上傳的值
+        } else {
+            Toast.makeText(context, "The connection has been canceled", Toast.LENGTH_SHORT).show();
         }
+        myNavigationAsyncTask.execute(Common.updateUserUrl, getId); //第一個參數是Common的網址,第二個是要上傳的值
         //---------------------------上傳結束
 
     }

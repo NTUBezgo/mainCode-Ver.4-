@@ -9,11 +9,9 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +20,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -69,9 +64,7 @@ public class MainFragment extends Fragment implements
     private GoogleApiClient mGoogleApiClient;   // Google API用戶端物件
     private LocationRequest mLocationRequest;   // Location請求物件
 
-    private ArrayList<Geofence> mGeofenceList = new ArrayList<Geofence>();
-    private PendingIntent mGeofencePendingIntent;
-    private MyData myData=new MyData();
+    private MyData myData;
 
     private String mMarkers[][]; //存放座標
     private List<Marker> markerList = new ArrayList<Marker>(); //存放Marker
@@ -89,6 +82,8 @@ public class MainFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+        myData=new MyData(getResources());
 
         try{
             SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mainMap);

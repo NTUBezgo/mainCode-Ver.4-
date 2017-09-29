@@ -9,11 +9,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 //=========================================
 // 非同步工作, 用來取回網站回傳的資料
 //=========================================
-public class getTokenAsyncTask extends AsyncTask<String, Integer, String> {
+public class getRecordDoneAsyncTask extends AsyncTask<String, Integer, String> {
 
     //----------------------------------------
     // 宣告一個接收回傳結果的程式必須實作的介面
@@ -27,7 +28,7 @@ public class getTokenAsyncTask extends AsyncTask<String, Integer, String> {
     //-----------------------------------------------------------
     // 建構元, 傳入(1)context, (2)取回資料後執行的程式
     //-----------------------------------------------------------
-    public getTokenAsyncTask(TaskListener taskListener) {
+    public getRecordDoneAsyncTask(TaskListener taskListener) {
         this.taskListener = taskListener;
     }
 
@@ -61,6 +62,7 @@ public class getTokenAsyncTask extends AsyncTask<String, Integer, String> {
             //conn.setDoOutput(true);
 
             int statusCode = conn.getResponseCode();
+
 
             Log.v("Test2","statuus:"+statusCode);
 

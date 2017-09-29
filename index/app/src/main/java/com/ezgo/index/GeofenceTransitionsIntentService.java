@@ -3,6 +3,7 @@ package com.ezgo.index;
 import android.app.IntentService;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
@@ -56,6 +57,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
             Intent lbcIntent = new Intent("googlegeofence"); //Send to any reciever listening for this
             lbcIntent.putExtra("from","enter");
             LocalBroadcastManager.getInstance(GeofenceTransitionsIntentService.this).sendBroadcast(lbcIntent);  //Send the intent
+
 
 
         }else if(transition == Geofence.GEOFENCE_TRANSITION_EXIT ){ //離開範圍

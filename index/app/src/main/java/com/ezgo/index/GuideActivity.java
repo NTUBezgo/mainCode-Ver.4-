@@ -20,7 +20,7 @@ public class GuideActivity extends AppCompatActivity implements View.OnClickList
     private ViewPager vp;
     private MyPageAdapter vpAdapter;
     private List<View> views;
-    private Button startMain;
+    private ImageView startMain;
 
     //引導圖片資源
     private static final int[] pics = { R.drawable.guide1,R.drawable.guide2,
@@ -114,7 +114,7 @@ public class GuideActivity extends AppCompatActivity implements View.OnClickList
 
         if(arg0==3){
             //------------------開始闖關按鈕--------------------
-            startMain = (Button) findViewById(R.id.startMain);
+            startMain = (ImageView) findViewById(R.id.startMain);
             startMain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

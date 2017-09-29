@@ -21,12 +21,10 @@ public class getWorksheet {
     private static String[] option= new String[100];
     private static String[] record_question_id= new String[100];
     private static String[] option_question_id= new String[100];
-    private static byte[] token= new byte[100];
+    private static String[] recordDone= new String[100];
     private static String user_id;
     private static int optionLength ;
-
-    private static int optionCount = 1;
-    public  static int[] optionArr = new int[15];
+    private static int questionLength ;
 
     public static void getJSON() {
 
@@ -39,13 +37,12 @@ public class getWorksheet {
                     JSONArray jsonArray = object.getJSONArray("record");
 
                     int j=0;
-
+                    questionLength = jsonArray.length();
                     for (int i = 0 ; i<jsonArray.length() ; i++){
                         question[i] = jsonArray.getJSONObject(i).getString("question");
                         answer[i] = jsonArray.getJSONObject(i).getString("answer");
                         description[i] = jsonArray.getJSONObject(i).getString("description");
                         record_question_id[i] = jsonArray.getJSONObject(i).getString("question_id");
-                        token[i] = Byte.valueOf(jsonArray.getJSONObject(i).getString("token"));
                             /*
                             if( i != 0){
                                 if(question_id[i].equals(question_id[i-1]) ){
@@ -62,22 +59,22 @@ public class getWorksheet {
                             }
                             */
                     }
-                    jsonArray = object.getJSONArray("1");
+                    jsonArray = object.getJSONArray("option");
 
                     for (int i = 0 ; i<jsonArray.length() ; i++) {
                         option[i] = jsonArray.getJSONObject(i).getString("qOption");
                         option_question_id[i] = jsonArray.getJSONObject(i).getString("question_id");
-                        // Log.v("option",""+option[i]);
-                        // Log.v("oqID",""+option_question_id[i]);
+                        //Log.v("option",""+option[i]);
+                        //Log.v("oqID",""+option_question_id[i]);
                     }
                     optionLength = jsonArray.length();
-                    Log.v("length",""+getOptionLength());
+                    //Log.v("length",""+getOptionLength());
                 } catch (Exception e) {
-                    Log.v("ABC", Log.getStackTraceString(e));
+                    //Log.v("ABC", Log.getStackTraceString(e));
                 }
             }
         });
-        myAsyncTask.execute(Common.url + getUser_id());
+        myAsyncTask.execute(Common.showQuest + getUser_id());
     }
     //-----------------使用者的題目清單maxIndex:15
     public static String getQuestion(int i){
@@ -92,8 +89,8 @@ public class getWorksheet {
     public static String getRecord_Question_id(int i){
         return record_question_id[i];
     }
-    public static byte getToken(int i){
-        return token[i];
+    public static String getRecordDone(int i){
+        return recordDone[i];
     }
     //-----------------使用者的選項，索引的範圍不確定，
     public static String getOption(int i){
@@ -103,11 +100,11 @@ public class getWorksheet {
         return option_question_id[i];
     }
     //------------------
-    public static int getOptionArr(int i){
-        return  optionArr[i] ;
-    }
     public static int getOptionLength(){
         return optionLength;
+    }
+    public static int getQuestionLength(){
+        return questionLength;
     }
     public static int getUser_id(){
         return  Integer.valueOf(user_id) ;
@@ -116,6 +113,7 @@ public class getWorksheet {
     protected static void postUser_id(String user){
         user_id = user ;
     }
-
-
+    protected static void postRecordDone(String sendRecordDone,int i){
+        recordDone[i] = sendRecordDone;
+    }
 }

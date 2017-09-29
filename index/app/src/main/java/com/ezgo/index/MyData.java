@@ -1,6 +1,8 @@
 package com.ezgo.index;
 
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -14,7 +16,24 @@ import static android.content.ContentValues.TAG;
  * Created by 8320E on 2017/4/5.
  */
 
-public class MyData {
+public class MyData{
+
+    /*private Context context;
+
+    public MyData(Context current){
+        this.context=current;
+    }
+
+    String[] array= context.getResources().getStringArray(R.array.AreaMarkers);
+    */
+
+
+    private Resources res;
+
+    public MyData(Resources res){
+        this.res=res;
+        setMarkers();
+    }
 
     //建立各館區marker
     private String areaMarkers[][]={
@@ -27,8 +46,6 @@ public class MyData {
             {"24.9968265","121.5830956","大貓熊館"}
     };
 
-    public String[][] getAreaMarkers(){return areaMarkers;}
-
     //建立闖關單marker
     private String workSheetMarkers[][]={
             {"24.9946605","121.5887605","斑點鬣狗"},{"24.9975801","121.5799735","臺灣黑熊"},
@@ -37,24 +54,36 @@ public class MyData {
             {"24.9978621","121.5818524","教育中心"}
     };
 
+
+    public void setMarkers(){ //設定名稱從strings取得
+        String[] array= res.getStringArray(R.array.AreaMarkers);
+        String[] array1= res.getStringArray(R.array.WorksheetMarkers);
+
+        for(int i=0; i<13; i++){ areaMarkers[i][2] = array[i]; }
+        for(int i=0; i<7; i++){ workSheetMarkers[i][2] = array1[i]; }
+    }
+
+    public String[][] getAreaMarkers(){return areaMarkers;}
     public String[][] getWorkSheetMarkers(){return workSheetMarkers;}
 
     //闖關單選擇題圖示
     private static int worksheetImg[] ={
             R.drawable.env_hyena,R.drawable.env_bear,
             R.drawable.env_wolf,R.drawable.env_prairiedog,
-            R.drawable.env_kookaburra
+            R.drawable.env_kookaburra,R.drawable.env_deer
     };
 
     public static int[] getWorksheetImg(){return worksheetImg;}
 
     //{24.9975801, 121.5799735}, //臺灣黑熊
-    //{24.9932772, 121.5900815}, //北美灰狼
-    //{25.002292, 121.483586}, //測試用
+    //{24.9977223, 121.5810719}, //山羌
+    //{24.995106, 121.583514}, //笑翠鳥
+    //{25.002292, 121.483586}, //測試用-----------------
+
     //建立地理圍欄範圍
     private Double geofenceList[][]={
             {24.9946605, 121.5887605}, //斑點鬣狗
-            {25.002292, 121.483586}, //測試用
+            {25.002292, 121.483586}, //測試用-----------------
             {24.9932772, 121.5900815}, //北美灰狼
             {24.9921553, 121.5890408}, //黑尾草原犬鼠
             {24.995106, 121.583514}, //笑翠鳥

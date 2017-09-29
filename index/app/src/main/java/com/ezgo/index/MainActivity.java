@@ -19,6 +19,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -35,8 +36,8 @@ public class MainActivity extends AppCompatActivity
     private MainFragment mainFragment;
     private NavigationView navigationView;
 
-    private MyData myData =new MyData();
-    int choosefont = myData.getFont();
+    private MyData myData;
+    int choosefont;
 
     String getId;
 
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         context=this;
+        myData =new MyData(getResources());
+        choosefont = myData.getFont();
         fragmentManager = getSupportFragmentManager();
 
         //--------------設定ActionBar-----------------

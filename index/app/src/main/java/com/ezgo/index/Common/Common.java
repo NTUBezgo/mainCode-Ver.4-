@@ -11,8 +11,12 @@ public class Common {
     //--------------------------
     //(2) 若連結現有測試主機
     //--------------------------
+    //Get
+    public static String showQuest="http://ezgo.twjoin.com/showQuest/";
+    public static String getRecordDoneUrl="http://ezgo.twjoin.com/getRecordDone/";
+    public static String downloadRewardDone="http://ezgo.twjoin.com/downloadRewardDone/";
+    //Post
     public static String updateUserUrl="http://ezgo.twjoin.com/update";
-    public static String url="http://ezgo.twjoin.com/showQuest/";
-    public static String getTokenUrl="http://ezgo.twjoin.com/getToken/";
     public static String updateAnsUrl="http://ezgo.twjoin.com/updateAns/";
+    public static String updateRewardUrl="http://ezgo.twjoin.com//updateReward/";
 }

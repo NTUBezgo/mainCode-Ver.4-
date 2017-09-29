@@ -50,13 +50,14 @@ public class ArActivity extends UnityPlayerActivity implements
 
     private ArrayList<Geofence> mGeofenceList = new ArrayList<Geofence>();
     private PendingIntent mGeofencePendingIntent;
-    private MyData myData=new MyData();
+    private MyData myData;
 
     private Button endBtn; //結束導航按鈕
     private TextView gotoTv; //顯示前往哪區
 
     private String targetPosition[]=new String[3]; //導航目標的位置
 
+    private float distence[] = new float[1]; //距離
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,7 @@ public class ArActivity extends UnityPlayerActivity implements
         setContentView(R.layout.activity_ar);
 
         context=this;
+        myData=new MyData(getResources());
 
         //------------開啟Unity----------------
         LinearLayout u3dLayout = (LinearLayout) findViewById(R.id.u3d_layout);
@@ -75,14 +77,6 @@ public class ArActivity extends UnityPlayerActivity implements
         targetPosition[0]=bundle.getString("targetLat");
         targetPosition[1]=bundle.getString("targetLng");
         targetPosition[2]=bundle.getString("targetTitle");
-
-        //--------------測試android 呼叫 unity 函式---------------------------------------------------------------------------------------
-        /*sendBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UnityPlayer.UnitySendMessage("Manager", "ZoomIn", "");
-            }
-        });*/
 
         //檢查是否有開啟GPS
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -126,8 +120,7 @@ public class ArActivity extends UnityPlayerActivity implements
 
         //顯示前往哪一動物
         gotoTv = (TextView) findViewById(R.id.gotoTv);
-        gotoTv.setText(R.string.notice_goto+targetPosition[2]);
-
+        gotoTv.setText(getString(R.string.ar_goto) + targetPosition[2]);
 
         //接收地理圍欄intent
         LocalBroadcastManager lbc = LocalBroadcastManager.getInstance(this);
@@ -162,13 +155,13 @@ public class ArActivity extends UnityPlayerActivity implements
                 UnityPlayer.UnitySendMessage("Main Camera", "changeAni", "true");  //呼叫unity函式設定動作
 
                 if(GeofenceTransitionsIntentService.WHICHAREA==6){
-                    Toast.makeText(ArActivity.this, R.string.notice_EC ,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ArActivity.this, R.string.ar_EC ,Toast.LENGTH_SHORT).show();
                     gotoTv.setText("");
                 }else{
                     sendBtn.setVisibility(View.VISIBLE);
                     gotoTv.setVisibility(View.INVISIBLE);
 
-                    Toast.makeText(ArActivity.this, R.string.notice_enterRange ,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ArActivity.this, R.string.ar_enterRange ,Toast.LENGTH_SHORT).show();
 
                     sendBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -346,9 +339,14 @@ public class ArActivity extends UnityPlayerActivity implements
     public void onLocationChanged(Location location) {
         // 位置改變
         // Location參數是目前的位置
+
         double myLat=location.getLatitude();
         double myLng=location.getLongitude();
-        //textView.setText("緯度:"+myLat+"\n經度:"+myLng);
+
+        TextView textView = (TextView) findViewById(R.id.textDistence);
+        //distanceBetween(現在的緯度,現在的經度,目標緯度,目標經度,儲存的變數(是一個陣列)) 單位：公尺
+        Location.distanceBetween(myLat,myLng,Float.valueOf(targetPosition[0]),Float.valueOf(targetPosition[1]) ,distence);
+        textView.setText(getString(R.string.ar_distence) + (int)distence[0] + getString(R.string.ar_meter));
     }
 
 
