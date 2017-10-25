@@ -9,18 +9,24 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -64,12 +70,14 @@ public class MainFragment extends Fragment implements
     private GoogleApiClient mGoogleApiClient;   // Google API用戶端物件
     private LocationRequest mLocationRequest;   // Location請求物件
 
+    private ArrayList<Geofence> mGeofenceList = new ArrayList<Geofence>();
+    private PendingIntent mGeofencePendingIntent;
     private MyData myData;
 
     private String mMarkers[][]; //存放座標
     private List<Marker> markerList = new ArrayList<Marker>(); //存放Marker
     private String targetPosition[]=new String[3]; //導航目標的位置(傳給unity)
-    private LinearLayout arLinearLayout ; //開始導航按鈕
+    private Button btnAr;   //開始導航按鈕
 
     //存放闖關單的動物頭像
     private int[] wsIcon={R.drawable.circle_hyena, R.drawable.circle_bear, R.drawable.circle_wolf,
@@ -107,23 +115,80 @@ public class MainFragment extends Fragment implements
                     .build();
         }
 
-        arLinearLayout = (LinearLayout) rootView.findViewById(R.id.btn_ar); //開始導航按鈕
-        arLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startAr(targetPosition);
-            }
-        });
+        btnAr =(Button) rootView.findViewById(R.id.btnn_ar);    //開始導航按鈕
 
 
         return rootView;
     }
 
-    private void addTestCircle(){   //-----------------------------------------測試用circle-------------------------------
+    //---------------加入Geofence--------------
+    private void addGeoFence(){
         Double geofenceList[][]=myData.getGeofenceList();
-        for(int i=0; i<geofenceList.length; i++){
-            addTestCircle(geofenceList[i][0], geofenceList[i][1]);
+
+        for (int i=0; i<geofenceList.length; i++){
+            mGeofenceList.add(new Geofence.Builder()
+                    .setRequestId(String.valueOf(i))
+                    .setCircularRegion(geofenceList[i][0], geofenceList[i][1],25)  //測試用 原為25------------------------------
+                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                            Geofence.GEOFENCE_TRANSITION_EXIT)
+                    .build());
+
+            addTestCircle(geofenceList[i][0], geofenceList[i][1]);//測試用circle------------------------
         }
+    }
+
+    //--------------建立Geofence----------------
+    private void startGeofenceMonitoring(){
+        try{
+            //加入Geofence
+            addGeoFence();
+
+            // 建立Geofence請求物件
+            GeofencingRequest geofenceRequest = new GeofencingRequest.Builder()
+                    .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+                    .addGeofences(mGeofenceList)
+                    .build();
+
+            mGeofencePendingIntent = getGeofencePendingIntent();
+            LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, geofenceRequest,mGeofencePendingIntent)
+                    .setResultCallback(new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(@NonNull Status status) {
+                            if(status.isSuccess()){
+                                //Log.e(TAG, "Successfully added geofence");
+                                //Toast.makeText(getActivity(),"Geofence成功",Toast.LENGTH_SHORT).show();
+                            }else{
+                                //Log.e(TAG, "Failed to add geofence"+status.getStatus());
+                                //Toast.makeText(getActivity(),"Geofence失敗",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+        }catch (SecurityException e){
+            //Log.e(TAG, "SecurityException - " + e.getMessage());
+        }
+    }
+
+    private PendingIntent getGeofencePendingIntent(){
+        if(mGeofencePendingIntent != null){
+            return mGeofencePendingIntent;
+        }
+        Intent intent = new Intent(getActivity(), MapGeofenceIntentService.class);
+
+        return PendingIntent.getService(getActivity(),0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    //--------------停止Geofence----------------
+    private void stopGeofenceMonitoring(){
+        ArrayList<String> geofenceIds = new ArrayList<String>();
+        Double geofenceList[][]=myData.getGeofenceList();
+
+        for(int i=0; i<geofenceList.length; i++){
+            geofenceIds.add(String.valueOf(i));
+        }
+
+        LocationServices.GeofencingApi.removeGeofences(mGoogleApiClient,geofenceIds);
     }
 
 
@@ -141,6 +206,7 @@ public class MainFragment extends Fragment implements
             LocationServices.FusedLocationApi.removeLocationUpdates(
                     mGoogleApiClient, this);
         }
+        stopGeofenceMonitoring();
     }
 
     @Override
@@ -182,6 +248,8 @@ public class MainFragment extends Fragment implements
             requestPermissions(
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},102);
         }
+
+        startGeofenceMonitoring();  //建立Geofence------------------------
     }
 
     @Override
@@ -236,12 +304,11 @@ public class MainFragment extends Fragment implements
                 chooseWorkSheetMarkers();  //建立各園區marker
             }
 
-
             //各園區marker點擊事件
             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-                    arLinearLayout.setVisibility(View.VISIBLE); //開始導航按鈕 顯示
+                    btnAr.setVisibility(View.VISIBLE); //開始導航按鈕 顯示
 
                     targetPosition[0]=String.valueOf(marker.getPosition().latitude);
                     targetPosition[1]=String.valueOf(marker.getPosition().longitude);
@@ -261,11 +328,10 @@ public class MainFragment extends Fragment implements
             mMap.setOnInfoWindowCloseListener(new GoogleMap.OnInfoWindowCloseListener() {
                 @Override
                 public void onInfoWindowClose(Marker marker) {
-                    arLinearLayout.setVisibility(View.INVISIBLE);  //開始導航按鈕 隱藏
+                    btnAr.setVisibility(View.INVISIBLE);  //開始導航按鈕 隱藏
                 }
             });
 
-            addTestCircle();  //-----------------------------------------測試用circle-------------------------------
 
         }catch (Exception e){
             e.printStackTrace();
@@ -286,8 +352,24 @@ public class MainFragment extends Fragment implements
         startActivity(intent);
     }
 
+    //--------------------------------------------------開始辨識----------------------------------------
+    private void startIr(){
+        Intent intent=new Intent();
+        intent.setClass(getActivity(), GuideActivity.class);
+        startActivity(intent);
+    }
+
+
     //---------------取得闖關單座標---------------
     public void chooseWorkSheetMarkers(){
+        btnAr.setText(R.string.main_startAr);  //設定文字為開始導航
+        btnAr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startAr(targetPosition);
+            }
+        });
+
         removeMarkers();
         mMarkers=myData.getWorkSheetMarkers();
         setMarkers(1);
@@ -295,6 +377,14 @@ public class MainFragment extends Fragment implements
 
     //---------------取得所有館區座標---------------
     public void chooseAreaMarkers(){
+        btnAr.setText(R.string.main_startIr);  //設定文字為開始辨識
+        btnAr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startIr();
+            }
+        });
+
         removeMarkers();
         mMarkers=myData.getAreaMarkers();
         setMarkers(2);

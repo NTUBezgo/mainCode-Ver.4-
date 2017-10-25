@@ -15,22 +15,22 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_gravity="center"
             android:src="@drawable/zoologo" />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:text="@string/about_zoo"
             android:layout_gravity="center"
+            android:layout_marginTop="5dp"
             android:textSize="18dp"
             android:textColor="@color/colorPrimary"/>
 
@@ -46,47 +46,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="1.2"
+        android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_gravity="center"
-            android:src="@drawable/imdlogo"/>
+            android:src="@drawable/imddmdlogo"/>
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:text="@string/about_imd"
             android:layout_gravity="center"
-            android:textSize="18dp"
+            android:layout_marginTop="20dp"
+            android:textSize="16dp"
             android:textColor="@color/colorPrimary"/>
-    </LinearLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:background="#6ec4b6"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:src="@drawable/dmdlogo"/>
-
     </LinearLayout>
 
 </LinearLayout>

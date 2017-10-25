@@ -9,9 +9,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.drawable.AnimationDrawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -19,6 +21,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,6 +74,11 @@ public class ArActivity extends UnityPlayerActivity implements
         LinearLayout u3dLayout = (LinearLayout) findViewById(R.id.u3d_layout);
         u3dLayout.addView(mUnityPlayer);
         mUnityPlayer.requestFocus();
+
+        //---------------設定Loading幀動畫--------------------
+        ImageView mImageViewFilling = (ImageView) findViewById(R.id.loadingDog);
+        ((AnimationDrawable) mImageViewFilling.getBackground()).start();
+        mHandler.sendEmptyMessageDelayed(LOADING_OVER, 6000); //隱藏Loading頁------------
 
         //---------------取得目標位置---------------------
         Bundle bundle=getIntent().getExtras();
@@ -129,6 +137,22 @@ public class ArActivity extends UnityPlayerActivity implements
 
     }
 
+    //------------隱藏Loading頁-------------------
+    private static final int LOADING_OVER = 0;
+    private Handler mHandler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case LOADING_OVER:     //若已經答過題-->跳至Loading頁
+                    View view = (View) findViewById(R.id.loadingPage);
+                    view.setVisibility(View.GONE);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    };
+
     //------------Unity取得目標位置-------------------
     public String[] getTargetPosition() {
         return targetPosition;
@@ -173,6 +197,7 @@ public class ArActivity extends UnityPlayerActivity implements
 
             }else if(geoFrom.equals("exit")){ //----------------------若離開範圍
                 UnityPlayer.UnitySendMessage("Main Camera", "changeAni", "false"); //呼叫unity函式設定動作
+                Toast.makeText(ArActivity.this, R.string.ar_exitRange ,Toast.LENGTH_SHORT).show();
                 sendBtn.setVisibility(View.INVISIBLE);
                 gotoTv.setVisibility(View.VISIBLE);
             }

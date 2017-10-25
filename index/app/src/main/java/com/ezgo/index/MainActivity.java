@@ -1,17 +1,21 @@
 package com.ezgo.index;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,6 +24,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -37,7 +43,6 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
 
     private MyData myData;
-    int choosefont;
 
     String getId;
 
@@ -48,16 +53,11 @@ public class MainActivity extends AppCompatActivity
 
         context=this;
         myData =new MyData(getResources());
-        choosefont = myData.getFont();
         fragmentManager = getSupportFragmentManager();
 
         //--------------設定ActionBar-----------------
         ActionBar actionBar = this.getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-        //--------------設定預設字型-----------------
-        if(choosefont==1) FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/wt011.ttf");
-        else if(choosefont==2) FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/wp010-08.ttf");
 
         //---------------drawer設定---------------------
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -177,15 +177,34 @@ public class MainActivity extends AppCompatActivity
                 mMenu.findItem(R.id.action_worksheet).setVisible(false);
                 mMenu.findItem(R.id.action_area).setVisible(false);
                 break;
-            case R.id.nav_font:     //---------切換注音---------
-                if(choosefont==1){
-                    myData.setFont(2);
-                }else if(choosefont==2){
-                    myData.setFont(1);
+            case R.id.nav_intro:     //---------切換園區簡介頁面---------
+                fragment = new IntroductionFragment();
+                fragmentTransaction.replace(R.id.main_frame,fragment);
+                mMenu.findItem(R.id.action_worksheet).setVisible(false);
+                mMenu.findItem(R.id.action_area).setVisible(false);
+                break;
+            case R.id.nav_language:     //---------切換語言---------
+                final String[] language = {"中文","English"};
+                final String nowLanguage = getResources().getConfiguration().locale.toString();
+                int index=0;    //預設選項
+                if(nowLanguage.equals("zh_TW")){
+                    index=0;
+                }else if(nowLanguage.equals("en")){
+                    index=1;
                 }
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+
+                AlertDialog.Builder dialog_list = new AlertDialog.Builder(MainActivity.this);
+                dialog_list.setTitle(R.string.main_language);
+                dialog_list.setSingleChoiceItems(language, index, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(which==0){
+                            if(!(nowLanguage.equals("zh_TW"))){ switchLanguage("zh"); }
+                        }else if(which==1){
+                            if(!(nowLanguage.equals("en"))){ switchLanguage("en"); }
+                        }
+                    }
+                }).show();
             default:
                 break;
         }
@@ -195,6 +214,25 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    //-------------------切換語言--------------------
+    private void switchLanguage(String language){
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+
+        if(language.equals("en")){
+            conf.setLocale(Locale.ENGLISH);
+        }else{
+            conf.setLocale(Locale.TRADITIONAL_CHINESE);
+        }
+        res.updateConfiguration(conf, dm);
+
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, MainActivity.class);
+        startActivity(intent);
+        this.finish();
     }
 
     //------------------------------------------螢幕方向------------------------------------

@@ -83,7 +83,7 @@ public class MyData{
     //建立地理圍欄範圍
     private Double geofenceList[][]={
             {24.9946605, 121.5887605}, //斑點鬣狗
-            {25.002292, 121.483586}, //測試用-----------------
+            {24.9975801, 121.5799735}, //臺灣黑熊
             {24.9932772, 121.5900815}, //北美灰狼
             {24.9921553, 121.5890408}, //黑尾草原犬鼠
             {24.995106, 121.583514}, //笑翠鳥
@@ -94,15 +94,6 @@ public class MyData{
     public Double[][] getGeofenceList(){
         return geofenceList;
     }
-
-
-    //選擇是否注音
-    public static int chooseFont=1;
-    public void setFont(int a){
-        chooseFont=a;
-    }
-    public int getFont(){return chooseFont;}
-
 
     //闖關單icon跳至主畫面
     private static boolean isFromWS=false;

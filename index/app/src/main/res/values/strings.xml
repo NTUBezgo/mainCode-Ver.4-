@@ -13,8 +13,10 @@
     <string name="nav_worksheet">本期闖關單</string>
     <string name="nav_dogInfo">旺哥小檔案</string>
     <string name="nav_info">闖關說明</string>
-    <string name="nav_font">切換注音</string>
+    <string name="nav_language">切換語言</string>
     <string name="nav_contact">關於我們</string>
+    <string name="nav_intro">園區簡介</string> <!--園區簡介-->
+    <string name="nav_other">其他</string>
 
     <!-- main.xml 切換按鈕-->
     <string name="action_worksheet">闖關單</string>
@@ -54,11 +56,11 @@
         <item>教育中心</item>
     </string-array>
 
-    <!-- WorksheetActivity.java -->
-    <string name="W_reload">請重新整理頁面！</string>
+    <!-- ArActivity.java -->
     <string name="ar_goto">前往:</string>
     <string name="ar_EC">已經到達教育中心囉!</string>
     <string name="ar_enterRange">已經進入答題範圍囉!</string>
+    <string name="ar_exitRange">已經離開答題範圍</string>
     <string name="ar_distence">距離：</string>
     <string name="ar_meter">公尺</string>
 
@@ -68,6 +70,9 @@
 
     <!-- activity_endguide.xml 說明頁 -->
     <string name="endguide_startMain">開始闖關</string>
+
+    <!-- MainActivity.java 主畫面 -->
+    <string name="main_language">選擇語言</string>
 
     <!-- activity_worksheet.xml 闖關單題目 -->
     <string name="worksheet_btnResume">重新整理</string>
@@ -87,13 +92,13 @@
 
     <!-- fragment_main.xml 主畫面地圖 -->
     <string name="main_startAr">開始導航</string>
+    <string name="main_startIr">開始辨識</string>
 
     <!-- fragment_reward.xml 獎品兌換 -->
     <string name="reward_exchange">兌換獎品</string>
 
     <!-- RewardFragment.java 獎品兌換-->
     <string name="reward_notice">請至服務台兌換</string>
-    <string name="reward_done">已兌換獎品</string>
 
     <!-- fragment_worksheet.xml 本期闖關單 -->
     <string name="worksheet_btnStartExchange">領取獎品</string>
@@ -109,7 +114,10 @@
     <string name="alert_go">立即兌換</string>
 
     <!-- reward_alert_1.xml 兌換彈出視窗1 -->
-    <string name="alert_name1">兌換獎品請記得到服務台兌換喔~</string>
+    <string name="alert_name1">請前往遊客服務中心兌換獎品喔~</string>
     <string name="alert_name2">我了解了</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

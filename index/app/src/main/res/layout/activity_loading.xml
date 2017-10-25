@@ -4,7 +4,7 @@
     android:id="@+id/activity_loading"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundGreen"
+    android:background="@color/whiteColor"
     tools:context="com.ezgo.index.LoadingActivity">
 
     <!--測試用-->
@@ -25,15 +25,17 @@
         android:gravity="center">
 
         <ImageView
+            android:id="@+id/loadingDog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/dog_running"/>
+            android:background="@drawable/loading_animation"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Loading..."
-            android:textSize="50dp"
+            android:textSize="25dp"
+            android:textColor="@color/backgroundGreen"
             android:layout_gravity="center"/>
     </LinearLayout>
 

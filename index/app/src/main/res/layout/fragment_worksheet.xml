@@ -95,17 +95,21 @@
 
     </LinearLayout>
 
+
     <Button
         android:id="@+id/startExchange"
-        android:layout_width="300dp"
-        android:layout_height="60dp"
-        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
-        android:background="@drawable/button_arstart"
-        android:textSize="38dp"
+        android:background="@drawable/btn_reward"
+        android:textSize="28dp"
         android:textColor="@color/whiteColor"
         android:layout_gravity="center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:text="@string/worksheet_btnStartExchange"
         android:visibility="gone"/>
+
 
 </LinearLayout>

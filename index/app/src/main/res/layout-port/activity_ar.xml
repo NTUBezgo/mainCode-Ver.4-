@@ -58,4 +58,7 @@
     </RelativeLayout>
 
 
+    <include android:id="@+id/loadingPage" layout="@layout/activity_loading" />
+
+
 </FrameLayout>

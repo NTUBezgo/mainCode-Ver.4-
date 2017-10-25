@@ -22,15 +22,21 @@
             android:icon="@drawable/ic_info_outline_white_36dp"
             android:title="@string/nav_info"/>
 
+        <!--園區簡介-->
+        <item
+            android:id="@+id/nav_intro"
+            android:icon="@drawable/ic_guide"
+            android:title="@string/nav_intro"/>
+
     </group>
 
 
-    <item android:title="其他" android:id="@+id/setting">
+    <item android:title="@string/nav_other" android:id="@+id/setting">
         <menu>
             <item
-                android:id="@+id/nav_font"
+                android:id="@+id/nav_language"
                 android:icon="@drawable/ic_exchange"
-                android:title="@string/nav_font" />
+                android:title="@string/nav_language" />
 
             <item
                 android:id="@+id/nav_contact"

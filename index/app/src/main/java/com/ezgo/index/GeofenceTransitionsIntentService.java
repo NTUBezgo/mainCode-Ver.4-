@@ -2,8 +2,10 @@ package com.ezgo.index;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
@@ -21,7 +23,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
     private static final String TAG = "GTIntentService";
     public static int WHICHAREA;
-
+    Handler handler = new Handler();
     public GeofenceTransitionsIntentService() {
         super(TAG);
     }
@@ -59,10 +61,10 @@ public class GeofenceTransitionsIntentService extends IntentService {
             LocalBroadcastManager.getInstance(GeofenceTransitionsIntentService.this).sendBroadcast(lbcIntent);  //Send the intent
 
 
-
         }else if(transition == Geofence.GEOFENCE_TRANSITION_EXIT ){ //離開範圍
             //Log.e(TAG,"Exiting geofence -"+requestId);
 
+            //-----------------傳送訊息至arActivity
             Intent lbcIntent = new Intent("googlegeofence"); //Send to any reciever listening for this
             lbcIntent.putExtra("from","exit");
             LocalBroadcastManager.getInstance(GeofenceTransitionsIntentService.this).sendBroadcast(lbcIntent);  //Send the intent

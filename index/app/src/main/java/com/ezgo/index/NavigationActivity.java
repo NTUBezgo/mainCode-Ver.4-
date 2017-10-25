@@ -3,11 +3,16 @@ package com.ezgo.index;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.ezgo.index.Common.Common;
@@ -23,7 +28,8 @@ public class NavigationActivity extends Activity {
     String getId;
     public String user_id;
     public String recordDone;
-    public String rewardDone;
+
+    private ImageView imageView;
 
     //----------
     static boolean doneChk;
@@ -43,9 +49,13 @@ public class NavigationActivity extends Activity {
 
         setContentView(R.layout.activity_navigation);
 
-        //預設字型
-        FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/wp010-08.ttf");
-
+        //------------------------------------------設定旺事如意logo動畫-----------------------------------------
+        ScaleAnimation scaleAnimation = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f
+                , Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        scaleAnimation.setDuration(1000); //時間
+        scaleAnimation.setRepeatCount(0); //不重複
+        imageView = (ImageView) findViewById(R.id.navDog);
+        imageView.startAnimation(scaleAnimation);
 
         //---------------------------上傳使用者的裝置ID及新增15筆record的紀錄
         NavigationAsyncTask myNavigationAsyncTask = new NavigationAsyncTask(new NavigationAsyncTask.TaskListener() {
@@ -72,12 +82,11 @@ public class NavigationActivity extends Activity {
                     //Log.e("user_id :" , user_id);
 
                     //---------------------------跳轉頁面
-                    /*if(doneChk){
-                        mHandler.sendEmptyMessageDelayed(GOTO_LOADING_ACTIVITY, 1000); //1秒跳轉
+                    if(doneChk){
+                        mHandler.sendEmptyMessageDelayed(GOTO_LOADING_ACTIVITY, 3000); //秒跳轉
                     }else{
-                        mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 1000); //1秒跳轉
-                    }*/
-                    mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 1000); //1秒跳轉
+                        mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 3000); //秒跳轉
+                    }
 
                 }catch(Exception e){}
             }

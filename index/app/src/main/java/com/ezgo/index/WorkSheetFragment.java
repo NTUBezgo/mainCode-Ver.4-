@@ -2,6 +2,7 @@ package com.ezgo.index;
 
 
 import android.content.Intent;
+import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -52,7 +53,13 @@ public class WorkSheetFragment extends Fragment {
 
         for (int i = 0 ; i<imgViewsID.length ; i++) { //頭像預設為灰色
             imageView = (ImageView) view.findViewById(imgViewsID[i]);
-            imageView.setColorFilter(ContextCompat.getColor(getActivity(), R.color.worksheetImag1));// 換色
+            ColorMatrixColorFilter colorFilter = new ColorMatrixColorFilter(new float[]{
+                    0.33F, 0.59F, 0.11F, 0, 0,
+                    0.33F, 0.59F, 0.11F, 0, 0,
+                    0.33F, 0.59F, 0.11F, 0, 0,
+                    0, 0, 0, 1, 0,
+            });
+            imageView.setColorFilter(colorFilter);// 換色
         }
 
         textView = (TextView) view.findViewById(R.id.showQuestAmount);
@@ -64,17 +71,11 @@ public class WorkSheetFragment extends Fragment {
                 try {
                     JSONObject object = new JSONObject(result);
                     JSONArray jsonArray = object.getJSONArray("ans");
-                    textView.setText(getString(R.string.worksheet_correct) + Byte.valueOf(jsonArray.getJSONObject(0).getString("ans")));
+                    textView.setText(getString(R.string.worksheet_correct) + jsonArray.getJSONObject(0).getString("ans"));
 
                     jsonArray = object.getJSONArray("recordDone");
 
-                    for (int i = 0 ; i<jsonArray.length() ; i++) {
-                        imageView = (ImageView) view.findViewById(imgViewsID[i]);
-                        imageView.setColorFilter(ContextCompat.getColor(getActivity(), R.color.worksheetImag1));// 換色
-                    }
-
                     for (int i = 0 ; i<jsonArray.length() ; i++){
-                        // 沒有看過的動物要變成灰色
                         // recordDone[i] == 0 代表還沒看過這隻動物
                         // recordDone[i] == 1 代表看過這隻動物
                         recordDone[i] = Byte.valueOf(jsonArray.getJSONObject(i).getString("recordDone"));
@@ -97,7 +98,7 @@ public class WorkSheetFragment extends Fragment {
                         }else {
                             chkEnd +=1;
                             final int j=i;
-                            imageView.clearColorFilter(); //回答過變回彩色
+                            imageView.clearColorFilter(); //回答過變回彩色---
                             imageView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -111,7 +112,7 @@ public class WorkSheetFragment extends Fragment {
                         }
                     }
                     if(chkEnd == 6){
-                        //進入這裡表示作答完了，可以跳到兌換獎品頁,可以先不要做判斷，才有辦法進去兌換獎品頁?
+                        //進入這裡表示作答完了，可以跳到兌換獎品頁
                         startExchange.setVisibility(View.VISIBLE);
                         startExchange.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -122,7 +123,7 @@ public class WorkSheetFragment extends Fragment {
                     }
 
                 } catch (Exception e) {
-                    Log.v("ABC", Log.getStackTraceString(e));
+                    //Log.v("ABC", Log.getStackTraceString(e));
                 }
             }
         });myAsyncTask.execute(Common.getRecordDoneUrl + getUser_id());
@@ -138,7 +139,7 @@ public class WorkSheetFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().setTitle("本期闖關單");
+        getActivity().setTitle(R.string.nav_worksheet);
     }
 
 }

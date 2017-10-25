@@ -7,29 +7,16 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:gravity="center"
-    android:background="@color/backgroundGreen"
+    android:background="@drawable/navi_bg"
     tools:context="com.ezgo.index.NavigationActivity">
 
-    <FrameLayout
+    <ImageView
+        android:id="@+id/navDog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:padding="@dimen/layout_padding">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="270dp"
-            android:layout_marginBottom="40dp"
-            android:src="@drawable/icon_zoo_1"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:src="@drawable/taipeizoologo"/>
-    </FrameLayout>
-
+        android:layout_gravity="center"
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/nav_pic"/>
 
     <!--測試用-->
     <TextView

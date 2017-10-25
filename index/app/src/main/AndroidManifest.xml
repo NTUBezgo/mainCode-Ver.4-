@@ -30,7 +30,7 @@
         <!-- debug -->
         <!-- android:value="AIzaSyCLcFEkhYQGuSJwc-5UeIv5qh9j-0_prhw" -->
         <!-- release -->
-        <!--android:value="AIzaSyDDJob0EBBF6-OBW3kfu2TvYG30P4raqXw"/> 組長的map-->
+        <!-- android:value="AIzaSyDDJob0EBBF6-OBW3kfu2TvYG30P4raqXw"/> 組長的map -->
 
 
         <!-- 導引頁 -->
@@ -46,18 +46,21 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
         <!-- Ar畫面 -->
         <activity
             android:name=".ArActivity"
-            android:process="com.ezgo.index.unity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:process="com.ezgo.index.unity"
             android:screenOrientation="portrait"
             android:theme="@style/ArTheme" />
 
         <!-- 說明畫面 -->
-        <activity android:name=".GuideActivity" />
+        <activity
+            android:name=".GuideActivity"
+            android:screenOrientation="portrait" />
 
         <!-- Loading畫面 -->
         <activity android:name=".LoadingActivity" />
@@ -70,11 +73,26 @@
         <!-- 動物介紹畫面 -->
         <activity android:name=".AnimalintroActivity" />
 
+        <!-- 館區簡介 -->
+        <activity
+            android:name=".AreaActivity"
+            android:theme="@style/AppTheme" />
+
+        <!-- HTML畫面 -->
+        <activity
+            android:name=".HtmlActivity"
+            android:theme="@style/AppTheme" />
+
         <service
             android:name=".GeofenceTransitionsIntentService"
             android:enabled="true"
             android:exported="true"
-            android:process="com.ezgo.index.unity"/>
+            android:process="com.ezgo.index.unity" />
+        <service
+            android:name=".MapGeofenceIntentService"
+            android:enabled="true"
+            android:exported="true" />
+
 
     </application>
 

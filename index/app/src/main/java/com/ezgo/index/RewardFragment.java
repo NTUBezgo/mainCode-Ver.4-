@@ -1,7 +1,11 @@
 package com.ezgo.index;
 
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -10,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +32,7 @@ import org.json.JSONObject;
 public class RewardFragment extends Fragment {
 
     private View view;
-    private Button btn_exchange;
+    private ImageView exchagneBtn;
 
     private AlertDialog ad;
 
@@ -42,52 +47,81 @@ public class RewardFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_reward, container, false);
-        btn_exchange = (Button) view.findViewById(R.id.btn_exchange);
-        downloadRewardDone();
+        exchagneBtn = (ImageView) view.findViewById(R.id.iv_exchange);
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.reward_alert_1, null);
-        TextView tv_ok = (TextView) v.findViewById(R.id.id_name2);
+        if (isConnected()) {    //檢查網路是否開啟
+            downloadRewardDone(); //取得兌換紀錄
 
-        tv_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ad.dismiss();
-            }
-        });
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+            View v = LayoutInflater.from(getActivity()).inflate(R.layout.reward_alert_1, null);
+            TextView tv_ok = (TextView) v.findViewById(R.id.id_name2);
 
-        dialogBuilder.setView(v);
-        ad = dialogBuilder.show();
+            tv_ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ad.dismiss();
+                }
+            });
 
-        btn_exchange.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            dialogBuilder.setView(v);
+            ad = dialogBuilder.show();
 
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-                View view = LayoutInflater.from(getActivity()).inflate(R.layout.reward_alert, null);
-                TextView tv_btn1 = (TextView) view.findViewById(R.id.btn_wait);
-                TextView tv_btn2 = (TextView) view.findViewById(R.id.btn_go);
-                tv_btn1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ad.dismiss();
-                        Toast.makeText(getActivity(), R.string.reward_notice, Toast.LENGTH_SHORT).show();
+            exchagneBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (isConnected()) {    //檢查網路是否開啟
+                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                        View view = LayoutInflater.from(getActivity()).inflate(R.layout.reward_alert, null);
+                        TextView tv_btn1 = (TextView) view.findViewById(R.id.btn_wait);
+                        TextView tv_btn2 = (TextView) view.findViewById(R.id.btn_go);
+                        tv_btn1.setOnClickListener(new View.OnClickListener() { //稍後
+                            @Override
+                            public void onClick(View view) {
+                                ad.dismiss();
+                                Toast.makeText(getActivity(), R.string.reward_notice, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        tv_btn2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) { //立即兌換
+                                ad.dismiss();
+                                updateReward();
+                                downloadRewardDone();
+                            }
+                        });
+                        dialogBuilder.setView(view);
+                        ad = dialogBuilder.show();
+                    }else{
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle(R.string.notice_network);
+                        builder.setCancelable(false);
+
+                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        });
+
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
                     }
-                });
-                tv_btn2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ad.dismiss();
-                        updateReward();
-                        btn_exchange.setText(R.string.reward_done);
-                        btn_exchange.setEnabled(false);
-                        btn_exchange.setTextColor(Color.parseColor("#9ADCDCDC"));
-                    }
-                });
-                dialogBuilder.setView(view);
-                ad = dialogBuilder.show();
-            }
-        });
+                }
+            });
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.notice_network);
+            builder.setCancelable(false);
+
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
+
 
         return view;
     }
@@ -95,7 +129,7 @@ public class RewardFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().setTitle("兌換獎品");
+        getActivity().setTitle(R.string.reward_exchange);
     }
 
     private void downloadRewardDone(){
@@ -107,12 +141,11 @@ public class RewardFragment extends Fragment {
                     JSONArray jsonArray = object.getJSONArray("reward");
                     rewardDone = jsonArray.getJSONObject(0).getString("done");
                     if(rewardDone.equals("1")){
-                        btn_exchange.setText(R.string.reward_done);
-                        btn_exchange.setEnabled(false);
-                        btn_exchange.setTextColor(Color.parseColor("#9ADCDCDC"));
+                        exchagneBtn.setImageResource(R.drawable.dog_exchange2);
+                        exchagneBtn.setEnabled(false);
                     }
                 } catch (Exception e) {
-                    Log.v("ABC", Log.getStackTraceString(e));
+                    //Log.v("ABC", Log.getStackTraceString(e));
                 }
             }
         });
@@ -132,6 +165,15 @@ public class RewardFragment extends Fragment {
         } else {
             //Toast.makeText(RewardFragment.this, "連線已取消", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private boolean isConnected(){  //檢查網路是否開啟
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
     }
 
 }

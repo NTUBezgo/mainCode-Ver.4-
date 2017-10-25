@@ -3,9 +3,11 @@ package com.ezgo.index;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -43,9 +45,21 @@ public class WorksheetActivity extends AppCompatActivity {
     //---------判斷使用者已經回答幾題range:0-2 當=3時會被重置為0
     private static int count = 0;
     //---------用於答對或答錯後顯示什麼提示訊息
-    private static  String showCurrent = "恭喜您答對了";
-    private static  String showFail = "很可惜答錯了";
-
+    private String showCurrent;
+    private String showFail;
+    private int titleNumber = 0;
+    //計算單題選項總數
+    int optionSum;
+    private static int titleNo[] ={
+            R.drawable.q1,R.drawable.q2,R.drawable.q3
+    };
+    private static int optionImg[] ={
+            R.drawable.optiona,R.drawable.optionb,R.drawable.optionc,R.drawable.optiond
+    };
+    private static int optionCheckImg[] ={
+            R.drawable.optionchecka,R.drawable.optioncheckb,R.drawable.optioncheckc,R.drawable.optioncheckd
+    };
+    static Boolean[] setCheck = new Boolean[4];
     /*
     目前的邏輯：
     陣列長度：0 1 2 3 4 5 6 7 8 9 10 11 12 13 14ttttttttttttttttttttt
@@ -82,14 +96,16 @@ public class WorksheetActivity extends AppCompatActivity {
         worksheetImg = MyData.getWorksheetImg();
         rg  = (RadioGroup) findViewById(R.id.rg);
 
+        showCurrent = getString(R.string.worksheet_hintRight);
+        showFail = getString(R.string.worksheet_hintWrong);
         imageTop = (ImageView) findViewById(R.id.ImgViewTop);
         imageBottom = (ImageView) findViewById(R.id.ImgViewBottom);
         textView = (TextView) findViewById(R.id.title);
-        textView.setTextSize(24.0f);
+        textView.setTextSize(20.f);
         textDescription = (TextView) findViewById(R.id.textDescription);
         textHint = (TextView) findViewById(R.id.textHint);
-        textDescription.setTextSize(20.0f);
-        textHint.setTextSize(22.0f);
+        textDescription.setTextSize(18.0f);
+        textHint.setTextSize(18.0f);
         mBtnChk = (Button)findViewById(R.id.btnChk);
         mBtnResume = (Button)findViewById(R.id.btnResume);
         mBtnNextquest = (Button)findViewById(R.id.btnNextquest);
@@ -97,8 +113,11 @@ public class WorksheetActivity extends AppCompatActivity {
         textDetail = (LinearLayout) findViewById(R.id.textDetail);
         mBtnNextquest.setVisibility(View.GONE);
         textDetail.setVisibility(View.GONE);
+        imageBottom.setVisibility(View.GONE);
+        imageTop.setImageResource(titleNo[titleNumber]);
 
-        //判斷目前該顯示哪一張圖片
+        /*
+        //判斷目前該顯示哪一張圓圈動物頭
         switch (imgNo){
             case 0:
                 imageBottom.setImageResource(worksheetImg[0]);
@@ -126,7 +145,7 @@ public class WorksheetActivity extends AppCompatActivity {
                 imageTop.setImageResource(worksheetImg[5]);
                 break;
         }
-
+        */
         getData();
     }
 
@@ -148,9 +167,7 @@ public class WorksheetActivity extends AppCompatActivity {
                             mBtnNextquest.setVisibility(View.VISIBLE);
                             mBtnChk.setVisibility(View.GONE);
                             textDetail.setVisibility(View.VISIBLE);
-                            //進行上傳動作
-                            updateAns();
-                            //showNextQuest();
+                            updateAns();//-------------------------------進行上傳動作-----------------------------------------
                             textHint.setText(showCurrent );
                             //資料庫內預設沒有解釋的時候顯示無
                             if(getWorksheet.getDescription(index).equals("無")){
@@ -165,8 +182,7 @@ public class WorksheetActivity extends AppCompatActivity {
                             mBtnNextquest.setVisibility(View.VISIBLE);
                             mBtnChk.setVisibility(View.GONE);
                             textDetail.setVisibility(View.VISIBLE);
-                            updateAns();
-                            //showNextQuest();
+                            updateAns(); //-------------------------------進行上傳動作-----------------------------------------
                             textHint.setText(showFail);
                             if(getWorksheet.getDescription(index).equals("無")){
                             }else{
@@ -178,6 +194,11 @@ public class WorksheetActivity extends AppCompatActivity {
                         }
 
                     } else {
+                        if(rg != null){
+                            rg.removeAllViews();
+                        }
+                        mBtnNextquest.setVisibility(View.VISIBLE);
+                        mBtnChk.setVisibility(View.GONE);
                         showNextQuest();
                         Toast.makeText(WorksheetActivity.this, R.string.worksheet_notice2, Toast.LENGTH_SHORT).show();
                     }
@@ -208,20 +229,29 @@ public class WorksheetActivity extends AppCompatActivity {
         super.onResume();
         //確認按鈕
         mBtnChk = (Button)findViewById(R.id.btnChk);
-
+        if(rg != null){
+            rg.removeAllViews();
+        }
+        sign= sign-optionSum-1;
         getData();
     }
-    //暫時不作用
+    protected void onStop() {
+        super.onStop();
+
+    }
+
     protected void showNextQuest(){
         count += 1;
-
-        mBtnNextquest.setVisibility(View.GONE);
-        mBtnChk.setVisibility(View.VISIBLE);
+        //titleNumber的範圍是0-2(三個題目->三張圖片)
+        titleNumber +=1;
 
         if(count != maxQuestionLength){
             //------------顯示下一題
             index += 1;
             Ans = 2;
+            imageTop.setImageResource(titleNo[titleNumber]);
+            mBtnNextquest.setVisibility(View.GONE);
+            mBtnChk.setVisibility(View.VISIBLE);
         }
         /*
         //測試用，可以顯示所有題目
@@ -234,7 +264,6 @@ public class WorksheetActivity extends AppCompatActivity {
         else{
             //-------------在這裡撰寫回首頁的程式碼
             Intent intent = new Intent();
-
             intent.setClass(WorksheetActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -242,6 +271,8 @@ public class WorksheetActivity extends AppCompatActivity {
             count =0;
             //Toast.makeText(WorksheetActivity.this,"答題結束" , Toast.LENGTH_SHORT).show();
         }
+
+
         showData();
         //count=3等於使用者已回答三題，else表示使用者要回首頁了
     }
@@ -267,6 +298,7 @@ public class WorksheetActivity extends AppCompatActivity {
     }
     //-------------------顯示問答題內容
     private void showData(){
+
         for(int i =0 ; i < optionLength;i++){
             if(sign != -1)break;
             if(optionQuestion_id[i].equals(recordQuestion_id[index])){
@@ -282,40 +314,45 @@ public class WorksheetActivity extends AppCompatActivity {
             mBtnResume.setVisibility(View.GONE);
             RadioButton rb;
             OnClickListener mOnClickListener = new OnClickListener();
-            int i =0;
+            optionSum =0;
             while(optionQuestion_id[sign].equals(recordQuestion_id[index])){
                 rb = new RadioButton(this);
                 if(optionQuestion_id[sign + 1] == null){
                     optionQuestion_id[sign + 1] = "100";
                 }
+
                 if(optionQuestion_id[sign].equals(optionQuestion_id[sign + 1])){
-                    rb.setId(1 + i);             //id = 1,2,3
-                    rb.setText(option[sign]);
-                    nowAnser[i+1] = option[sign];//nowAnser[0] 使用範圍是1-4
-                    rb.setTextSize(17.0f);
+                    rb.setId(1 + optionSum);             //id = 1,2,3
+                    rb.setText("　" +stringFormat(option[sign]));
+                    nowAnser[optionSum+1] = option[sign];//nowAnser[0] 使用範圍是1-4
+                    rb.setTextSize(19.0f);
                     rb.setTextColor(Color.BLACK);
                     rb.setButtonTintList(ColorStateList.valueOf(Color.BLACK));
-                    rb.setHeight(120);
-                    if(i ==0){
+                    rb.setBackgroundResource(optionImg[optionSum]);
+                    rb.setGravity(Gravity.CENTER);
+                    rb.setButtonDrawable(null);
+                    if(optionSum ==0){
                         rb.setChecked(true);
                     }
                     rb.setOnClickListener(mOnClickListener);
                     rg.addView(rb);
                     sign +=1;
                 }else{
-                    rb.setId(1 + i);             //id = 1,2,3
-                    rb.setText(option[sign]);
-                    nowAnser[i+1] = option[sign];
-                    rb.setTextSize(17.0f);
+                    rb.setId(1 + optionSum);             //id = 1,2,3
+                    rb.setText("　" +stringFormat(option[sign]));
+                    nowAnser[optionSum+1] = option[sign];
+                    rb.setTextSize(19.0f);
                     rb.setTextColor(Color.BLACK);
                     rb.setButtonTintList(ColorStateList.valueOf(Color.BLACK));
-                    rb.setHeight(120);
+                    rb.setBackgroundResource(optionImg[optionSum]);
+                    rb.setGravity(Gravity.CENTER);
+                    rb.setButtonDrawable(null);
                     rb.setOnClickListener(mOnClickListener);
                     rg.addView(rb);
                     sign +=1;
                     break;
                 }
-                i+=1;
+                optionSum+=1;
             }
         } else {
             mBtnChk.setVisibility(View.GONE);
@@ -346,6 +383,7 @@ public class WorksheetActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             RadioButton rb;
+            rb = (RadioButton) findViewById(rg.getCheckedRadioButtonId());
             switch(rg.getCheckedRadioButtonId()){
                 case 1:
                     if(rg.getCheckedRadioButtonId() == getWorksheet.getAnswer(index)) {
@@ -353,8 +391,7 @@ public class WorksheetActivity extends AppCompatActivity {
                     }else {
                         Ans = 0;
                     }
-                    rb = (RadioButton) findViewById(rg.getCheckedRadioButtonId());
-                    rb.setChecked(true);
+                    setOptionCheck(rg.getCheckedRadioButtonId()-1);
                     break;
                 case 2:
                     if(rg.getCheckedRadioButtonId() == getWorksheet.getAnswer(index)) {
@@ -362,8 +399,7 @@ public class WorksheetActivity extends AppCompatActivity {
                     }else {
                         Ans = 0;
                     }
-                    rb = (RadioButton) findViewById(rg.getCheckedRadioButtonId());
-                    rb.setChecked(true);
+                    setOptionCheck(rg.getCheckedRadioButtonId()-1);
                     break;
                 case 3:
 
@@ -372,8 +408,7 @@ public class WorksheetActivity extends AppCompatActivity {
                     }else {
                         Ans = 0;
                     }
-                    rb = (RadioButton) findViewById(rg.getCheckedRadioButtonId());
-                    rb.setChecked(true);
+                    setOptionCheck(rg.getCheckedRadioButtonId()-1);
                     break;
                 case 4:
                     if(rg.getCheckedRadioButtonId() == getWorksheet.getAnswer(index)) {
@@ -381,11 +416,22 @@ public class WorksheetActivity extends AppCompatActivity {
                     }else {
                         Ans = 0;
                     }
-                    rb = (RadioButton) findViewById(rg.getCheckedRadioButtonId());
-                    rb.setChecked(true);
+                    setOptionCheck(rg.getCheckedRadioButtonId()-1);
                     break;
             }
-            Log.v("rg",rg.getCheckedRadioButtonId()+"");
+            for(int i =0;i<4;i++){
+                try {
+                    rb = (RadioButton) findViewById(1 + i);
+                    if (setCheck[i]) {
+                        rb.setBackgroundResource(optionCheckImg[rg.getCheckedRadioButtonId() - 1]);
+                    } else {
+                        rb.setBackgroundResource(optionImg[i]);
+                    }
+                }catch (Exception e){
+
+                }
+            }
+            //Log.v("rg",rg.getCheckedRadioButtonId()+"");
         }
     };
 
@@ -398,5 +444,21 @@ public class WorksheetActivity extends AppCompatActivity {
     public static void postCount(int pCount){
         imgNo = pCount;
         index = pCount*3;
+    }
+
+    public static void setOptionCheck(int whatOption){
+        for(int i = 0 ; i < 4 ; i++){
+            setCheck[i] = false;
+        }
+        setCheck[whatOption] = true;
+    }
+
+    public static StringBuffer stringFormat(String str){
+        StringBuffer mstringBuffer = new StringBuffer();
+        mstringBuffer.append(str);
+        if(mstringBuffer.length() >8){
+            mstringBuffer.insert(9,"\n　");
+        }
+        return mstringBuffer;
     }
 }
