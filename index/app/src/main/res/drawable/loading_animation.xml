@@ -3,11 +3,19 @@
     android:oneshot="false">
 
     <item
-        android:duration="280"
+        android:duration="250"
         android:drawable="@drawable/dog_run1"/>
 
     <item
-        android:duration="280"
+        android:duration="250"
         android:drawable="@drawable/dog_run2"/>
+
+    <item
+        android:duration="250"
+        android:drawable="@drawable/dog_run3"/>
+
+    <item
+        android:duration="250"
+        android:drawable="@drawable/dog_run4"/>
 
 </animation-list>

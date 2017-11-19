@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_breakthrough"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/worksheet_background"
+    tools:context="com.ezgo.index.WorkSheetFragment"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <ImageView
+        android:id="@+id/intro_animalCircle"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:layout_gravity="center_horizontal" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/intro_animalCircle1"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="2.5"
+                    android:src="@drawable/number_wood_1"/>
+
+                <TextView
+                    android:id="@+id/intro_animalTitle1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#212121"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/intro_animalCircle2"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="2.5"
+                    android:src="@drawable/number_wood_2"/>
+
+                <TextView
+                    android:id="@+id/intro_animalTitle2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#212121"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/intro_animalCircle3"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="2.5"
+                    android:src="@drawable/number_wood_3"/>
+
+                <TextView
+                    android:id="@+id/intro_animalTitle3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#212121"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/intro_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_reward"
+            android:textSize="28dp"
+            android:textColor="@color/whiteColor"
+            android:text="@string/worksheet_intro_back"/>
+
+    </LinearLayout>
+
+</LinearLayout>

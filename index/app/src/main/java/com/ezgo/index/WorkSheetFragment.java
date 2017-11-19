@@ -35,12 +35,13 @@ public class WorkSheetFragment extends Fragment {
     private ImageView imageView;
     private TextView textView;
     private Button startExchange;
+    private TextView tv_exchangeNotice;
     private int[] imgViewsID= {R.id.circle_hyena, R.id.circle_bear, R.id.circle_wolf,
             R.id.circle_head_prairiedog , R.id.circle_kookaburra, R.id.circle_deer
     };
     //確認是否六題皆完成
     int chkEnd = 0;
-    private static int[] recordDone = new int[10];
+    private static int[] recordDone = new int[7];
 
     public WorkSheetFragment() {
     }
@@ -63,8 +64,15 @@ public class WorkSheetFragment extends Fragment {
         }
 
         textView = (TextView) view.findViewById(R.id.showQuestAmount);
+        tv_exchangeNotice = (TextView) view.findViewById(R.id.tv_exchangeNotice);
         myData = new MyData(getResources());
 
+        setAnimalCircle();
+
+        return view;
+    }
+
+    private void setAnimalCircle(){
         getRecordDoneAsyncTask myAsyncTask = new getRecordDoneAsyncTask(new getRecordDoneAsyncTask.TaskListener() {
             @Override
             public void onFinished(String result) {
@@ -79,7 +87,7 @@ public class WorkSheetFragment extends Fragment {
                         // recordDone[i] == 0 代表還沒看過這隻動物
                         // recordDone[i] == 1 代表看過這隻動物
                         recordDone[i] = Byte.valueOf(jsonArray.getJSONObject(i).getString("recordDone"));
-                        //Log.v("recordDone",""+recordDone[i]);
+                        //Log.e("recordDone",""+recordDone[i]);
                         imageView = (ImageView) view.findViewById(imgViewsID[i]);
                         //判斷頭像的顏色
                         if(recordDone[i] == 0){
@@ -93,7 +101,6 @@ public class WorkSheetFragment extends Fragment {
                                     ((MainActivity)getActivity()).jumpToMainFragment();
                                 }
                             });
-
                             continue;
                         }else {
                             chkEnd +=1;
@@ -103,17 +110,17 @@ public class WorkSheetFragment extends Fragment {
                                 @Override
                                 public void onClick(View v) {
                                     //看動物的問答題
-                                    Intent intent = new Intent();
-                                    intent.setClass(getActivity(), WorksheetActivity.class);
-                                    WorksheetActivity.postCount(j);
-                                    startActivity(intent);
+                                    WorksheetIntroFragment.postCount(j);
+                                    ((MainActivity)getActivity()).exchangeWorksheetIntro();
                                 }
                             });
                         }
                     }
                     if(chkEnd == 6){
                         //進入這裡表示作答完了，可以跳到兌換獎品頁
-                        startExchange.setVisibility(View.VISIBLE);
+                        tv_exchangeNotice.setVisibility(View.INVISIBLE);
+                        startExchange.setBackground(getResources().getDrawable(R.drawable.btn_reward));
+                        startExchange.setText(R.string.worksheet_btnStartExchange);
                         startExchange.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -127,19 +134,13 @@ public class WorkSheetFragment extends Fragment {
                 }
             }
         });myAsyncTask.execute(Common.getRecordDoneUrl + getUser_id());
-
-        //------
-       /* Toast.makeText(getActivity(), "請至此動物區尋找題目與答案", Toast.LENGTH_SHORT).show();
-        myData.fromWS(position);
-        ((MainActivity)getActivity()).jumpToMainFragment();*/
-
-        return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
         getActivity().setTitle(R.string.nav_worksheet);
+        setAnimalCircle();
     }
 
 }

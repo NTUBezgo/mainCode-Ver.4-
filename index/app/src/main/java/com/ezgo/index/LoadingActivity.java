@@ -15,7 +15,6 @@ public class LoadingActivity extends AppCompatActivity {
 
     private String getFrom;
     private static final int GOTO_MAIN_ACTIVITY = 0;
-    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

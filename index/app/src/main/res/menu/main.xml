@@ -10,7 +10,7 @@
 
     <item
         android:id="@+id/action_area"
-        android:icon="@drawable/area"
+        android:icon="@drawable/ic_camera"
         android:title="@string/action_area"
         app:showAsAction="always"/>
 

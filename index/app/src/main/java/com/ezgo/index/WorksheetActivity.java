@@ -3,7 +3,6 @@ package com.ezgo.index;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,8 +22,6 @@ import com.ezgo.index.MyAsyncTask.worksheetUpdateAsyncTask;
 public class WorksheetActivity extends AppCompatActivity {
     //---------每隻動物最多有3題題目
     private static final int maxQuestionLength = 3;
-    //---------判斷傳進來的值是哪一張圖片
-    private static int imgNo ;
     //---------使用者的資料
     private static String[] question = new String[100];
     private static String[] description = new String[100];
@@ -38,11 +35,13 @@ public class WorksheetActivity extends AppCompatActivity {
     private static int optionLength = 0;
     //---------取得總共有幾題題目
     private static int questionLength = 0;
+    //---------判斷傳進來的值是哪一張圖片
+    private static int imgNo ;
     //---------目前題目在第0題，要從地理圍欄傳入該動物是哪隻動物(詳見postIndex) range:0-14
     private static int index = 0;
     //---------判斷使用者是否有點下正確答案的radioButton
     private static byte Ans = 2;
-    //---------判斷使用者已經回答幾題range:0-2 當=3時會被重置為0
+    //---------判斷使用者已經回答幾題range:0-2 當=3時會被重置為0 (333行)
     private static int count = 0;
     //---------用於答對或答錯後顯示什麼提示訊息
     private String showCurrent;
@@ -79,11 +78,10 @@ public class WorksheetActivity extends AppCompatActivity {
     public Button mBtnResume;
     public Button mBtnNextquest;
     public RadioGroup rg;
-    private TextView textView;
+    private TextView title;
     private TextView textDescription;
     private TextView textHint;
     private LinearLayout textDetail;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,8 +98,8 @@ public class WorksheetActivity extends AppCompatActivity {
         showFail = getString(R.string.worksheet_hintWrong);
         imageTop = (ImageView) findViewById(R.id.ImgViewTop);
         imageBottom = (ImageView) findViewById(R.id.ImgViewBottom);
-        textView = (TextView) findViewById(R.id.title);
-        textView.setTextSize(20.f);
+        title = (TextView) findViewById(R.id.title);
+        title.setTextSize(20.f);
         textDescription = (TextView) findViewById(R.id.textDescription);
         textHint = (TextView) findViewById(R.id.textHint);
         textDescription.setTextSize(18.0f);
@@ -117,32 +115,40 @@ public class WorksheetActivity extends AppCompatActivity {
         imageTop.setImageResource(titleNo[titleNumber]);
 
         /*
+        try{
+            Log.v("postCount",getFrom);
+            postCount(Integer.valueOf(getFrom));
+        }catch (Exception e){
+            Log.v("postCount Error ：",e +"");
+        }
+        */
+        /*
         //判斷目前該顯示哪一張圓圈動物頭
         switch (imgNo){
             case 0:
-                imageBottom.setImageResource(worksheetImg[0]);
+                imageBottom.setImageResource(worksheetImg[imgNo]);
                 imageTop.setVisibility(View.GONE);
                 break;
             case 1:
-                imageBottom.setImageResource(worksheetImg[1]);
+                imageBottom.setImageResource(worksheetImg[imgNo]);
                 imageTop.setVisibility(View.GONE);
 
                 break;
             case 2:
-                imageBottom.setImageResource(worksheetImg[2]);
+                imageBottom.setImageResource(worksheetImg[imgNo]);
                 imageTop.setVisibility(View.GONE);
                 break;
             case 3:
-                imageBottom.setImageResource(worksheetImg[3]);
+                imageBottom.setImageResource(worksheetImg[imgNo]);
                 imageTop.setVisibility(View.GONE);
                 break;
             case 4:
                 imageBottom.setVisibility(View.GONE);
-                imageTop.setImageResource(worksheetImg[4]);
+                imageTop.setImageResource(worksheetImg[imgNo]);
                 break;
             case 5:
                 imageBottom.setVisibility(View.GONE);
-                imageTop.setImageResource(worksheetImg[5]);
+                imageTop.setImageResource(worksheetImg[imgNo]);
                 break;
         }
         */
@@ -168,7 +174,7 @@ public class WorksheetActivity extends AppCompatActivity {
                             mBtnChk.setVisibility(View.GONE);
                             textDetail.setVisibility(View.VISIBLE);
                             updateAns();//-------------------------------進行上傳動作-----------------------------------------
-                            textHint.setText(showCurrent );
+                            textHint.setText(showCurrent);
                             //資料庫內預設沒有解釋的時候顯示無
                             if(getWorksheet.getDescription(index).equals("無")){
                             }else{
@@ -240,6 +246,89 @@ public class WorksheetActivity extends AppCompatActivity {
 
     }
 
+    //-------------------取得這位使用者的問答題
+    private void getData() {
+        questionLength = getWorksheet.getQuestionLength();
+        optionLength = getWorksheet.getOptionLength();
+        for (int i = 0; i < questionLength; i++) {
+            question[i] = getWorksheet.getQuestion(i);
+            description[i] = getWorksheet.getDescription(i);
+            recordQuestion_id[i] = getWorksheet.getRecord_Question_id(i);
+            recordDone[i] = getWorksheet.getRecordDone(i);
+        }
+        for (int i = 0; i < optionLength; i++) {
+            option[i] = getWorksheet.getOption(i);
+            optionQuestion_id[i] = getWorksheet.getOptionQuestion_id(i);
+        }
+        showData();
+    }
+    //-------------------顯示問答題內容
+    private void showData(){
+
+        for(int i =0 ; i < optionLength;i++){
+            if(sign != -1)break;
+            if(optionQuestion_id[i].equals(recordQuestion_id[index])){
+                sign = i;
+                break;
+            }
+        }
+        if (option[index] != null) {
+            //設定題目的文字
+            title.setText(question[index]);
+            //顯示確認按鈕
+            mBtnChk.setVisibility(View.VISIBLE);
+            mBtnResume.setVisibility(View.GONE);
+            RadioButton rb;
+            OnClickListener mOnClickListener = new OnClickListener();
+            optionSum =0;
+            while(optionQuestion_id[sign].equals(recordQuestion_id[index])){
+                rb = new RadioButton(this);
+                if(optionQuestion_id[sign + 1] == null){
+                    optionQuestion_id[sign + 1] = "100";
+                }
+
+                if(optionQuestion_id[sign].equals(optionQuestion_id[sign + 1])){
+                    rb.setId(1 + optionSum);             //id = 1,2,3
+                    rb.setText("　　" +stringFormat(option[sign]));
+                    nowAnser[optionSum+1] = option[sign];//nowAnser[0] 使用範圍是1-4
+                    rb.setTextSize(19.0f);
+                    rb.setTextColor(Color.BLACK);
+                    rb.setButtonTintList(ColorStateList.valueOf(Color.BLACK));
+                    rb.setBackgroundResource(optionImg[optionSum]);
+                    rb.setGravity(Gravity.CENTER);
+                    rb.setButtonDrawable(null);
+                    if(optionSum ==0){
+                        rb.setChecked(true);
+                    }
+                    rb.setOnClickListener(mOnClickListener);
+                    rg.addView(rb);
+                    sign +=1;
+                }else{
+                    rb.setId(1 + optionSum);             //id = 1,2,3
+                    rb.setText("　　" +stringFormat(option[sign]));
+                    nowAnser[optionSum+1] = option[sign];
+                    rb.setTextSize(19.0f);
+                    rb.setTextColor(Color.BLACK);
+                    rb.setButtonTintList(ColorStateList.valueOf(Color.BLACK));
+                    rb.setBackgroundResource(optionImg[optionSum]);
+                    rb.setGravity(Gravity.CENTER);
+                    rb.setButtonDrawable(null);
+                    rb.setOnClickListener(mOnClickListener);
+                    rg.addView(rb);
+                    sign +=1;
+                    break;
+                }
+                optionSum+=1;
+            }
+        } else {
+            mBtnChk.setVisibility(View.GONE);
+            mBtnResume.setVisibility(View.VISIBLE);
+            title.setText(getString(R.string.worksheet_reload));
+        }
+
+    }
+
+
     protected void showNextQuest(){
         count += 1;
         //titleNumber的範圍是0-2(三個題目->三張圖片)
@@ -276,92 +365,10 @@ public class WorksheetActivity extends AppCompatActivity {
         showData();
         //count=3等於使用者已回答三題，else表示使用者要回首頁了
     }
-
+    //判斷該題是否作答過
     public static boolean checkRecordDone(int index){
         return getWorksheet.getRecordDone(index) .equals("1");
     }
-    //-------------------取得這位使用者的問答題
-    private void getData() {
-        questionLength = getWorksheet.getQuestionLength();
-        optionLength = getWorksheet.getOptionLength();
-        for (int i = 0; i < questionLength; i++) {
-            question[i] = getWorksheet.getQuestion(i);
-            description[i] = getWorksheet.getDescription(i);
-            recordQuestion_id[i] = getWorksheet.getRecord_Question_id(i);
-            recordDone[i] = getWorksheet.getRecordDone(i);
-        }
-        for (int i = 0; i < optionLength; i++) {
-            option[i] = getWorksheet.getOption(i);
-            optionQuestion_id[i] = getWorksheet.getOptionQuestion_id(i);
-        }
-        showData();
-    }
-    //-------------------顯示問答題內容
-    private void showData(){
-
-        for(int i =0 ; i < optionLength;i++){
-            if(sign != -1)break;
-            if(optionQuestion_id[i].equals(recordQuestion_id[index])){
-                sign = i;
-                break;
-            }
-        }
-        if (option[index] != null) {
-            //設定題目的文字
-            textView.setText(question[index]);
-            //顯示確認按鈕
-            mBtnChk.setVisibility(View.VISIBLE);
-            mBtnResume.setVisibility(View.GONE);
-            RadioButton rb;
-            OnClickListener mOnClickListener = new OnClickListener();
-            optionSum =0;
-            while(optionQuestion_id[sign].equals(recordQuestion_id[index])){
-                rb = new RadioButton(this);
-                if(optionQuestion_id[sign + 1] == null){
-                    optionQuestion_id[sign + 1] = "100";
-                }
-
-                if(optionQuestion_id[sign].equals(optionQuestion_id[sign + 1])){
-                    rb.setId(1 + optionSum);             //id = 1,2,3
-                    rb.setText("　" +stringFormat(option[sign]));
-                    nowAnser[optionSum+1] = option[sign];//nowAnser[0] 使用範圍是1-4
-                    rb.setTextSize(19.0f);
-                    rb.setTextColor(Color.BLACK);
-                    rb.setButtonTintList(ColorStateList.valueOf(Color.BLACK));
-                    rb.setBackgroundResource(optionImg[optionSum]);
-                    rb.setGravity(Gravity.CENTER);
-                    rb.setButtonDrawable(null);
-                    if(optionSum ==0){
-                        rb.setChecked(true);
-                    }
-                    rb.setOnClickListener(mOnClickListener);
-                    rg.addView(rb);
-                    sign +=1;
-                }else{
-                    rb.setId(1 + optionSum);             //id = 1,2,3
-                    rb.setText("　" +stringFormat(option[sign]));
-                    nowAnser[optionSum+1] = option[sign];
-                    rb.setTextSize(19.0f);
-                    rb.setTextColor(Color.BLACK);
-                    rb.setButtonTintList(ColorStateList.valueOf(Color.BLACK));
-                    rb.setBackgroundResource(optionImg[optionSum]);
-                    rb.setGravity(Gravity.CENTER);
-                    rb.setButtonDrawable(null);
-                    rb.setOnClickListener(mOnClickListener);
-                    rg.addView(rb);
-                    sign +=1;
-                    break;
-                }
-                optionSum+=1;
-            }
-        } else {
-            mBtnChk.setVisibility(View.GONE);
-            mBtnResume.setVisibility(View.VISIBLE);
-            textView.setText(getString(R.string.worksheet_reload));
-        }
-
-    }
-
     //連接資料庫進行上傳
     private void updateAns(){
         worksheetUpdateAsyncTask myNavigationAsyncTask = new worksheetUpdateAsyncTask(new worksheetUpdateAsyncTask.TaskListener() {
@@ -442,6 +449,7 @@ public class WorksheetActivity extends AppCompatActivity {
     3 = 第十題 4 = 第 十三  題
     ------------------*/
     public static void postCount(int pCount){
+        //Log.v("pCount ：", pCount + "");
         imgNo = pCount;
         index = pCount*3;
     }
@@ -457,7 +465,7 @@ public class WorksheetActivity extends AppCompatActivity {
         StringBuffer mstringBuffer = new StringBuffer();
         mstringBuffer.append(str);
         if(mstringBuffer.length() >8){
-            mstringBuffer.insert(9,"\n　");
+            mstringBuffer.insert(9,"\n　　");
         }
         return mstringBuffer;
     }

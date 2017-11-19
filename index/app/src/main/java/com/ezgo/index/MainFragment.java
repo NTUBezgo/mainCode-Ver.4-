@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ezgo.index.Common.Common;
+import com.ezgo.index.MyAsyncTask.getRecordDoneAsyncTask;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -46,12 +49,16 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.gms.maps.model.UrlTileProvider;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
+import static com.ezgo.index.getWorksheet.getUser_id;
 
 
 /**
@@ -70,14 +77,14 @@ public class MainFragment extends Fragment implements
     private GoogleApiClient mGoogleApiClient;   // Google API用戶端物件
     private LocationRequest mLocationRequest;   // Location請求物件
 
-    private ArrayList<Geofence> mGeofenceList = new ArrayList<Geofence>();
-    private PendingIntent mGeofencePendingIntent;
     private MyData myData;
 
     private String mMarkers[][]; //存放座標
     private List<Marker> markerList = new ArrayList<Marker>(); //存放Marker
     private String targetPosition[]=new String[3]; //導航目標的位置(傳給unity)
     private Button btnAr;   //開始導航按鈕
+
+    private int[] recordDone = new int[7]; //是否答完題目
 
     //存放闖關單的動物頭像
     private int[] wsIcon={R.drawable.circle_hyena, R.drawable.circle_bear, R.drawable.circle_wolf,
@@ -117,80 +124,15 @@ public class MainFragment extends Fragment implements
 
         btnAr =(Button) rootView.findViewById(R.id.btnn_ar);    //開始導航按鈕
 
-
         return rootView;
     }
 
-    //---------------加入Geofence--------------
-    private void addGeoFence(){
+    private void addTestCircle(){   //-----------------------------------------測試用circle-------------------------------
         Double geofenceList[][]=myData.getGeofenceList();
-
-        for (int i=0; i<geofenceList.length; i++){
-            mGeofenceList.add(new Geofence.Builder()
-                    .setRequestId(String.valueOf(i))
-                    .setCircularRegion(geofenceList[i][0], geofenceList[i][1],25)  //測試用 原為25------------------------------
-                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                            Geofence.GEOFENCE_TRANSITION_EXIT)
-                    .build());
-
-            addTestCircle(geofenceList[i][0], geofenceList[i][1]);//測試用circle------------------------
-        }
-    }
-
-    //--------------建立Geofence----------------
-    private void startGeofenceMonitoring(){
-        try{
-            //加入Geofence
-            addGeoFence();
-
-            // 建立Geofence請求物件
-            GeofencingRequest geofenceRequest = new GeofencingRequest.Builder()
-                    .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
-                    .addGeofences(mGeofenceList)
-                    .build();
-
-            mGeofencePendingIntent = getGeofencePendingIntent();
-            LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, geofenceRequest,mGeofencePendingIntent)
-                    .setResultCallback(new ResultCallback<Status>() {
-                        @Override
-                        public void onResult(@NonNull Status status) {
-                            if(status.isSuccess()){
-                                //Log.e(TAG, "Successfully added geofence");
-                                //Toast.makeText(getActivity(),"Geofence成功",Toast.LENGTH_SHORT).show();
-                            }else{
-                                //Log.e(TAG, "Failed to add geofence"+status.getStatus());
-                                //Toast.makeText(getActivity(),"Geofence失敗",Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-
-        }catch (SecurityException e){
-            //Log.e(TAG, "SecurityException - " + e.getMessage());
-        }
-    }
-
-    private PendingIntent getGeofencePendingIntent(){
-        if(mGeofencePendingIntent != null){
-            return mGeofencePendingIntent;
-        }
-        Intent intent = new Intent(getActivity(), MapGeofenceIntentService.class);
-
-        return PendingIntent.getService(getActivity(),0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-    //--------------停止Geofence----------------
-    private void stopGeofenceMonitoring(){
-        ArrayList<String> geofenceIds = new ArrayList<String>();
-        Double geofenceList[][]=myData.getGeofenceList();
-
         for(int i=0; i<geofenceList.length; i++){
-            geofenceIds.add(String.valueOf(i));
+            addTestCircle(geofenceList[i][0], geofenceList[i][1]);
         }
-
-        LocationServices.GeofencingApi.removeGeofences(mGoogleApiClient,geofenceIds);
     }
-
 
     @Override
     public void onStart() {
@@ -206,7 +148,6 @@ public class MainFragment extends Fragment implements
             LocationServices.FusedLocationApi.removeLocationUpdates(
                     mGoogleApiClient, this);
         }
-        stopGeofenceMonitoring();
     }
 
     @Override
@@ -248,8 +189,6 @@ public class MainFragment extends Fragment implements
             requestPermissions(
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},102);
         }
-
-        startGeofenceMonitoring();  //建立Geofence------------------------
     }
 
     @Override
@@ -296,12 +235,14 @@ public class MainFragment extends Fragment implements
             moveMap(taiZoo);//移動到動物園位置
             addTileOverlay();//新增動物園地圖圖層
 
+            checkRecordDone(); //確認有沒有答過題目
+
             //判斷要顯示的marker
             if(myData.getIsFromWS()){
                 jumpWorksheetMarker();  //闖關單跳至地圖
 
             }else{
-                chooseWorkSheetMarkers();  //建立各園區marker
+                chooseWorkSheetMarkers();  //建立各闖關單marker
             }
 
             //各園區marker點擊事件
@@ -332,6 +273,7 @@ public class MainFragment extends Fragment implements
                 }
             });
 
+            addTestCircle();  //-----------------------------------------測試用circle-------------------------------
 
         }catch (Exception e){
             e.printStackTrace();
@@ -346,6 +288,7 @@ public class MainFragment extends Fragment implements
         bundle.putString("targetLat",targetPosition[0]);
         bundle.putString("targetLng",targetPosition[1]);
         bundle.putString("targetTitle",targetPosition[2]);
+        bundle.putIntArray("recordDone",recordDone);
 
         intent.putExtras(bundle);
         intent.setClass(getActivity(), ArActivity.class);
@@ -353,9 +296,14 @@ public class MainFragment extends Fragment implements
     }
 
     //--------------------------------------------------開始辨識----------------------------------------
-    private void startIr(){
+    private void startIr(String targetPosition[]){
         Intent intent=new Intent();
-        intent.setClass(getActivity(), GuideActivity.class);
+        Bundle bundle = new Bundle();
+
+        bundle.putString("vision",targetPosition[2]);
+
+        intent.putExtras(bundle);
+        intent.setClass(getActivity(), CloudvisionActivity.class);
         startActivity(intent);
     }
 
@@ -381,13 +329,31 @@ public class MainFragment extends Fragment implements
         btnAr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startIr();
+                startIr(targetPosition);
             }
         });
 
         removeMarkers();
         mMarkers=myData.getAreaMarkers();
         setMarkers(2);
+    }
+
+    //-----------------選取闖關單題目跳至其座標-----------------
+    public void jumpWorksheetMarker(){
+        btnAr.setText(R.string.main_startAr);  //設定文字為開始導航
+        btnAr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startAr(targetPosition);
+            }
+        });
+
+        removeMarkers();
+        mMarkers=myData.getPositionFromWS();
+        setMarkers(3);
+        myData.setIsFromWS(false);
+        LatLng position = new LatLng(Double.parseDouble(mMarkers[0][0]),Double.parseDouble(mMarkers[0][1]));
+        moveMap(position);
     }
 
     //-----------------新增Markers-----------------
@@ -398,7 +364,7 @@ public class MainFragment extends Fragment implements
             MarkerOptions markerOptions = new MarkerOptions();
             if(type==1){    //選取闖關單標誌
                 markerOptions.position(position).icon(BitmapDescriptorFactory.fromResource(wsIcon[i])); //動物頭像Marker
-            }else if(type==2){  //選取館區標誌
+            }else if(type==2){  //選取館區標誌**********
                 markerOptions.position(position); //普通Marker
             }else if(type==3){  //從闖關單頁面跳至此
                 markerOptions.position(position).icon(BitmapDescriptorFactory.fromResource(wsIcon[Integer.parseInt(mMarkers[i][3])]));
@@ -419,17 +385,7 @@ public class MainFragment extends Fragment implements
         markerList.clear();
     }
 
-    //-----------------選取闖關單題目跳至其座標-----------------
-    public void jumpWorksheetMarker(){
-        removeMarkers();
-        mMarkers=myData.getPositionFromWS();
-        setMarkers(3);
-        myData.setIsFromWS(false);
-        LatLng position = new LatLng(Double.parseDouble(mMarkers[0][0]),Double.parseDouble(mMarkers[0][1]));
-        moveMap(position);
-    }
-
-    //-------------------地理圍欄 測試用-----------------------
+    //-------------------地理圍欄 測試用-----------------------*********
     private void addTestCircle(Double lat,Double lng){
         LatLng latLng = new LatLng(lat,lng);
 
@@ -490,9 +446,33 @@ public class MainFragment extends Fragment implements
                 .tileProvider(tileProvider));
     }
 
+    //----------------------------------確認有沒有答過題目------------------------------
+    private void checkRecordDone(){
+        getRecordDoneAsyncTask myAsyncTask = new getRecordDoneAsyncTask(new getRecordDoneAsyncTask.TaskListener() {
+            @Override
+            public void onFinished(String result) {
+                try {
+                    JSONObject object = new JSONObject(result);
+                    JSONArray jsonArray = object.getJSONArray("recordDone");
 
-    public void onDestroyView()
-    {
+                    for (int i = 0 ; i<jsonArray.length() ; i++) {
+                        // recordDone[i] == 0 代表還沒看過這隻動物
+                        // recordDone[i] == 1 代表看過這隻動物
+                        recordDone[i] = Byte.valueOf(jsonArray.getJSONObject(i).getString("recordDone"));
+                        //Log.e("recordDone", "" + recordDone[i]);
+
+                        if (recordDone[i] == 1) {
+                            //若答過題
+                        }
+                    }
+                } catch (Exception e) {
+                    //Log.v("ABC", Log.getStackTraceString(e));
+                }
+            }
+        });myAsyncTask.execute(Common.getRecordDoneUrl + getUser_id());
+    }
+/*
+    public void onDestroyView() {
         try {
             Fragment fragment = (getChildFragmentManager().findFragmentById(R.id.mainMap));
             if (fragment != null) {
@@ -504,6 +484,6 @@ public class MainFragment extends Fragment implements
             e.printStackTrace();
         }
         super.onDestroyView();
-    }
+    }*/
 
 }

@@ -17,56 +17,55 @@
 
         <TextView
             android:id="@+id/showQuestAmount"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:gravity="center"
             android:textColor="#000000"
-            android:textSize="17dp" />
+            android:textSize="17dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_weight="3"
             android:layout_height="0dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
 
             <ImageView
                 android:id="@+id/circle_hyena"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:src="@drawable/sticker_hyena"
-                android:padding="15dp"/>
+                android:src="@drawable/sticker_hyena"/>
 
             <ImageView
                 android:id="@+id/circle_bear"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:src="@drawable/sticker_bear"
-                android:padding="15dp"/>
+                android:src="@drawable/sticker_bear"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
 
             <ImageView
                 android:id="@+id/circle_wolf"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:src="@drawable/sticker_wolf"
-                android:padding="15dp"/>
+                android:src="@drawable/sticker_wolf"/>
 
             <ImageView
                 android:id="@+id/circle_head_prairiedog"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:src="@drawable/sticker_prairiedog"
-                android:padding="15dp"/>
+                android:src="@drawable/sticker_prairiedog"/>
 
         </LinearLayout>
 
@@ -74,42 +73,49 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
 
             <ImageView
                 android:id="@+id/circle_kookaburra"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:src="@drawable/sticker_kookaburra"
-                android:padding="15dp"/>
+                android:src="@drawable/sticker_kookaburra"/>
 
             <ImageView
                 android:id="@+id/circle_deer"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:src="@drawable/sticker_deer"
-                android:padding="15dp"/>
+                android:src="@drawable/sticker_deer"/>
         </LinearLayout>
 
     </LinearLayout>
-
 
     <Button
         android:id="@+id/startExchange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:background="@drawable/btn_reward"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/btn_reward0"
         android:textSize="28dp"
         android:textColor="@color/whiteColor"
         android:layout_gravity="center_horizontal"
         android:paddingBottom="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:text="@string/worksheet_btnStartExchange"
-        android:visibility="gone"/>
+        android:text="@string/worksheet_btnCantExchange"/>
+
+    <TextView
+        android:id="@+id/tv_exchangeNotice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/worksheet_exchangeNotice"
+        android:textColor="#000000"
+        android:textSize="17dp"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"/>
 
 
 </LinearLayout>

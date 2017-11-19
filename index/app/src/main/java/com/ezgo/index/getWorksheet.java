@@ -43,34 +43,16 @@ public class getWorksheet {
                         answer[i] = jsonArray.getJSONObject(i).getString("answer");
                         description[i] = jsonArray.getJSONObject(i).getString("description");
                         record_question_id[i] = jsonArray.getJSONObject(i).getString("question_id");
-                            /*
-                            if( i != 0){
-                                if(question_id[i].equals(question_id[i-1]) ){
-                                    optionCount += 1;
-                                }else{
-                                    optionArr[j] = optionCount;
-                                    j+=1;
-                                    optionCount =1;
-                                }
-                                if(i+1 == getWorksheetLength()){
-                                    optionArr[j] = optionCount;
-                                   // Log.v("Test2","H" + question_id[i]);
-                                }
-                            }
-                            */
                     }
                     jsonArray = object.getJSONArray("option");
 
                     for (int i = 0 ; i<jsonArray.length() ; i++) {
                         option[i] = jsonArray.getJSONObject(i).getString("qOption");
                         option_question_id[i] = jsonArray.getJSONObject(i).getString("question_id");
-                        //Log.v("option",""+option[i]);
-                        //Log.v("oqID",""+option_question_id[i]);
                     }
                     optionLength = jsonArray.length();
-                    //Log.v("length",""+getOptionLength());
+
                 } catch (Exception e) {
-                    //Log.v("ABC", Log.getStackTraceString(e));
                 }
             }
         });

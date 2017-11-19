@@ -88,6 +88,26 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
+    //--------------------------------------------------本期闖關單動物簡介-----------------------------------------
+    public void exchangeWorksheetIntro(){
+        Fragment fragment = null;
+        fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragment = new WorksheetIntroFragment();
+        fragmentTransaction.replace(R.id.main_frame,fragment);
+        fragmentTransaction.commit();
+    }
+
+    //--------------------------------------------------跳回本期闖關單-----------------------------------------
+    public void exchangeWorksheetFragment(){
+        Fragment fragment = null;
+        fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragment = new WorkSheetFragment();
+        fragmentTransaction.replace(R.id.main_frame,fragment);
+        fragmentTransaction.commit();
+    }
+
     //------------------------------------------選取闖關單list跳至其座標-----------------------------------------
     public void jumpToMainFragment(){
         onNavigationItemSelected(navigationView.getMenu().getItem(0));

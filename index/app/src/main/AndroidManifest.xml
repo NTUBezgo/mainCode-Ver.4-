@@ -83,15 +83,26 @@
             android:name=".HtmlActivity"
             android:theme="@style/AppTheme" />
 
+        <!-- 影像辨識 -->
+        <activity android:name=".CloudvisionActivity" />
+        <activity android:name=".CVintroActivity"></activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+        <!--影像辨識-->
+
         <service
             android:name=".GeofenceTransitionsIntentService"
             android:enabled="true"
             android:exported="true"
             android:process="com.ezgo.index.unity" />
-        <service
-            android:name=".MapGeofenceIntentService"
-            android:enabled="true"
-            android:exported="true" />
 
 
     </application>

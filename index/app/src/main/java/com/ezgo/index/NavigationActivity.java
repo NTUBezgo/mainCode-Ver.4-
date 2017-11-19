@@ -82,11 +82,13 @@ public class NavigationActivity extends Activity {
                     //Log.e("user_id :" , user_id);
 
                     //---------------------------跳轉頁面
+
                     if(doneChk){
                         mHandler.sendEmptyMessageDelayed(GOTO_LOADING_ACTIVITY, 3000); //秒跳轉
                     }else{
                         mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 3000); //秒跳轉
                     }
+                    //mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 3000); //秒跳轉
 
                 }catch(Exception e){}
             }
@@ -108,6 +110,7 @@ public class NavigationActivity extends Activity {
         //---------------------------上傳結束
 
     }
+
 
     //-------------------------------------------------------------------------------------------------
     private static final int GOTO_LOADING_ACTIVITY = 0;

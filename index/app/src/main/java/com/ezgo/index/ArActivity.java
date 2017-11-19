@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,9 +57,13 @@ public class ArActivity extends UnityPlayerActivity implements
     private MyData myData;
 
     private Button endBtn; //結束導航按鈕
-    private TextView gotoTv; //顯示前往哪區
+    private TextView tv_arrival; //顯示抵達哪裡
 
     private String targetPosition[]=new String[3]; //導航目標的位置
+    private int[] recordDone = new int[7]; //是否答完題目
+    private String mMarkers[][]; //存放座標
+    private TextView tv_distance;
+    private RelativeLayout relativeLayout2;
 
     private float distence[] = new float[1]; //距離
 
@@ -85,6 +90,9 @@ public class ArActivity extends UnityPlayerActivity implements
         targetPosition[0]=bundle.getString("targetLat");
         targetPosition[1]=bundle.getString("targetLng");
         targetPosition[2]=bundle.getString("targetTitle");
+
+        recordDone=bundle.getIntArray("recordDone");
+        recordDone[6]=0; //教育中心不答題
 
         //檢查是否有開啟GPS
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -126,9 +134,13 @@ public class ArActivity extends UnityPlayerActivity implements
             }
         });
 
-        //顯示前往哪一動物
-        gotoTv = (TextView) findViewById(R.id.gotoTv);
-        gotoTv.setText(getString(R.string.ar_goto) + targetPosition[2]);
+        //顯示抵達哪一動物
+        tv_arrival = (TextView) findViewById(R.id.tv_arrival);
+
+        mMarkers=myData.getWorkSheetMarkers();
+        tv_distance = (TextView) findViewById(R.id.textDistence);
+
+        relativeLayout2 = (RelativeLayout) findViewById(R.id.relative2);
 
         //接收地理圍欄intent
         LocalBroadcastManager lbc = LocalBroadcastManager.getInstance(this);
@@ -173,17 +185,25 @@ public class ArActivity extends UnityPlayerActivity implements
 
             Bundle geobundle=geointent.getExtras();
             geoFrom=geobundle.getString("from");
+            int where=GeofenceTransitionsIntentService.WHICHAREA;
 
             if(geoFrom.equals("enter")){  //----------------------若進入範圍內
 
                 UnityPlayer.UnitySendMessage("Main Camera", "changeAni", "true");  //呼叫unity函式設定動作
 
-                if(GeofenceTransitionsIntentService.WHICHAREA==6){
-                    Toast.makeText(ArActivity.this, R.string.ar_EC ,Toast.LENGTH_SHORT).show();
-                    gotoTv.setText("");
+                if(where==6){
+                    tv_arrival.setText(getString(R.string.ar_arrived) +"教育中心");
                 }else{
-                    sendBtn.setVisibility(View.VISIBLE);
-                    gotoTv.setVisibility(View.INVISIBLE);
+
+                    if(recordDone[where]==1){ //作答過
+                        sendBtn.setVisibility(View.GONE);
+                        tv_arrival.setText(getString(R.string.ar_arrived) + mMarkers[where][2] + getString(R.string.ar_alreadyDone));
+                    }else if(recordDone[where]==0){ //沒作答過
+                        sendBtn.setVisibility(View.VISIBLE);
+                        tv_arrival.setText(getString(R.string.ar_arrived) + mMarkers[where][2] + getString(R.string.ar_arrived1));
+                    }
+
+                    relativeLayout2.setVisibility(View.VISIBLE);
 
                     Toast.makeText(ArActivity.this, R.string.ar_enterRange ,Toast.LENGTH_SHORT).show();
 
@@ -198,8 +218,8 @@ public class ArActivity extends UnityPlayerActivity implements
             }else if(geoFrom.equals("exit")){ //----------------------若離開範圍
                 UnityPlayer.UnitySendMessage("Main Camera", "changeAni", "false"); //呼叫unity函式設定動作
                 Toast.makeText(ArActivity.this, R.string.ar_exitRange ,Toast.LENGTH_SHORT).show();
-                sendBtn.setVisibility(View.INVISIBLE);
-                gotoTv.setVisibility(View.VISIBLE);
+                relativeLayout2.setVisibility(View.INVISIBLE);
+
             }
         }
     }
@@ -338,7 +358,7 @@ public class ArActivity extends UnityPlayerActivity implements
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
 
-        startGeofenceMonitoring();
+        startGeofenceMonitoring(); //建立地理圍欄
     }
 
     @Override
@@ -368,10 +388,9 @@ public class ArActivity extends UnityPlayerActivity implements
         double myLat=location.getLatitude();
         double myLng=location.getLongitude();
 
-        TextView textView = (TextView) findViewById(R.id.textDistence);
         //distanceBetween(現在的緯度,現在的經度,目標緯度,目標經度,儲存的變數(是一個陣列)) 單位：公尺
         Location.distanceBetween(myLat,myLng,Float.valueOf(targetPosition[0]),Float.valueOf(targetPosition[1]) ,distence);
-        textView.setText(getString(R.string.ar_distence) + (int)distence[0] + getString(R.string.ar_meter));
+        tv_distance.setText(getString(R.string.ar_distence) + targetPosition[2] + "：" + (int)distence[0] + getString(R.string.ar_meter));
     }
 
 
