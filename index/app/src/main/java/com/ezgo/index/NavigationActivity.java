@@ -88,7 +88,7 @@ public class NavigationActivity extends Activity {
                     }else{
                         mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 3000); //秒跳轉
                     }
-                    //mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 3000); //秒跳轉
+                    //mHandler.sendEmptyMessageDelayed(GOTO_RESET_ACTIVITY, 3000); //秒跳轉
 
                 }catch(Exception e){}
             }
@@ -115,6 +115,7 @@ public class NavigationActivity extends Activity {
     //-------------------------------------------------------------------------------------------------
     private static final int GOTO_LOADING_ACTIVITY = 0;
     private static final int GOTO_GUIDE_ACTIVITY = 1;
+    private static final int GOTO_RESET_ACTIVITY = 2;
     private Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             getWorksheet.getJSON();
@@ -131,6 +132,11 @@ public class NavigationActivity extends Activity {
                     break;
                 case GOTO_GUIDE_ACTIVITY:     //若尚未答過題-->跳至說明頁
                     intent.setClass(NavigationActivity.this, GuideActivity.class);
+                    startActivity(intent);
+                    finish();
+                    break;
+                case GOTO_RESET_ACTIVITY:     //已答完題並兌換過獎品-->跳至是否重玩頁
+                    intent.setClass(NavigationActivity.this, ResetActivity.class);
                     startActivity(intent);
                     finish();
                     break;

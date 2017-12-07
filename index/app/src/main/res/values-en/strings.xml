@@ -61,8 +61,6 @@
     <string name="ar_arrived">reach </string>
     <string name="ar_arrived1"> range</string>
     <string name="ar_alreadyDone"></string>
-    <string name="ar_enterRange">Already enter the range of the task !</string>
-    <string name="ar_exitRange">Already left the range of the task !</string>
     <string name="ar_distence">To </string>
     <string name="ar_meter"> M</string>
 
@@ -122,5 +120,12 @@
     <string name="alert_name1">Please go to the information desk to get gifts.</string>
     <string name="alert_name2">I got it.</string>
 
+    <!-- fragmeny_worksheet_intro.xml 本期闖關單_查看某隻動物的題目-->
+    <string name="worksheet_intro_back">返回</string>
+
+    <!-- activity_reset.xml 是否重玩-->
+    <string name="reset_btn1">繼續遊玩</string>
+    <string name="reset_btn2">重新開始</string>
+    <string name="reset_notice">若選\"繼續遊玩\"將繼續之前的闖關紀錄\n若選\"重新開始\"則闖關紀錄會刪除,請注意,即使再次闖關完成,獎品也無法再次兌換</string>
 
 </resources>

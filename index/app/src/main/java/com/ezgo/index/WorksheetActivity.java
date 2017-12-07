@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,8 +30,8 @@ public class WorksheetActivity extends AppCompatActivity {
     private static String[] recordQuestion_id = new String[100];
     private static String[] optionQuestion_id = new String[100];
     private static String[] recordDone = new String[100];
-    private static int[] worksheetImg = new int[5];
-    private static String[] nowAnser = new String[5];
+
+    private static String[] nowAnswer = new String[5];
     //---------取得總共有幾個選項(每一題有多個選項)這裡指所有題目共有幾個選項
     private static int optionLength = 0;
     //---------取得總共有幾題題目
@@ -50,7 +51,16 @@ public class WorksheetActivity extends AppCompatActivity {
     //計算單題選項總數
     int optionSum;
     private static int titleNo[] ={
-            R.drawable.q1,R.drawable.q2,R.drawable.q3
+            R.drawable.number_wood_1,R.drawable.number_wood_2,R.drawable.number_wood_3
+    };
+    /*
+    private int[] imgViewsDrable= {R.drawable.sticker_hyena, R.drawable.sticker_bear, R.drawable.sticker_wolf,
+            R.drawable.sticker_prairiedog , R.drawable.sticker_kookaburra, R.drawable.sticker_deer
+    };
+    */
+    private static int titleAnimal[] ={
+            R.drawable.worksheet_title_hyena,R.drawable.worksheet_title_bear,R.drawable.worksheet_title_wolf,
+            R.drawable.worksheet_title_prairiedog,R.drawable.worksheet_title_kookaburra,R.drawable.worksheet_title_deer
     };
     private static int optionImg[] ={
             R.drawable.optiona,R.drawable.optionb,R.drawable.optionc,R.drawable.optiond
@@ -59,6 +69,8 @@ public class WorksheetActivity extends AppCompatActivity {
             R.drawable.optionchecka,R.drawable.optioncheckb,R.drawable.optioncheckc,R.drawable.optioncheckd
     };
     static Boolean[] setCheck = new Boolean[4];
+    //true = 選項介面 false = 解釋介面
+    private static boolean state = true;
     /*
     目前的邏輯：
     陣列長度：0 1 2 3 4 5 6 7 8 9 10 11 12 13 14ttttttttttttttttttttt
@@ -70,8 +82,10 @@ public class WorksheetActivity extends AppCompatActivity {
     //---------判斷是否要顯示下一題 false代表不顯示, true代表停留在敘述的文字
     boolean showNext = false;
 
-    ImageView imageTop;
+    ImageView imageCircle;
+    ImageView imageNumber;
     ImageView imageBottom;
+    ImageView yesNoImg;
 
     private int user_id;
     public Button mBtnChk;
@@ -91,19 +105,20 @@ public class WorksheetActivity extends AppCompatActivity {
         //------------------取得使用者ID
         user_id = getWorksheet.getUser_id();
         //------------------
-        worksheetImg = MyData.getWorksheetImg();
         rg  = (RadioGroup) findViewById(R.id.rg);
 
         showCurrent = getString(R.string.worksheet_hintRight);
         showFail = getString(R.string.worksheet_hintWrong);
-        imageTop = (ImageView) findViewById(R.id.ImgViewTop);
+
+        imageCircle = (ImageView) findViewById(R.id.ImgViewCircle);
+        imageNumber = (ImageView) findViewById(R.id.ImgViewNumber);
         imageBottom = (ImageView) findViewById(R.id.ImgViewBottom);
+        yesNoImg = (ImageView) findViewById(R.id.YesNoImg);
+
         title = (TextView) findViewById(R.id.title);
         title.setTextSize(20.f);
         textDescription = (TextView) findViewById(R.id.textDescription);
         textHint = (TextView) findViewById(R.id.textHint);
-        textDescription.setTextSize(18.0f);
-        textHint.setTextSize(18.0f);
         mBtnChk = (Button)findViewById(R.id.btnChk);
         mBtnResume = (Button)findViewById(R.id.btnResume);
         mBtnNextquest = (Button)findViewById(R.id.btnNextquest);
@@ -112,46 +127,31 @@ public class WorksheetActivity extends AppCompatActivity {
         mBtnNextquest.setVisibility(View.GONE);
         textDetail.setVisibility(View.GONE);
         imageBottom.setVisibility(View.GONE);
-        imageTop.setImageResource(titleNo[titleNumber]);
 
-        /*
-        try{
-            Log.v("postCount",getFrom);
-            postCount(Integer.valueOf(getFrom));
-        }catch (Exception e){
-            Log.v("postCount Error ：",e +"");
-        }
-        */
-        /*
+        imageNumber.setImageResource(titleNo[titleNumber]);
+
         //判斷目前該顯示哪一張圓圈動物頭
         switch (imgNo){
             case 0:
-                imageBottom.setImageResource(worksheetImg[imgNo]);
-                imageTop.setVisibility(View.GONE);
+                imageCircle.setImageResource(titleAnimal[imgNo]);
                 break;
             case 1:
-                imageBottom.setImageResource(worksheetImg[imgNo]);
-                imageTop.setVisibility(View.GONE);
-
+                imageCircle.setImageResource(titleAnimal[imgNo]);
                 break;
             case 2:
-                imageBottom.setImageResource(worksheetImg[imgNo]);
-                imageTop.setVisibility(View.GONE);
+                imageCircle.setImageResource(titleAnimal[imgNo]);
                 break;
             case 3:
-                imageBottom.setImageResource(worksheetImg[imgNo]);
-                imageTop.setVisibility(View.GONE);
+                imageCircle.setImageResource(titleAnimal[imgNo]);
                 break;
             case 4:
-                imageBottom.setVisibility(View.GONE);
-                imageTop.setImageResource(worksheetImg[imgNo]);
+                imageCircle.setImageResource(titleAnimal[imgNo]);
                 break;
             case 5:
-                imageBottom.setVisibility(View.GONE);
-                imageTop.setImageResource(worksheetImg[imgNo]);
+                imageCircle.setImageResource(titleAnimal[imgNo]);
                 break;
         }
-        */
+
         getData();
     }
 
@@ -167,34 +167,12 @@ public class WorksheetActivity extends AppCompatActivity {
                     //清除radioButton 相信你看到這頁會有問題
                     if (!checkRecordDone(index)) {
                         if (Ans == 1) {
-                            if(rg != null){
-                                rg.removeAllViews();
-                            }
-                            mBtnNextquest.setVisibility(View.VISIBLE);
-                            mBtnChk.setVisibility(View.GONE);
-                            textDetail.setVisibility(View.VISIBLE);
-                            updateAns();//-------------------------------進行上傳動作-----------------------------------------
-                            textHint.setText(showCurrent);
-                            //資料庫內預設沒有解釋的時候顯示無
-                            if(getWorksheet.getDescription(index).equals("無")){
-                            }else{
-                                textDescription.setText(
-                                        "\n"+ getWorksheet.getDescription(index));
-                            }
+                            yesNoImg.setImageResource(R.drawable.worksheet_true);
+                            showAns();
                         } else if(Ans ==0){
-                            if(rg != null){
-                                rg.removeAllViews();
-                            }
-                            mBtnNextquest.setVisibility(View.VISIBLE);
-                            mBtnChk.setVisibility(View.GONE);
-                            textDetail.setVisibility(View.VISIBLE);
-                            updateAns(); //-------------------------------進行上傳動作-----------------------------------------
-                            textHint.setText(showFail);
-                            if(getWorksheet.getDescription(index).equals("無")){
-                            }else{
-                                textDescription.setText(
-                                        "\n"+ getWorksheet.getDescription(index));
-                            }
+                            yesNoImg.setImageResource(R.drawable.worksheet_false);
+                            showAns();
+
                         }else{
                             Toast.makeText(WorksheetActivity.this, R.string.worksheet_notice1, Toast.LENGTH_SHORT).show();
                         }
@@ -233,13 +211,7 @@ public class WorksheetActivity extends AppCompatActivity {
 
     protected void onResume() {
         super.onResume();
-        //確認按鈕
-        mBtnChk = (Button)findViewById(R.id.btnChk);
-        if(rg != null){
-            rg.removeAllViews();
-        }
-        sign= sign-optionSum-1;
-        getData();
+
     }
     protected void onStop() {
         super.onStop();
@@ -281,20 +253,25 @@ public class WorksheetActivity extends AppCompatActivity {
             RadioButton rb;
             OnClickListener mOnClickListener = new OnClickListener();
             optionSum =0;
+
+            RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
             while(optionQuestion_id[sign].equals(recordQuestion_id[index])){
                 rb = new RadioButton(this);
                 if(optionQuestion_id[sign + 1] == null){
                     optionQuestion_id[sign + 1] = "100";
                 }
+                params.setMargins(0, 0, 0, 3);
 
                 if(optionQuestion_id[sign].equals(optionQuestion_id[sign + 1])){
                     rb.setId(1 + optionSum);             //id = 1,2,3
-                    rb.setText("　　" +stringFormat(option[sign]));
-                    nowAnser[optionSum+1] = option[sign];//nowAnser[0] 使用範圍是1-4
+                    rb.setText("　" +stringFormat(option[sign]));
+                    nowAnswer[optionSum+1] = option[sign];//nowAnswer[0] 使用範圍是1-4
                     rb.setTextSize(19.0f);
                     rb.setTextColor(Color.BLACK);
                     rb.setButtonTintList(ColorStateList.valueOf(Color.BLACK));
                     rb.setBackgroundResource(optionImg[optionSum]);
+                    rb.setLayoutParams(params);
                     rb.setGravity(Gravity.CENTER);
                     rb.setButtonDrawable(null);
                     if(optionSum ==0){
@@ -305,18 +282,20 @@ public class WorksheetActivity extends AppCompatActivity {
                     sign +=1;
                 }else{
                     rb.setId(1 + optionSum);             //id = 1,2,3
-                    rb.setText("　　" +stringFormat(option[sign]));
-                    nowAnser[optionSum+1] = option[sign];
+                    rb.setText("　" +stringFormat(option[sign]));
+                    nowAnswer[optionSum+1] = option[sign];
                     rb.setTextSize(19.0f);
                     rb.setTextColor(Color.BLACK);
                     rb.setButtonTintList(ColorStateList.valueOf(Color.BLACK));
                     rb.setBackgroundResource(optionImg[optionSum]);
+                    rb.setLayoutParams(params);
                     rb.setGravity(Gravity.CENTER);
                     rb.setButtonDrawable(null);
                     rb.setOnClickListener(mOnClickListener);
                     rg.addView(rb);
                     sign +=1;
                     break;
+
                 }
                 optionSum+=1;
             }
@@ -333,12 +312,13 @@ public class WorksheetActivity extends AppCompatActivity {
         count += 1;
         //titleNumber的範圍是0-2(三個題目->三張圖片)
         titleNumber +=1;
-
+        state = true;
+        title.setVisibility(View.VISIBLE);
         if(count != maxQuestionLength){
             //------------顯示下一題
             index += 1;
             Ans = 2;
-            imageTop.setImageResource(titleNo[titleNumber]);
+            imageNumber.setImageResource(titleNo[titleNumber]);
             mBtnNextquest.setVisibility(View.GONE);
             mBtnChk.setVisibility(View.VISIBLE);
         }
@@ -460,6 +440,30 @@ public class WorksheetActivity extends AppCompatActivity {
         }
         setCheck[whatOption] = true;
     }
+    public void showAns(){
+        state = false;
+        if(rg != null){
+            rg.removeAllViews();
+        }
+        title.setVisibility(View.GONE);
+        mBtnNextquest.setVisibility(View.VISIBLE);
+        mBtnChk.setVisibility(View.GONE);
+        textDetail.setVisibility(View.VISIBLE);
+        updateAns();//-------------------------------進行上傳動作-----------------------------------------
+        if(Ans == 1){
+            textHint.setText(showCurrent);
+        }else{
+            textHint.setText(showFail);
+        }
+
+        //資料庫內預設沒有解釋的時候顯示無
+        if(getWorksheet.getDescription(index).equals("無")){
+        }else{
+            textDescription.setText(
+                    "\n"+ getWorksheet.getDescription(index));
+        }
+    }
+
 
     public static StringBuffer stringFormat(String str){
         StringBuffer mstringBuffer = new StringBuffer();
@@ -469,4 +473,5 @@ public class WorksheetActivity extends AppCompatActivity {
         }
         return mstringBuffer;
     }
+
 }

@@ -62,8 +62,8 @@ public class WorksheetIntroFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getActivity().setTitle(R.string.nav_worksheet);
-
     }
+
     public void setImage(){
         animalCircle = (ImageView) view.findViewById(R.id.intro_animalCircle);
         animalCircle.setImageResource(imgViewsDrable[imgNo]);

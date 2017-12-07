@@ -205,7 +205,7 @@ public class ArActivity extends UnityPlayerActivity implements
 
                     relativeLayout2.setVisibility(View.VISIBLE);
 
-                    Toast.makeText(ArActivity.this, R.string.ar_enterRange ,Toast.LENGTH_SHORT).show();
+                    ///Toast.makeText(ArActivity.this, R.string.ar_enterRange ,Toast.LENGTH_SHORT).show();
 
                     sendBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -217,7 +217,7 @@ public class ArActivity extends UnityPlayerActivity implements
 
             }else if(geoFrom.equals("exit")){ //----------------------若離開範圍
                 UnityPlayer.UnitySendMessage("Main Camera", "changeAni", "false"); //呼叫unity函式設定動作
-                Toast.makeText(ArActivity.this, R.string.ar_exitRange ,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ArActivity.this, R.string.ar_exitRange ,Toast.LENGTH_SHORT).show();
                 relativeLayout2.setVisibility(View.INVISIBLE);
 
             }
@@ -244,7 +244,7 @@ public class ArActivity extends UnityPlayerActivity implements
         for (int i=0; i<geofenceList.length; i++){
             mGeofenceList.add(new Geofence.Builder()
                     .setRequestId(String.valueOf(i))
-                    .setCircularRegion(geofenceList[i][0], geofenceList[i][1],100)  //測試用 原為25------------------------------
+                    .setCircularRegion(geofenceList[i][0], geofenceList[i][1],25)  //測試用 原為25------------------------------
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
                             Geofence.GEOFENCE_TRANSITION_EXIT)

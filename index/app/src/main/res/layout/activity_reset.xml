@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_reset"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/reset_background"
+    tools:context="com.ezgo.index.ResetActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/btn_continue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/reset_board"
+            android:layout_marginTop="145dp"
+            android:text="@string/reset_btn1"
+            android:textSize="20dp"/>
+
+        <Button
+            android:id="@+id/btn_reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/reset_board"
+            android:layout_marginTop="50dp"
+            android:text="@string/reset_btn2"
+            android:textSize="20dp"/>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1.2"
+        android:text="@string/reset_notice"
+        android:layout_gravity="bottom"
+        android:padding="15dp"
+        android:textSize="18dp"/>
+
+</LinearLayout>

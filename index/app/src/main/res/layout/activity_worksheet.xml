@@ -12,21 +12,37 @@
     android:background="@drawable/worksheet_background1"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/ImgViewTop"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:gravity="center"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="40dp"/>
+        android:layout_marginBottom="40dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="20dp">
+
+        <ImageView
+            android:id="@+id/ImgViewCircle"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:scaleX="1.05"
+            android:scaleY="1.1"/>
+
+        <ImageView
+            android:id="@+id/ImgViewNumber"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="200dp"/>
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/title"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
         android:gravity="center_vertical"/>
 
     <LinearLayout
@@ -34,16 +50,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="30dp"
+        android:paddingTop="15dp"
         android:gravity="center">
+
+        <ImageView
+            android:id="@+id/YesNoImg"
+            android:layout_width="115dp"
+            android:layout_height="115dp"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"/>
 
         <TextView
             android:id="@+id/textHint"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:textColor="#000000"/>
+            android:gravity="center"
+            android:textSize="24dp"
+            android:textColor="#ffffff"/>
 
         <ScrollView
             android:layout_height="wrap_content"
@@ -53,20 +76,20 @@
                 android:id="@+id/textDescription"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:textColor="#000000"/>
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:textSize="18dp"
+                android:textColor="#ffffff"/>
 
         </ScrollView>
 
     </LinearLayout>
 
-
     <RadioGroup
         android:id="@+id/rg"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="10dp"
         android:orientation="vertical">
@@ -97,7 +120,7 @@
 
         <Button
             android:id="@+id/btnNextquest"
-            android:layout_width="80dp"
+            android:layout_width="120dp"
             android:layout_height="80dp"
             android:background="@drawable/nextquest"
             android:layout_marginRight="30dp"
@@ -106,14 +129,14 @@
 
         <Button
             android:id="@+id/btnChk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/btn_check"
+            android:layout_width="120dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/worksheet_check"
             android:layout_gravity="center"
             android:paddingBottom="5dp"
             android:text="@string/worksheet_btnChk"
-            android:textSize="30dp" />
+            android:textSize="26dp" />
 
     </LinearLayout>
 

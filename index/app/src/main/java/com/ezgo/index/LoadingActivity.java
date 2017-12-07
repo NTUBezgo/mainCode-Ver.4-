@@ -28,7 +28,7 @@ public class LoadingActivity extends AppCompatActivity {
         Bundle bundle=getIntent().getExtras();
         getFrom=bundle.getString("from");
 
-        if(getFrom.equals("GuideActivity")||getFrom.equals("NavigationActivity")){
+        if(getFrom.equals("GuideActivity")||getFrom.equals("NavigationActivity")||getFrom.equals("ResetActivity")){
             mHandler.sendEmptyMessageDelayed(GOTO_MAIN_ACTIVITY, 1000); //1秒跳轉
         }
 
@@ -36,16 +36,16 @@ public class LoadingActivity extends AppCompatActivity {
 
     private Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
-            switch (msg.what) {
-                case GOTO_MAIN_ACTIVITY:
-                    Intent intent = new Intent();
-                    intent.setClass(LoadingActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                    break;
-                default:
-                    break;
-            }
+        switch (msg.what) {
+            case GOTO_MAIN_ACTIVITY:
+                Intent intent = new Intent();
+                intent.setClass(LoadingActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            default:
+                break;
+        }
         }
 
     };
