@@ -143,10 +143,6 @@ public class MainActivity extends AppCompatActivity
                 mainFragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.main_frame);
                 mainFragment.chooseWorkSheetMarkers();
                 return true;
-            case R.id.action_area:  //選擇顯示館區的Markers
-                mainFragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.main_frame);
-                mainFragment.chooseAreaMarkers();
-                return true;
             case android.R.id.home:
                 FragmentManager fm = getSupportFragmentManager();
                 if(fm.getBackStackEntryCount() > 0){
@@ -171,47 +167,33 @@ public class MainActivity extends AppCompatActivity
                 fragment = new MainFragment();
                 fragmentTransaction.replace(R.id.main_frame,fragment);
                 mMenu.findItem(R.id.action_worksheet).setVisible(true);
-                mMenu.findItem(R.id.action_area).setVisible(true);
                 break;
             case R.id.nav_worksheet:     //---------切換闖關單頁面---------
                 fragment = new WorkSheetFragment();
                 fragmentTransaction.replace(R.id.main_frame,fragment);
                 mMenu.findItem(R.id.action_worksheet).setVisible(false);
-                mMenu.findItem(R.id.action_area).setVisible(false);
                 break;
             case R.id.nav_dogInfo:     //---------切換旺哥小檔案頁面---------
                 fragment = new DoginfoFragment();
                 fragmentTransaction.replace(R.id.main_frame,fragment);
                 mMenu.findItem(R.id.action_worksheet).setVisible(false);
-                mMenu.findItem(R.id.action_area).setVisible(false);
                 break;
             case R.id.nav_info:     //---------切換闖關說明頁面---------
                 fragment = new InformationFragment();
                 fragmentTransaction.replace(R.id.main_frame,fragment);
                 mMenu.findItem(R.id.action_worksheet).setVisible(false);
-                mMenu.findItem(R.id.action_area).setVisible(false);
                 break;
             case R.id.nav_contact:     //---------切換相關單位頁面---------
                 fragment = new AboutFragment();
                 fragmentTransaction.replace(R.id.main_frame,fragment);
                 mMenu.findItem(R.id.action_worksheet).setVisible(false);
-                mMenu.findItem(R.id.action_area).setVisible(false);
-                break;
-            case R.id.nav_intro:     //---------切換園區簡介頁面---------
-                fragment = new IntroductionFragment();
-                fragmentTransaction.replace(R.id.main_frame,fragment);
-                mMenu.findItem(R.id.action_worksheet).setVisible(false);
-                mMenu.findItem(R.id.action_area).setVisible(false);
                 break;
             case R.id.nav_language:     //---------切換語言---------
                 final String[] language = {"中文","English"};
                 final String nowLanguage = getResources().getConfiguration().locale.toString();
                 int index=0;    //預設選項
-                if(nowLanguage.equals("zh_TW")){
-                    index=0;
-                }else if(nowLanguage.equals("en")){
-                    index=1;
-                }
+                if(nowLanguage.equals("zh_TW")){ index=0; }
+                else if(nowLanguage.equals("en")){ index=1; }
 
                 AlertDialog.Builder dialog_list = new AlertDialog.Builder(MainActivity.this);
                 dialog_list.setTitle(R.string.main_language);

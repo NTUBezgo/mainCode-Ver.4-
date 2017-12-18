@@ -15,12 +15,10 @@
     <string name="nav_info">Introduction</string>
     <string name="nav_language">Language</string>
     <string name="nav_contact">About</string>
-    <string name="nav_intro">Zoo info</string> <!--園區簡介-->
     <string name="nav_other">Other</string>
 
     <!-- main.xml 切換按鈕-->
     <string name="action_worksheet">Task</string>
-    <string name="action_area">bonus</string>
 
     <!-- 提示用 -->
     <string name="notice_gps">Please open gps</string>
@@ -30,23 +28,6 @@
     <string name="notice_network">Please check whether the network is open.</string>
 
     <!-- MyData.java -->
-    <!--
-    <string-array name="AreaMarkers">
-        <item>Yellow duck</item>
-        <item>Ginger duck</item>
-        <item>Frog</item>
-        <item>Hippo</item>
-        <item>Panda</item>
-    </string-array>
--->
-    <string-array name="AreaMarkers">
-        <item>Spotted Hyena</item>
-        <item>Formosan Black Bear</item>
-        <item>Gray Wolf</item>
-        <item>Black Tailed Prairie Dog</item>
-        <item>Kookaburra</item>
-    </string-array>
-
     <string-array name="WorksheetMarkers">
         <item>Spotted Hyena</item>
         <item>Formosan Black Bear</item>
@@ -92,7 +73,6 @@
 
     <!-- fragment_main.xml 主畫面地圖 -->
     <string name="main_startAr">Start Navigation</string>
-    <string name="main_startIr">Start Recognition</string>
 
     <!-- fragment_worksheet.xml 本期闖關單 -->
     <string name="worksheet_btnStartExchange">Get prizes</string>
@@ -121,7 +101,7 @@
     <string name="alert_name2">I got it.</string>
 
     <!-- fragmeny_worksheet_intro.xml 本期闖關單_查看某隻動物的題目-->
-    <string name="worksheet_intro_back">返回</string>
+    <string name="worksheet_intro_back">Back</string>
 
     <!-- activity_reset.xml 是否重玩-->
     <string name="reset_btn1">繼續遊玩</string>

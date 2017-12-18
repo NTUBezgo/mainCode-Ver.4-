@@ -73,35 +73,8 @@
         <!-- 是否重玩畫面 -->
         <activity android:name=".ResetActivity"></activity>
 
-
-        <!-- *************************************************** -->
         <!-- 動物介紹畫面 -->
         <activity android:name=".AnimalintroActivity" />
-
-        <!-- 館區簡介 -->
-        <activity
-            android:name=".AreaActivity"
-            android:theme="@style/AppTheme" />
-
-        <!-- HTML畫面 -->
-        <activity
-            android:name=".HtmlActivity"
-            android:theme="@style/AppTheme" />
-
-        <!-- 影像辨識 -->
-        <activity android:name=".CloudvisionActivity" />
-        <activity android:name=".CVintroActivity" />
-
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>
-        <!-- 影像辨識 -->
 
         <service
             android:name=".GeofenceTransitionsIntentService"

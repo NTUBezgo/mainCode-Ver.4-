@@ -35,13 +35,6 @@ public class MyData{
         setMarkers();
     }
 
-    //建立各館區marker
-    private String areaMarkers[][]={
-            {"24.9946605","121.5887605","斑點鬣狗"},{"24.9975801","121.5799735","臺灣黑熊"},
-            {"24.9932772","121.5900815","北美灰狼"},{"24.9921553","121.5890408","黑尾草原犬鼠"},
-            {"24.995106","121.583514","笑翠鳥"}
-    };
-
     //建立闖關單marker
     private String workSheetMarkers[][]={
             {"24.9946605","121.5887605","斑點鬣狗"},{"24.9975801","121.5799735","臺灣黑熊"},
@@ -52,14 +45,10 @@ public class MyData{
 
 
     public void setMarkers(){ //設定名稱從strings取得
-        String[] array= res.getStringArray(R.array.AreaMarkers);
         String[] array1= res.getStringArray(R.array.WorksheetMarkers);
-
-        for(int i=0; i<5; i++){ areaMarkers[i][2] = array[i]; }
         for(int i=0; i<7; i++){ workSheetMarkers[i][2] = array1[i]; }
     }
 
-    public String[][] getAreaMarkers(){return areaMarkers;}
     public String[][] getWorkSheetMarkers(){return workSheetMarkers;}
 
     //闖關單選擇題圖示

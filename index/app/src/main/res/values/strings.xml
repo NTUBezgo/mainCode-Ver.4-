@@ -15,12 +15,10 @@
     <string name="nav_info">闖關說明</string>
     <string name="nav_language">切換語言</string>
     <string name="nav_contact">關於我們</string>
-    <string name="nav_intro">園區簡介</string> <!--園區簡介-->
     <string name="nav_other">其他</string>
 
     <!-- main.xml 切換按鈕-->
     <string name="action_worksheet">闖關單</string>
-    <string name="action_area">加分題</string>
 
     <!-- 提示用 -->
     <string name="notice_gps">請開啟GPS</string>
@@ -30,24 +28,6 @@
     <string name="notice_network">請檢查網路是否有開啟</string>
 
     <!-- MyData.java -->
-    <!--
-    <string-array name="AreaMarkers">
-        <item>黃色小鴨</item>
-        <item>薑母鴨</item>
-        <item>青蛙</item>
-        <item>河馬</item>
-        <item>熊貓</item>
-    </string-array>
--->
-
-    <string-array name="AreaMarkers">
-        <item>斑點鬣狗</item>
-        <item>臺灣黑熊</item>
-        <item>北美灰狼</item>
-        <item>黑尾草原犬鼠</item>
-        <item>笑翠鳥</item>
-    </string-array>
-
     <string-array name="WorksheetMarkers">
         <item>斑點鬣狗</item>
         <item>臺灣黑熊</item>
@@ -93,7 +73,6 @@
 
     <!-- fragment_main.xml 主畫面地圖 -->
     <string name="main_startAr">開始導航</string>
-    <string name="main_startIr">開始辨識</string>
 
     <!-- fragment_worksheet.xml 本期闖關單 -->
     <string name="worksheet_btnStartExchange">領取獎品</string>
@@ -128,43 +107,5 @@
     <string name="reset_btn1">繼續遊玩</string>
     <string name="reset_btn2">重新開始</string>
     <string name="reset_notice">若選\"繼續遊玩\"將繼續之前的闖關紀錄\n若選\"重新開始\"則闖關紀錄會刪除,請注意,即使再次闖關完成,獎品也無法再次兌換</string>
-
-    <!-- 影像辨識 -->
-    <string name="CV_action">開始拍攝</string>
-    <string name="CV_introductionTitle">動物介紹</string>
-    <string name="CV_hint">請按下開始拍攝</string>
-    <string name="CV_answerHint">提示</string>
-    <string name="CV_End">返回</string>
-
-    <string name="CV_introduction_hyena">我是斑點鬣狗，動物界的電影明星，獅子王、少年PI的奇幻漂流都有我的身影呢！在我們的社會中，母鬣狗的身分地位比較高，屬於標準的母系社會。母鬣狗、公鬣狗的生殖器外觀相似，早期以為斑點鬣狗是雌雄同體呢！
-    斑點鬣狗是非洲哺乳動物中能發出最多種聲音的第一名，有時候也會發出像是人類的笑聲，因此又稱「笑鬣狗」。</string>
-    <string name="CV_introduction_bear">我的名字叫臺灣黑熊，是臺灣特有種，同時也是瀕危物種。我們是雜食性的
-動物，常以植物作為主食，靈敏的鼻子就是最好的食物搜尋器。
-臺灣黑熊的身形龐大，卻有靈巧的身手，能爬樹、涉水，全力跑步的時速達
-30-40公里呢！雖然在自然界中少有天敵，但是受到人為活動的影響，像是非法
-狩獵、棲息地破壞，使臺灣黑熊數量越來越少。</string>
-    <string name="CV_introduction_prairiedog"> 我是黑尾草原犬鼠，平常最喜歡挖穴築巢，建造我們的地底皇宮，一個家族的成員有1隻公的和3-4隻母的，以及生育的小犬鼠。
-我們是非常社會化的動物，以家族為單位，成群住在大草原。
-晨昏之時是我最有活力的時候，不妨來溫帶動物區看看我吧！
-要是看到我站起來，表示我在警戒，替家族成員偵查外面的狀況。</string>
-    <string name="CV_introduction_wolf"> 我叫做北美灰狼，是群居性的哺乳動物，我們會團體合作、分工狩獵大型動物。
-        狼群利用嚎叫溝通，叫聲最遠能傳到130平方公里以外呢！
-        在狼群中為了避免打鬥造成不必要的損傷，利用位階維持狼群的社會秩序，最高位階者為頭狼，具有許多特權，像是交配、享用食物等的優先權。</string>
-    <string name="CV_introduction_kookaburra">我叫做笑翠鳥，因為我的笑聲聽起來像人類的笑聲，屬於肉食性的鳥類，在野外捕捉蜥蜴、昆蟲等當作食物。
-        通常在陸地上靜待獵物出現，緊接著飛撲至地面啄食，最後返回棲枝享用美食。假如捕捉到蛇類，
-        笑翠鳥會使用大喙攻擊蛇的頭部，或是將蛇由高處拋下摔暈再進食。想聽我們令人愉悅的笑聲，就來熱帶雨林區吧！</string>
-    <string name="CV_introduction_deer">我是山中精靈—山羌，鳴叫聲如狗，又稱作「吠鹿」。
-        我屬於草食性動物，平常喜歡吃植物的嫩葉、嫩芽，因此可以從植物啃咬的痕跡和高度判斷我的存在。
-    天性害羞、膽小易受驚嚇，若是遇到威脅，會一邊跳躍逃離、一邊搖動尾巴混淆視聽；太過緊迫的追捕，容易導致山羌猝死喔。</string>
-
-    <string name="loading_message">辨識中，請稍等</string>
-    <string name="dialog_select_prompt">請選擇您要用什麼方式來拍照</string>
-    <string name="dialog_select_camera">現在照一張</string>
-    <string name="dialog_select_gallery">從相簿內找</string>
-
-    <string name="image_picker_error">Something is wrong with that image. Pick a different one please.</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

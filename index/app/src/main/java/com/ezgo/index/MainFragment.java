@@ -240,7 +240,6 @@ public class MainFragment extends Fragment implements
             //判斷要顯示的marker
             if(myData.getIsFromWS()){
                 jumpWorksheetMarker();  //闖關單跳至地圖
-
             }else{
                 chooseWorkSheetMarkers();  //建立各闖關單marker
             }
@@ -295,20 +294,7 @@ public class MainFragment extends Fragment implements
         startActivity(intent);
     }
 
-    //--------------------------------------------------開始辨識----------------------------------------
-    private void startIr(String targetPosition[]){
-        Intent intent=new Intent();
-        Bundle bundle = new Bundle();
-
-        bundle.putString("vision",targetPosition[2]);
-
-        intent.putExtras(bundle);
-        intent.setClass(getActivity(), CloudvisionActivity.class);
-        startActivity(intent);
-    }
-
-
-    //---------------取得闖關單座標---------------
+    //---------------1取得闖關單座標---------------
     public void chooseWorkSheetMarkers(){
         btnAr.setText(R.string.main_startAr);  //設定文字為開始導航
         btnAr.setOnClickListener(new View.OnClickListener() {
@@ -323,22 +309,7 @@ public class MainFragment extends Fragment implements
         setMarkers(1);
     }
 
-    //---------------取得所有館區座標---------------
-    public void chooseAreaMarkers(){
-        btnAr.setText(R.string.main_startIr);  //設定文字為開始辨識
-        btnAr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startIr(targetPosition);
-            }
-        });
-
-        removeMarkers();
-        mMarkers=myData.getAreaMarkers();
-        setMarkers(2);
-    }
-
-    //-----------------選取闖關單題目跳至其座標-----------------
+    //-----------------2選取闖關單題目跳至其座標-----------------
     public void jumpWorksheetMarker(){
         btnAr.setText(R.string.main_startAr);  //設定文字為開始導航
         btnAr.setOnClickListener(new View.OnClickListener() {
@@ -350,7 +321,7 @@ public class MainFragment extends Fragment implements
 
         removeMarkers();
         mMarkers=myData.getPositionFromWS();
-        setMarkers(3);
+        setMarkers(2);
         myData.setIsFromWS(false);
         LatLng position = new LatLng(Double.parseDouble(mMarkers[0][0]),Double.parseDouble(mMarkers[0][1]));
         moveMap(position);
@@ -364,9 +335,7 @@ public class MainFragment extends Fragment implements
             MarkerOptions markerOptions = new MarkerOptions();
             if(type==1){    //選取闖關單標誌
                 markerOptions.position(position).icon(BitmapDescriptorFactory.fromResource(wsIcon[i])); //動物頭像Marker
-            }else if(type==2){  //選取館區標誌**********
-                markerOptions.position(position); //普通Marker
-            }else if(type==3){  //從闖關單頁面跳至此
+            }else if(type==2){  //從闖關單頁面跳至此
                 markerOptions.position(position).icon(BitmapDescriptorFactory.fromResource(wsIcon[Integer.parseInt(mMarkers[i][3])]));
             }
 
