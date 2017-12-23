@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         //-----------------NavigationView設定------------
-       navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    //--------------------------------------------------本期闖關單動物簡介-----------------------------------------
+    //-----------------------------------------本期闖關單彩色頭像跳至動物簡介--------------------------------------
     public void exchangeWorksheetIntro(){
         Fragment fragment = null;
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -108,10 +108,11 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    //------------------------------------------選取闖關單list跳至其座標-----------------------------------------
+    //------------------------------------------選取灰色頭像跳至其座標-----------------------------------------
     public void jumpToMainFragment(){
         onNavigationItemSelected(navigationView.getMenu().getItem(0));
     }
+
 
     @Override
     public void onBackPressed() {
@@ -168,7 +169,7 @@ public class MainActivity extends AppCompatActivity
                 fragmentTransaction.replace(R.id.main_frame,fragment);
                 mMenu.findItem(R.id.action_worksheet).setVisible(true);
                 break;
-            case R.id.nav_worksheet:     //---------切換闖關單頁面---------
+            case R.id.nav_worksheet:     //---------切換本期闖關單頁面---------
                 fragment = new WorkSheetFragment();
                 fragmentTransaction.replace(R.id.main_frame,fragment);
                 mMenu.findItem(R.id.action_worksheet).setVisible(false);
@@ -183,6 +184,11 @@ public class MainActivity extends AppCompatActivity
                 fragmentTransaction.replace(R.id.main_frame,fragment);
                 mMenu.findItem(R.id.action_worksheet).setVisible(false);
                 break;
+            case R.id.nav_knowledge:     //---------切換動物小知識頁面---------
+                fragment = new KnowledgeFragment();
+                fragmentTransaction.replace(R.id.main_frame,fragment);
+                mMenu.findItem(R.id.action_worksheet).setVisible(false);
+                break;
             case R.id.nav_contact:     //---------切換相關單位頁面---------
                 fragment = new AboutFragment();
                 fragmentTransaction.replace(R.id.main_frame,fragment);
@@ -192,8 +198,8 @@ public class MainActivity extends AppCompatActivity
                 final String[] language = {"中文","English"};
                 final String nowLanguage = getResources().getConfiguration().locale.toString();
                 int index=0;    //預設選項
-                if(nowLanguage.equals("zh_TW")){ index=0; }
-                else if(nowLanguage.equals("en")){ index=1; }
+                if(nowLanguage.equals("zh_TW")||nowLanguage.equals("zh")){ index=0; }
+                else index=1;
 
                 AlertDialog.Builder dialog_list = new AlertDialog.Builder(MainActivity.this);
                 dialog_list.setTitle(R.string.main_language);
@@ -201,7 +207,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if(which==0){
-                            if(!(nowLanguage.equals("zh_TW"))){ switchLanguage("zh"); }
+                            if(!(nowLanguage.equals("zh"))){ switchLanguage("zh"); }
                         }else if(which==1){
                             if(!(nowLanguage.equals("en"))){ switchLanguage("en"); }
                         }

@@ -1,0 +1,67 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ezgo.index.KnowledgeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/knowledge_background"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:gravity="center">
+
+
+        <ImageView
+            android:id="@+id/kn_hyena"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/kn_hyena"
+            android:layout_marginBottom="5dp"/>
+
+
+        <ImageView
+            android:id="@+id/kn_bear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/kn_bear"
+            android:layout_marginBottom="15dp"/>
+
+
+        <ImageView
+            android:id="@+id/kn_wolf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/kn_wolf"
+            android:layout_marginBottom="10dp"/>
+
+
+        <ImageView
+            android:id="@+id/kn_prairiedog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/kn_prairiedog"
+            android:layout_marginBottom="10dp"/>
+
+
+        <ImageView
+            android:id="@+id/kn_kookaburra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/kn_kookaburra"
+            android:layout_marginBottom="10dp"/>
+
+
+        <ImageView
+            android:id="@+id/kn_deer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/kn_deer"/>
+
+    </LinearLayout>
+
+</ScrollView>

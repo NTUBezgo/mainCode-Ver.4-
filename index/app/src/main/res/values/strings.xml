@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">臺北動物園EZGo-旺事如意</string>
-    <string name="app_title">旺事如意</string>
+    <string name="app_name">EZGo</string>
+    <string name="app_title">EZGo</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -9,99 +9,101 @@
     <string name="test_text">(目前版本為測試用,無實際兌換效力)</string>
 
     <!-- activity_main_drawer.xml 側邊清單-->
-    <string name="nav_map">地圖導覽</string>
-    <string name="nav_worksheet">本期闖關單</string>
-    <string name="nav_dogInfo">旺哥小檔案</string>
-    <string name="nav_info">闖關說明</string>
-    <string name="nav_language">切換語言</string>
-    <string name="nav_contact">關於我們</string>
-    <string name="nav_other">其他</string>
+    <string name="nav_map">Guide map</string>
+    <string name="nav_worksheet">Task</string>
+    <string name="nav_dogInfo">Woofy\'s file</string>
+    <string name="nav_info">Introduction</string>
+    <string name="nav_knowledge">Knowledge</string>
+    <string name="nav_language">Language</string>
+    <string name="nav_contact">About</string>
+    <string name="nav_other">Other</string>
 
     <!-- main.xml 切換按鈕-->
-    <string name="action_worksheet">闖關單</string>
+    <string name="action_worksheet">Task</string>
 
     <!-- 提示用 -->
-    <string name="notice_gps">請開啟GPS</string>
-    <string name="notice_end">確定要結束嗎?</string>
-    <string name="notice_sure">確定</string>
-    <string name="notice_cancel">取消</string>
-    <string name="notice_network">請檢查網路是否有開啟</string>
+    <string name="notice_gps">Please open gps</string>
+    <string name="notice_end">Are you sure you want to end?</string>
+    <string name="notice_sure">OK</string>
+    <string name="notice_cancel">Cancel</string>
+    <string name="notice_network">Please check whether the network is open.</string>
 
     <!-- MyData.java -->
     <string-array name="WorksheetMarkers">
-        <item>斑點鬣狗</item>
-        <item>臺灣黑熊</item>
-        <item>北美灰狼</item>
-        <item>黑尾草原犬鼠</item>
-        <item>笑翠鳥</item>
-        <item>山羌</item>
-        <item>教育中心</item>
+        <item>Spotted Hyena</item>
+        <item>Formosan Black Bear</item>
+        <item>Gray Wolf</item>
+        <item>Black Tailed Prairie Dog</item>
+        <item>Kookaburra</item>
+        <item>Barking Deer</item>
+        <item>Education Center</item>
     </string-array>
 
-    <!-- ArActivity.java -->
-    <string name="ar_arrived">已到達</string>
-    <string name="ar_arrived1">範圍</string>
-    <string name="ar_alreadyDone">-此題作答過</string>
-    <string name="ar_distence">離</string>
-    <string name="ar_meter">公尺</string>
+    <!-- WorksheetActivity.java -->
+    <string name="ar_arrived">Arrive-</string>
+    <string name="ar_arrived1"></string>
+    <string name="ar_alreadyDone"></string>
+    <string name="ar_distence"></string>
+    <string name="ar_distence1">\nDistance</string>
+    <string name="ar_meter">M</string>
 
     <!-- activity_ar.xml 導航介面 -->
-    <string name="ar_endBtn">結束導航</string>
-    <string name="ar_startQ">開始答題!</string>
+    <string name="ar_endBtn">End</string>
+    <string name="ar_startQ">Test</string>
 
     <!-- activity_endguide.xml 說明頁 -->
-    <string name="endguide_startMain">開始闖關</string>
+    <string name="endguide_startMain">Start</string>
 
     <!-- MainActivity.java 主畫面 -->
-    <string name="main_language">選擇語言</string>
+    <string name="main_language">Select language</string>
 
     <!-- activity_worksheet.xml 闖關單題目 -->
-    <string name="worksheet_btnResume">重新整理</string>
-    <string name="worksheet_btnNextquest">顯示下一題</string>
-    <string name="worksheet_btnChk">確定</string>
+    <string name="worksheet_btnResume">Refresh</string>
+    <string name="worksheet_btnNextquest">Next</string>
+    <string name="worksheet_btnChk">Submit</string>
 
     <!--WorksheetActivity 闖關單題目 -->
-    <string name="worksheet_hintRight">恭喜您 答對了</string>
-    <string name="worksheet_hintWrong">很可惜 答錯了</string>
-    <string name="worksheet_reload">請重新整理頁面！</string>
-    <string name="worksheet_notice1">您還沒選擇答案喔！</string>
-    <string name="worksheet_notice2">這題答過囉，...</string>
+    <string name="worksheet_hintRight">Congratulations! You got it.</string>
+    <string name="worksheet_hintWrong">Unfortunely it\'s a wrong answer.</string>
+    <string name="worksheet_reload">Please refresh the page！</string>
+    <string name="worksheet_notice1">You have not chosen the answer！</string>
+    <string name="worksheet_notice2">This question has been answered...</string>
 
     <!-- fragment_about.xml 關於 -->
-    <string name="about_zoo">聯絡方式:02-2938-2300</string>
-    <string name="about_imd">聯絡方式:106505ezgo@gmail.com</string>
+    <string name="about_zoo">Contact:02-2938-2300</string>
+    <string name="about_imd">Contact:106505ezgo@gmail.com</string>
 
     <!-- fragment_main.xml 主畫面地圖 -->
-    <string name="main_startAr">開始導航</string>
+    <string name="main_startAr">Navigate</string>
 
     <!-- fragment_worksheet.xml 本期闖關單 -->
-    <string name="worksheet_btnStartExchange">領取獎品</string>
-    <string name="worksheet_btnCantExchange">尚未闖關成功</string>
-    <string name="worksheet_exchangeNotice">完成全部答題可領取獎品</string>
+    <string name="worksheet_btnStartExchange">Redeem prizes</string>
+    <string name="worksheet_btnCantExchange">Undone</string>
+    <string name="worksheet_exchangeNotice">Complete the entire questions to receive prizes</string>
 
     <!-- WorkSheetFragment.java 本期闖關單 -->
-    <string name="worksheet_gotoMap">請至此動物區尋找題目與答案</string>
-    <string name="worksheet_correct">目前答對題數: </string>
+    <string name="worksheet_gotoMap">Please go to the animal area to find the question and answer.</string>
+    <string name="worksheet_correct">The number of correct answers:</string>
 
     <!-- fragment_reward.xml 獎品兌換 -->
-    <string name="reward_exchange">兌換獎品</string>
-    <string name="reward_text">兌換地點:教育中心入口處\n請於活動期限內兌換完畢，逾期無效</string>
+    <string name="reward_exchange">Redeem prizes</string>
+    <string name="reward_text">Location:Education Center entrance\nPlease get prizes within the deadline,it will be overdue invalid!</string>
 
     <!-- RewardFragment.java 獎品兌換-->
-    <string name="reward_notice">請至服務台兌換</string>
+    <string name="reward_notice">Please go to the information desk to get gifts.</string>
 
     <!-- reward_alert.xml 兌換彈出視窗 -->
-    <string name="alert_name">點下[立即兌換]視同已兌換,
-請確定人已經在服務台</string>
-    <string name="alert_wait">稍後</string>
-    <string name="alert_go">立即兌換</string>
+    <string name="alert_name"> If you click the button, that means you already got prizes.
+	Please make sure you are already at the information desk.</string>
+    <string name="alert_wait">Later</string>
+    <string name="alert_go">Get prizes</string>
 
     <!-- reward_alert_1.xml 兌換彈出視窗1 -->
-    <string name="alert_name1">請前往遊客服務中心兌換獎品喔~</string>
-    <string name="alert_name2">我了解了</string>
+    <string name="alert_name1">Please go to the information desk to get gifts.</string>
+    <string name="alert_name2">I got it.</string>
 
     <!-- fragmeny_worksheet_intro.xml 本期闖關單_查看某隻動物的題目-->
-    <string name="worksheet_intro_back">返回</string>
+    <string name="worksheet_intro_back">Back</string>
 
     <!-- activity_reset.xml 是否重玩-->
     <string name="reset_btn1">繼續遊玩</string>
