@@ -25,11 +25,4 @@ public class InformationFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_information, container, false);
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getActivity().setTitle(R.string.nav_info);
-    }
-
 }

@@ -63,7 +63,7 @@ public class ArActivity extends UnityPlayerActivity implements
     private int[] recordDone = new int[7]; //是否答完題目
     private String mMarkers[][]; //存放座標
     private TextView tv_distance;
-    private RelativeLayout relativeLayout2;
+    private LinearLayout linearLayout2;
 
     private float distence[] = new float[1]; //距離
 
@@ -140,7 +140,7 @@ public class ArActivity extends UnityPlayerActivity implements
         mMarkers=myData.getWorkSheetMarkers();
         tv_distance = (TextView) findViewById(R.id.textDistence);
 
-        relativeLayout2 = (RelativeLayout) findViewById(R.id.relative2);
+        linearLayout2 = (LinearLayout) findViewById(R.id.linear2);
 
         //接收地理圍欄intent
         LocalBroadcastManager lbc = LocalBroadcastManager.getInstance(this);
@@ -203,7 +203,7 @@ public class ArActivity extends UnityPlayerActivity implements
                         tv_arrival.setText(getString(R.string.ar_arrived) + mMarkers[where][2] + getString(R.string.ar_arrived1));
                     }
 
-                    relativeLayout2.setVisibility(View.VISIBLE);
+                    linearLayout2.setVisibility(View.VISIBLE);
 
                     ///Toast.makeText(ArActivity.this, R.string.ar_enterRange ,Toast.LENGTH_SHORT).show();
 
@@ -218,7 +218,7 @@ public class ArActivity extends UnityPlayerActivity implements
             }else if(geoFrom.equals("exit")){ //----------------------若離開範圍
                 UnityPlayer.UnitySendMessage("Main Camera", "changeAni", "false"); //呼叫unity函式設定動作
                 //Toast.makeText(ArActivity.this, R.string.ar_exitRange ,Toast.LENGTH_SHORT).show();
-                relativeLayout2.setVisibility(View.INVISIBLE);
+                linearLayout2.setVisibility(View.INVISIBLE);
 
             }
         }
@@ -390,7 +390,7 @@ public class ArActivity extends UnityPlayerActivity implements
 
         //distanceBetween(現在的緯度,現在的經度,目標緯度,目標經度,儲存的變數(是一個陣列)) 單位：公尺
         Location.distanceBetween(myLat,myLng,Float.valueOf(targetPosition[0]),Float.valueOf(targetPosition[1]) ,distence);
-        tv_distance.setText(getString(R.string.ar_distence) + targetPosition[2] + "：" + (int)distence[0] + getString(R.string.ar_meter));
+        tv_distance.setText(getString(R.string.ar_distence) + targetPosition[2] + getString(R.string.ar_distence1) +  "：" + (int)distence[0] + getString(R.string.ar_meter));
     }
 
 

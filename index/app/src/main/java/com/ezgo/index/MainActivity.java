@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,7 +13,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,8 +20,6 @@ import android.view.MenuItem;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -67,15 +63,27 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         //-----------------NavigationView設定------------
-       navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        checkIfuserdone(); //確認使用者是否兌換過獎品
 
         //---------設定預設地圖Fragment--------
         FragmentTransaction defultFragment = getSupportFragmentManager().beginTransaction();
         defultFragment.replace(R.id.main_frame, new MainFragment());
         defultFragment.commit();
 
+        setTitle(R.string.app_title);
+    }
+
+    //-----------------------------------------確認使用者是否兌換過獎品--------------------------------------
+    public void checkIfuserdone(){
+        String userDone =getWorksheet.getUserDone();
+
+        if(userDone.equals("1")){ //兌換過獎品出現"再玩一次"按鈕
+            navigationView.getMenu().findItem(R.id.nav_reset).setVisible(true);
+        }else{
+            navigationView.getMenu().findItem(R.id.nav_reset).setVisible(false);
+        }
     }
 
     //--------------------------------------------------兌換獎品-----------------------------------------
@@ -88,7 +96,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    //--------------------------------------------------本期闖關單動物簡介-----------------------------------------
+    //-----------------------------------------闖關進度彩色頭像跳至動物簡介--------------------------------------
     public void exchangeWorksheetIntro(){
         Fragment fragment = null;
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -98,7 +106,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    //--------------------------------------------------跳回本期闖關單-----------------------------------------
+    //--------------------------------------------------跳回闖關進度-----------------------------------------
     public void exchangeWorksheetFragment(){
         Fragment fragment = null;
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -108,9 +116,15 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    //------------------------------------------選取闖關單list跳至其座標-----------------------------------------
+    //------------------------------------------選取灰色頭像跳至其座標-----------------------------------------
     public void jumpToMainFragment(){
         onNavigationItemSelected(navigationView.getMenu().getItem(0));
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        checkIfuserdone();
     }
 
     @Override
@@ -154,6 +168,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -168,7 +183,7 @@ public class MainActivity extends AppCompatActivity
                 fragmentTransaction.replace(R.id.main_frame,fragment);
                 mMenu.findItem(R.id.action_worksheet).setVisible(true);
                 break;
-            case R.id.nav_worksheet:     //---------切換闖關單頁面---------
+            case R.id.nav_worksheet:     //---------切換闖關進度頁面---------
                 fragment = new WorkSheetFragment();
                 fragmentTransaction.replace(R.id.main_frame,fragment);
                 mMenu.findItem(R.id.action_worksheet).setVisible(false);
@@ -183,17 +198,28 @@ public class MainActivity extends AppCompatActivity
                 fragmentTransaction.replace(R.id.main_frame,fragment);
                 mMenu.findItem(R.id.action_worksheet).setVisible(false);
                 break;
-            case R.id.nav_contact:     //---------切換相關單位頁面---------
+            case R.id.nav_knowledge:     //---------切換動物小知識頁面---------
+                fragment = new KnowledgeFragment();
+                fragmentTransaction.replace(R.id.main_frame,fragment);
+                mMenu.findItem(R.id.action_worksheet).setVisible(false);
+                break;
+            case R.id.nav_contact:     //---------切換關於我們頁面---------
                 fragment = new AboutFragment();
                 fragmentTransaction.replace(R.id.main_frame,fragment);
                 mMenu.findItem(R.id.action_worksheet).setVisible(false);
+                break;
+            case R.id.nav_reset:     //---------切換重玩頁面---------
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, ResetActivity.class);
+                startActivity(intent);
+                finish();
                 break;
             case R.id.nav_language:     //---------切換語言---------
                 final String[] language = {"中文","English"};
                 final String nowLanguage = getResources().getConfiguration().locale.toString();
                 int index=0;    //預設選項
-                if(nowLanguage.equals("zh_TW")){ index=0; }
-                else if(nowLanguage.equals("en")){ index=1; }
+                if(nowLanguage.equals("zh_TW")||nowLanguage.equals("zh")){ index=0; }
+                else index=1;
 
                 AlertDialog.Builder dialog_list = new AlertDialog.Builder(MainActivity.this);
                 dialog_list.setTitle(R.string.main_language);
@@ -201,7 +227,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if(which==0){
-                            if(!(nowLanguage.equals("zh_TW"))){ switchLanguage("zh"); }
+                            if(!(nowLanguage.equals("zh"))){ switchLanguage("zh"); }
                         }else if(which==1){
                             if(!(nowLanguage.equals("en"))){ switchLanguage("en"); }
                         }
@@ -217,6 +243,7 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     //-------------------切換語言--------------------
     private void switchLanguage(String language){

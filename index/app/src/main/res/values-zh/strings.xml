@@ -1,0 +1,111 @@
+<resources>
+    <string name="app_name">臺北動物園EZGo-旺事如意</string>
+    <string name="app_title">EZGo-旺事如意</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- 測試用 -->
+    <string name="test_text">(目前版本為測試用,無實際兌換效力)</string>
+
+    <!-- activity_main_drawer.xml 側邊清單-->
+    <string name="nav_map">地圖導覽</string>
+    <string name="nav_worksheet">闖關進度</string>
+    <string name="nav_dogInfo">旺哥小檔案</string>
+    <string name="nav_info">闖關說明</string>
+    <string name="nav_knowledge">動物小知識</string>
+    <string name="nav_language">切換語言</string>
+    <string name="nav_contact">關於我們</string>
+    <string name="nav_other">其他</string>
+
+    <!-- main.xml 切換按鈕-->
+    <string name="action_worksheet">闖關單</string>
+
+    <!-- 提示用 -->
+    <string name="notice_gps">請開啟GPS</string>
+    <string name="notice_end">確定要結束嗎?</string>
+    <string name="notice_sure">確定</string>
+    <string name="notice_cancel">取消</string>
+    <string name="notice_network">請檢查網路是否有開啟</string>
+
+    <!-- MyData.java -->
+    <string-array name="WorksheetMarkers">
+        <item>斑點鬣狗</item>
+        <item>臺灣黑熊</item>
+        <item>北美灰狼</item>
+        <item>黑尾草原犬鼠</item>
+        <item>笑翠鳥</item>
+        <item>山羌</item>
+        <item>教育中心</item>
+    </string-array>
+
+    <!-- ArActivity.java -->
+    <string name="ar_arrived">已到達</string>
+    <string name="ar_arrived1">範圍</string>
+    <string name="ar_alreadyDone">-此題作答過</string>
+    <string name="ar_distence">離</string>
+    <string name="ar_distence1"></string>
+    <string name="ar_meter">公尺</string>
+
+    <!-- activity_ar.xml 導航介面 -->
+    <string name="ar_endBtn">結束導航</string>
+    <string name="ar_startQ">開始答題!</string>
+
+    <!-- activity_endguide.xml 說明頁 -->
+    <string name="endguide_startMain">開始闖關</string>
+
+    <!-- MainActivity.java 主畫面 -->
+    <string name="main_language">選擇語言</string>
+
+    <!-- activity_worksheet.xml 闖關單題目 -->
+    <string name="worksheet_btnResume">重新整理</string>
+    <string name="worksheet_btnNextquest">顯示下一題</string>
+    <string name="worksheet_btnChk">確定</string>
+
+    <!--WorksheetActivity 闖關單題目 -->
+    <string name="worksheet_hintRight">恭喜您 答對了</string>
+    <string name="worksheet_hintWrong">很可惜 答錯了</string>
+    <string name="worksheet_reload">請重新整理頁面！</string>
+    <string name="worksheet_notice1">您還沒選擇答案喔！</string>
+    <string name="worksheet_notice2">這題答過囉，...</string>
+
+    <!-- fragment_about.xml 關於 -->
+    <string name="about_zoo">聯絡方式:02-2938-2300</string>
+    <string name="about_imd">聯絡方式:106505ezgo@gmail.com</string>
+
+    <!-- fragment_main.xml 主畫面地圖 -->
+    <string name="main_startAr">開始導航</string>
+
+    <!-- fragment_worksheet.xml 本期闖關單 -->
+    <string name="worksheet_btnStartExchange">兌換獎品</string>
+    <string name="worksheet_btnCantExchange">尚未闖關成功</string>
+    <string name="worksheet_exchangeNotice">完成全部答題可領取獎品</string>
+
+    <!-- WorkSheetFragment.java 本期闖關單 -->
+    <string name="worksheet_gotoMap">請至此動物區尋找題目與答案</string>
+    <string name="worksheet_correct">目前答對題數: </string>
+
+    <!-- fragment_reward.xml 獎品兌換 -->
+    <string name="reward_text">兌換地點:遊客服務中心\n請將本畫面出示給工作人員以領獎獎品(107/3/31前有效)</string>
+
+    <!-- reward_alert.xml 兌換彈出視窗 -->
+    <string name="alert_name">點下[立即兌換]視同已兌換,請確定人已經在遊客服務中心</string>
+    <string name="alert_wait">稍後</string>
+    <string name="alert_go">立即兌換</string>
+
+    <!-- reward_alert_1.xml 兌換彈出視窗1 -->
+    <string name="alert_name1">恭喜您,已兌換完畢！\n若想重新遊玩拿獎品，可拉開左側清單點選「再玩一次」！</string>
+    <string name="alert_know">我了解了</string>
+
+    <!-- fragmeny_worksheet_intro.xml 本期闖關單_查看某隻動物的題目-->
+    <string name="worksheet_intro_back">返回</string>
+
+    <!-- activity_reset.xml 是否重玩-->
+    <string name="reset_btn1">繼續遊玩</string>
+    <string name="reset_btn2">再玩一次</string>
+    <string name="reset_notice">若選\"繼續遊玩\"將保持之前的闖關紀錄\n若選\"重新開始\"可重新闖關答題拿獎品</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

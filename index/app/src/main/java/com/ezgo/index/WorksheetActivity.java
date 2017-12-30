@@ -84,7 +84,6 @@ public class WorksheetActivity extends AppCompatActivity {
 
     ImageView imageCircle;
     ImageView imageNumber;
-    ImageView imageBottom;
     ImageView yesNoImg;
 
     private int user_id;
@@ -112,7 +111,6 @@ public class WorksheetActivity extends AppCompatActivity {
 
         imageCircle = (ImageView) findViewById(R.id.ImgViewCircle);
         imageNumber = (ImageView) findViewById(R.id.ImgViewNumber);
-        imageBottom = (ImageView) findViewById(R.id.ImgViewBottom);
         yesNoImg = (ImageView) findViewById(R.id.YesNoImg);
 
         title = (TextView) findViewById(R.id.title);
@@ -126,7 +124,6 @@ public class WorksheetActivity extends AppCompatActivity {
         textDetail = (LinearLayout) findViewById(R.id.textDetail);
         mBtnNextquest.setVisibility(View.GONE);
         textDetail.setVisibility(View.GONE);
-        imageBottom.setVisibility(View.GONE);
 
         imageNumber.setImageResource(titleNo[titleNumber]);
 
@@ -321,16 +318,11 @@ public class WorksheetActivity extends AppCompatActivity {
             imageNumber.setImageResource(titleNo[titleNumber]);
             mBtnNextquest.setVisibility(View.GONE);
             mBtnChk.setVisibility(View.VISIBLE);
-        }
-        /*
-        //測試用，可以顯示所有題目
-        if(true){
-            //------------顯示下一題
-            index += 1;
-            Ans = 2;
-        }
-        */
-        else{
+            showData();
+        }else{  //count=3等於使用者已回答三題，else表示使用者要回首頁了
+            title.setVisibility(View.GONE);
+            mBtnChk.setVisibility(View.GONE);
+            mBtnNextquest.setVisibility(View.GONE);
             //-------------在這裡撰寫回首頁的程式碼
             Intent intent = new Intent();
             intent.setClass(WorksheetActivity.this, MainActivity.class);
@@ -340,10 +332,15 @@ public class WorksheetActivity extends AppCompatActivity {
             count =0;
             //Toast.makeText(WorksheetActivity.this,"答題結束" , Toast.LENGTH_SHORT).show();
         }
+          /*
+        //測試用，可以顯示所有題目
+        if(true){
+            //------------顯示下一題
+            index += 1;
+            Ans = 2;
+        }
+        */
 
-
-        showData();
-        //count=3等於使用者已回答三題，else表示使用者要回首頁了
     }
     //判斷該題是否作答過
     public static boolean checkRecordDone(int index){
@@ -464,11 +461,12 @@ public class WorksheetActivity extends AppCompatActivity {
         }
     }
 
-
     public static StringBuffer stringFormat(String str){
         StringBuffer mstringBuffer = new StringBuffer();
         mstringBuffer.append(str);
-        if(mstringBuffer.length() >8){
+        if(mstringBuffer.length() ==8){
+
+        }else if(mstringBuffer.length() >8){
             mstringBuffer.insert(9,"\n　　");
         }
         return mstringBuffer;

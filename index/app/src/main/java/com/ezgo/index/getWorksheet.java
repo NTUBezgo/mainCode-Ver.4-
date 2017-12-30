@@ -1,9 +1,7 @@
 package com.ezgo.index;
 
-import android.util.Log;
-
 import com.ezgo.index.Common.Common;
-import com.ezgo.index.MyAsyncTask.worksheetAsyncTask;
+import com.ezgo.index.MyAsyncTask.getterAsyncTask;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,13 +20,15 @@ public class getWorksheet {
     private static String[] record_question_id= new String[100];
     private static String[] option_question_id= new String[100];
     private static String[] recordDone= new String[100];
+    private static String userDone= "";
     private static String user_id;
     private static int optionLength ;
     private static int questionLength ;
+    private static String common = "";
 
     public static void getJSON() {
 
-        worksheetAsyncTask myAsyncTask = new worksheetAsyncTask(new worksheetAsyncTask.TaskListener() {
+        getterAsyncTask myAsyncTask = new getterAsyncTask(new getterAsyncTask.TaskListener() {
             @Override
             public void onFinished(String result) {
                 try {
@@ -91,11 +91,17 @@ public class getWorksheet {
     public static int getUser_id(){
         return  Integer.valueOf(user_id) ;
     }  //user_id 為數字型態
+    public static String getUserDone(){
+        return  String.valueOf(userDone) ;
+    } //是否兌換過獎品
 
     protected static void postUser_id(String user){
         user_id = user ;
     }
     protected static void postRecordDone(String sendRecordDone,int i){
         recordDone[i] = sendRecordDone;
+    }
+    protected static void postUserDone(String postUserDone){
+        userDone = postUserDone;
     }
 }

@@ -3,24 +3,21 @@ package com.ezgo.index;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ezgo.index.Common.Common;
-import com.ezgo.index.MyAsyncTask.worksheetAsyncTask;
-import com.ezgo.index.MyAsyncTask.worksheetUpdateAsyncTask;
+import com.ezgo.index.MyAsyncTask.getterAsyncTask;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -52,46 +49,53 @@ public class RewardFragment extends Fragment {
         if (isConnected()) {    //檢查網路是否開啟
             downloadRewardDone(); //取得兌換紀錄
 
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-            View v = LayoutInflater.from(getActivity()).inflate(R.layout.reward_alert_1, null);
-            TextView tv_ok = (TextView) v.findViewById(R.id.id_name2);
-
-            tv_ok.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ad.dismiss();
-                }
-            });
-
-            dialogBuilder.setView(v);
-            ad = dialogBuilder.show();
-
             exchagneBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     if (isConnected()) {    //檢查網路是否開啟
+
+                        //----提示-確認是否要兌換----
                         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
                         View view = LayoutInflater.from(getActivity()).inflate(R.layout.reward_alert, null);
-                        TextView tv_btn1 = (TextView) view.findViewById(R.id.btn_wait);
-                        TextView tv_btn2 = (TextView) view.findViewById(R.id.btn_go);
-                        tv_btn1.setOnClickListener(new View.OnClickListener() { //稍後
+                        Button btn_later= (Button) view.findViewById(R.id.btn_later);
+                        Button btn_get= (Button) view.findViewById(R.id.btn_get);
+
+                        btn_later.setOnClickListener(new View.OnClickListener() { //稍後
                             @Override
                             public void onClick(View view) {
                                 ad.dismiss();
-                                Toast.makeText(getActivity(), R.string.reward_notice, Toast.LENGTH_SHORT).show();
                             }
                         });
-                        tv_btn2.setOnClickListener(new View.OnClickListener() {
+                        btn_get.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) { //立即兌換
                                 ad.dismiss();
                                 updateReward();
                                 downloadRewardDone();
+
+                                //----------提示-可重玩並重整MainActivity-------
+                                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                                View v = LayoutInflater.from(getActivity()).inflate(R.layout.reward_alert_1, null);
+                                Button btn_know= (Button) v.findViewById(R.id.btn_know);
+
+                                btn_know.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                                        startActivity(intent);
+                                    }
+                                });
+
+                                dialogBuilder.setView(v);
+                                ad = dialogBuilder.show();
+
                             }
                         });
+
                         dialogBuilder.setView(view);
                         ad = dialogBuilder.show();
+
                     }else{
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         builder.setTitle(R.string.notice_network);
@@ -121,19 +125,13 @@ public class RewardFragment extends Fragment {
             dialog.show();
         }
 
-
-
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getActivity().setTitle(R.string.reward_exchange);
-    }
 
+    //---------------------取得兌換紀錄--------------
     private void downloadRewardDone(){
-        worksheetAsyncTask myAsyncTask = new worksheetAsyncTask(new worksheetAsyncTask.TaskListener() {
+        getterAsyncTask myAsyncTask = new getterAsyncTask(new getterAsyncTask.TaskListener() {
             @Override
             public void onFinished(String result) {
                 try {
@@ -143,6 +141,7 @@ public class RewardFragment extends Fragment {
                     if(rewardDone.equals("1")){
                         exchagneBtn.setImageResource(R.drawable.dog_exchange2);
                         exchagneBtn.setEnabled(false);
+                        getWorksheet.postUserDone(rewardDone); //更改變數
                     }
                 } catch (Exception e) {
                     //Log.v("ABC", Log.getStackTraceString(e));
@@ -152,8 +151,9 @@ public class RewardFragment extends Fragment {
         myAsyncTask.execute(Common.downloadRewardDone + getWorksheet.getUser_id());
     }
 
+    //---------------------更新兌換紀錄--------------
     private void updateReward(){
-        worksheetAsyncTask myNavigationAsyncTask = new worksheetAsyncTask(new worksheetAsyncTask.TaskListener() {
+        getterAsyncTask myNavigationAsyncTask = new getterAsyncTask(new getterAsyncTask.TaskListener() {
             @Override
             public void onFinished(String result) {
             }
@@ -163,7 +163,6 @@ public class RewardFragment extends Fragment {
             myNavigationAsyncTask.execute(Common.updateRewardUrl + getWorksheet.getUser_id());  //question_id[index]標註這題是哪一題, Ans為答案是否正確
             //Log.v("user_id:", user_id + "question[index]:"+ question_id[index] +"Ans:" +Ans+ "index" + index );  //question_id[index]標註這題是哪一題, Ans為答案是否正確
         } else {
-            //Toast.makeText(RewardFragment.this, "連線已取消", Toast.LENGTH_SHORT).show();
         }
     }
 

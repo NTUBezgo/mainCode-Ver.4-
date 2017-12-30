@@ -58,12 +58,6 @@ public class WorksheetIntroFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getActivity().setTitle(R.string.nav_worksheet);
-    }
-
     public void setImage(){
         animalCircle = (ImageView) view.findViewById(R.id.intro_animalCircle);
         animalCircle.setImageResource(imgViewsDrable[imgNo]);

@@ -139,7 +139,6 @@ public class WorkSheetFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().setTitle(R.string.nav_worksheet);
         setAnimalCircle();
     }
 

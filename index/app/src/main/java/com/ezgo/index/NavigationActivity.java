@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
@@ -27,12 +28,12 @@ public class NavigationActivity extends Activity {
     Context context;
     String getId;
     public String user_id;
-    public String recordDone;
+    public String userDone;
 
     private ImageView imageView;
 
-    //----------
-    static boolean doneChk;
+    //----------判斷使用者有沒有作答過題目
+    int doneChk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,25 +69,28 @@ public class NavigationActivity extends Activity {
                     }
                     JSONObject object = new JSONObject(result);
                     JSONArray jsonArray = object.getJSONArray("result");
-                    user_id = jsonArray.getJSONObject(0).getString("user_id");
-                    recordDone = jsonArray.getJSONObject(0).getString("done");
-                    getWorksheet.postUser_id(user_id);
 
                     for (int i = 0 ; i < jsonArray.length(); i++){
-                        getWorksheet.postRecordDone(jsonArray.getJSONObject(i).getString("done"),i);
-                        if((jsonArray.getJSONObject(i).getString("done").equals("1") )){
-                            doneChk = true;
+                        getWorksheet.postRecordDone(jsonArray.getJSONObject(i).getString("record_done"),i);
+                        if((jsonArray.getJSONObject(i).getString("record_done").equals("1") )){
+                            doneChk++;
                         };
                     }
-
-                    //Log.e("user_id :" , user_id);
-
+                    jsonArray = object.getJSONArray("userID");
+                    user_id = jsonArray.getJSONObject(0).getString("user_id");
+                    getWorksheet.postUser_id(user_id);
+                    jsonArray = object.getJSONArray("userDone");
+                    userDone = jsonArray.getJSONObject(0).getString("user_done");
+                    getWorksheet.postUserDone(userDone);
                     //---------------------------跳轉頁面
-
-                    if(doneChk){
-                        mHandler.sendEmptyMessageDelayed(GOTO_LOADING_ACTIVITY, 3000); //秒跳轉
+                    if(userDone.equals("1")){//跳轉至重新遊玩頁面
+                        mHandler.sendEmptyMessageDelayed(GOTO_RESET_ACTIVITY, 3000); //秒跳轉
                     }else{
-                        mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 3000); //秒跳轉
+                        if(doneChk >0) {
+                            mHandler.sendEmptyMessageDelayed(GOTO_LOADING_ACTIVITY, 3000); //秒跳轉
+                        }else{
+                            mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 3000); //秒跳轉
+                        }
                     }
                     //mHandler.sendEmptyMessageDelayed(GOTO_RESET_ACTIVITY, 3000); //秒跳轉
 
@@ -116,6 +120,7 @@ public class NavigationActivity extends Activity {
     private static final int GOTO_LOADING_ACTIVITY = 0;
     private static final int GOTO_GUIDE_ACTIVITY = 1;
     private static final int GOTO_RESET_ACTIVITY = 2;
+
     private Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             getWorksheet.getJSON();

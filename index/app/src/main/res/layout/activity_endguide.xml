@@ -5,17 +5,6 @@
     android:layout_height="fill_parent"
     android:background="@drawable/guide4"
     android:orientation="vertical" >
-<!--
-    <Button
-        android:id="@+id/startMain"
-        android:layout_width="260dp"
-        android:layout_height="60dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
-        android:background="@drawable/button_arstart"
-        android:textSize="40dp"
-        android:textColor="@color/whiteColor"
-        android:text="開始闖關"/>-->
 
     <ImageView
         android:id="@+id/startMain"
@@ -24,6 +13,5 @@
         android:src="@drawable/start"
         android:layout_gravity="center"
         android:layout_marginTop="70dp"/>
-
 
 </LinearLayout>

@@ -19,4 +19,5 @@ public class Common {
     public static String updateUserUrl="http://ezgo.twjoin.com/update";
     public static String updateAnsUrl="http://ezgo.twjoin.com/updateAns/";
     public static String updateRewardUrl="http://ezgo.twjoin.com//updateReward/";
+    public static String resetRecord="http://ezgo.twjoin.com/resetRecord/";
 }

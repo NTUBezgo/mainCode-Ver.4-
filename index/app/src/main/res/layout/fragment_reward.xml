@@ -11,17 +11,6 @@
     android:background="@drawable/reward_background"
     tools:context="com.ezgo.index.RewardFragment">
 
-    <!--測試用-->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/test_text"
-        android:textSize="20dp"
-        android:paddingTop="10dp"
-        android:textColor="@color/alertTextt"
-        android:layout_gravity="center_horizontal|bottom"
-        android:gravity="center_horizontal"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -35,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:src="@drawable/dog_exchange1"
         android:clickable="true"/>
     
@@ -45,6 +34,6 @@
         android:text="@string/reward_text"
         android:textColor="#000000"
         android:gravity="center"
-        android:textSize="16dp"/>
+        android:textSize="18dp"/>
 
 </LinearLayout>

@@ -21,6 +21,11 @@
             android:id="@+id/nav_info"
             android:icon="@drawable/ic_info_outline_white_36dp"
             android:title="@string/nav_info"/>
+
+        <item
+            android:id="@+id/nav_knowledge"
+            android:icon="@drawable/ic_knowledge"
+            android:title="@string/nav_knowledge"/>
     </group>
 
 
@@ -28,7 +33,7 @@
         <menu>
             <item
                 android:id="@+id/nav_language"
-                android:icon="@drawable/ic_exchange"
+                android:icon="@drawable/icon_language"
                 android:title="@string/nav_language" />
 
             <item
@@ -37,5 +42,10 @@
                 android:title="@string/nav_contact" />
         </menu>
     </item>
+
+    <item
+        android:id="@+id/nav_reset"
+        android:icon="@drawable/ic_reset"
+        android:title="@string/reset_btn2" />
 
 </menu>
