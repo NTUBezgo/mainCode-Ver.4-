@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -17,7 +18,9 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.accessibility.AccessibilityManagerCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +42,7 @@ import com.google.android.gms.location.LocationServices;
 import com.unity3d.player.UnityPlayer;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class ArActivity extends UnityPlayerActivity implements
@@ -70,10 +74,24 @@ public class ArActivity extends UnityPlayerActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ar);
 
+        //---------------取得目標位置---------------------
+        Bundle bundle=getIntent().getExtras();
+        targetPosition[0]=bundle.getString("targetLat");
+        targetPosition[1]=bundle.getString("targetLng");
+        targetPosition[2]=bundle.getString("targetTitle");
+
+        recordDone=bundle.getIntArray("recordDone");
+        recordDone[6]=0; //教育中心不答題
+
+        ///---------------取得目前語言---------------------
+        String language=bundle.getString("nowLanguage");
+        setLanguagee(language); //設定語言
+
+        setContentView(R.layout.activity_ar); //-----先改語系再setContentView
         context=this;
         myData=new MyData(getResources());
+
 
         //------------開啟Unity----------------
         LinearLayout u3dLayout = (LinearLayout) findViewById(R.id.u3d_layout);
@@ -85,14 +103,7 @@ public class ArActivity extends UnityPlayerActivity implements
         ((AnimationDrawable) mImageViewFilling.getBackground()).start();
         mHandler.sendEmptyMessageDelayed(LOADING_OVER, 6000); //隱藏Loading頁------------
 
-        //---------------取得目標位置---------------------
-        Bundle bundle=getIntent().getExtras();
-        targetPosition[0]=bundle.getString("targetLat");
-        targetPosition[1]=bundle.getString("targetLng");
-        targetPosition[2]=bundle.getString("targetTitle");
 
-        recordDone=bundle.getIntArray("recordDone");
-        recordDone[6]=0; //教育中心不答題
 
         //檢查是否有開啟GPS
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -149,6 +160,20 @@ public class ArActivity extends UnityPlayerActivity implements
 
     }
 
+    //---------------設定語言------------------
+    private void setLanguagee(String language){
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+
+        if(language.contains("en")){
+            conf.setLocale(Locale.ENGLISH);
+        }else{
+            conf.setLocale(Locale.TRADITIONAL_CHINESE);
+        }
+        res.updateConfiguration(conf, dm);
+    }
+
     //------------隱藏Loading頁-------------------
     private static final int LOADING_OVER = 0;
     private Handler mHandler = new Handler() {
@@ -170,7 +195,8 @@ public class ArActivity extends UnityPlayerActivity implements
         return targetPosition;
     }
 
-    //-----------------------------------------接收地理圍欄intent-----------------------------------------------------------------------
+
+    //------------------------------接收地理圍欄intent-----------------------------------------------
     public class GoogleReceiver extends BroadcastReceiver {
         ArActivity arActivity;
         String geoFrom;

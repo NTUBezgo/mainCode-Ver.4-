@@ -217,8 +217,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_language:     //---------切換語言---------
                 final String[] language = {"中文","English"};
                 final String nowLanguage = getResources().getConfiguration().locale.toString();
+
                 int index=0;    //預設選項
-                if(nowLanguage.equals("zh_TW")||nowLanguage.equals("zh")){ index=0; }
+                if(nowLanguage.contains("zh")){ index=0; }
                 else index=1;
 
                 AlertDialog.Builder dialog_list = new AlertDialog.Builder(MainActivity.this);
@@ -227,9 +228,9 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if(which==0){
-                            if(!(nowLanguage.equals("zh"))){ switchLanguage("zh"); }
+                            if(!(nowLanguage.contains("zh"))){ switchLanguage("zh"); }
                         }else if(which==1){
-                            if(!(nowLanguage.equals("en"))){ switchLanguage("en"); }
+                            if(!(nowLanguage.contains("en"))){ switchLanguage("en"); }
                         }
                     }
                 }).show();
@@ -258,11 +259,15 @@ public class MainActivity extends AppCompatActivity
         }
         res.updateConfiguration(conf, dm);
 
+        getWorksheet.setLanguage(language);
+        getWorksheet.getJSON();
+
         Intent intent = new Intent();
         intent.setClass(MainActivity.this, MainActivity.class);
         startActivity(intent);
         this.finish();
     }
+
 
     //------------------------------------------螢幕方向------------------------------------
     @Override

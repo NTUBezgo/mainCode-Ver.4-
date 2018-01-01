@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
@@ -287,7 +288,8 @@ public class MainFragment extends Fragment implements
         bundle.putString("targetLat",targetPosition[0]);
         bundle.putString("targetLng",targetPosition[1]);
         bundle.putString("targetTitle",targetPosition[2]);
-        bundle.putIntArray("recordDone",recordDone);
+        bundle.putIntArray("recordDone",recordDone); //每種動物是否答題過
+        bundle.putString("nowLanguage",getWorksheet.getLanguage()); //目前語言
 
         intent.putExtras(bundle);
         intent.setClass(getActivity(), ArActivity.class);

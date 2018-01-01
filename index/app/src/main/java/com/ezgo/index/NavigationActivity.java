@@ -29,6 +29,7 @@ public class NavigationActivity extends Activity {
     String getId;
     public String user_id;
     public String userDone;
+    public static String nowLanguage;
 
     private ImageView imageView;
 
@@ -46,7 +47,9 @@ public class NavigationActivity extends Activity {
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-        WorksheetActivity.postCount(3);
+        //WorksheetActivity.postCount(0);
+        //取得目前系統語言
+        getWorksheet.setLanguage(nowLanguage = getResources().getConfiguration().locale.toString());
 
         setContentView(R.layout.activity_navigation);
 
@@ -88,7 +91,8 @@ public class NavigationActivity extends Activity {
                     }else{
                         if(doneChk >0) {
                             mHandler.sendEmptyMessageDelayed(GOTO_LOADING_ACTIVITY, 3000); //秒跳轉
-                        }else{
+                        }
+                        else{
                             mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 3000); //秒跳轉
                         }
                     }

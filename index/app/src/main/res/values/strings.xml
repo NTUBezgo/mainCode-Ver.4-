@@ -32,11 +32,11 @@
     <string-array name="WorksheetMarkers">
         <item>Spotted Hyena</item>
         <item>Formosan Black Bear</item>
-        <item>Gray Wolf</item>
+        <item>North American Gray Wolf</item>
         <item>Black Tailed Prairie Dog</item>
-        <item>Kookaburra</item>
-        <item>Barking Deer</item>
-        <item>Education Center</item>
+        <item>Laughing Kookaburra</item>
+        <item>Reeves\'s muntjac</item>
+        <item>Visitor Center</item>
     </string-array>
 
     <!-- WorksheetActivity.java -->

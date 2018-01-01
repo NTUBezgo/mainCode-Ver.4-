@@ -23,6 +23,11 @@ import com.ezgo.index.MyAsyncTask.worksheetUpdateAsyncTask;
 public class WorksheetActivity extends AppCompatActivity {
     //---------每隻動物最多有3題題目
     private static final int maxQuestionLength = 3;
+    //---------選項的字體大小
+    private float fontSize = 19;
+    //----------目前語言
+    private String nowLanguage = "";
+
     //---------使用者的資料
     private static String[] question = new String[100];
     private static String[] description = new String[100];
@@ -43,7 +48,7 @@ public class WorksheetActivity extends AppCompatActivity {
     //---------判斷使用者是否有點下正確答案的radioButton
     private static byte Ans = 2;
     //---------判斷使用者已經回答幾題range:0-2 當=3時會被重置為0 (333行)
-    private static int count = 0;
+    private int count = 0;
     //---------用於答對或答錯後顯示什麼提示訊息
     private String showCurrent;
     private String showFail;
@@ -100,11 +105,16 @@ public class WorksheetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_worksheet);
         //-------------連接資料庫來取得值，不需要更改
-        getWorksheet.getJSON();
+
         //------------------取得使用者ID
         user_id = getWorksheet.getUser_id();
-        //------------------
+        //------------------取得目前語系該用的字體
+        nowLanguage = getWorksheet.getLanguage();
+        fontSize();
+
+        //--------------------------------------------------
         rg  = (RadioGroup) findViewById(R.id.rg);
+
 
         showCurrent = getString(R.string.worksheet_hintRight);
         showFail = getString(R.string.worksheet_hintWrong);
@@ -241,6 +251,7 @@ public class WorksheetActivity extends AppCompatActivity {
                 break;
             }
         }
+
         if (option[index] != null) {
             //設定題目的文字
             title.setText(question[index]);
@@ -262,9 +273,10 @@ public class WorksheetActivity extends AppCompatActivity {
 
                 if(optionQuestion_id[sign].equals(optionQuestion_id[sign + 1])){
                     rb.setId(1 + optionSum);             //id = 1,2,3
-                    rb.setText("　" +stringFormat(option[sign]));
+                    rb.setText("　　" +stringFormat(option[sign]));
                     nowAnswer[optionSum+1] = option[sign];//nowAnswer[0] 使用範圍是1-4
-                    rb.setTextSize(19.0f);
+                    rb.setTextSize(fontSize);
+                    rb.setLineSpacing(0.8F,0.8F);
                     rb.setTextColor(Color.BLACK);
                     rb.setButtonTintList(ColorStateList.valueOf(Color.BLACK));
                     rb.setBackgroundResource(optionImg[optionSum]);
@@ -279,10 +291,11 @@ public class WorksheetActivity extends AppCompatActivity {
                     sign +=1;
                 }else{
                     rb.setId(1 + optionSum);             //id = 1,2,3
-                    rb.setText("　" +stringFormat(option[sign]));
+                    rb.setText("　　" +stringFormat(option[sign]));
                     nowAnswer[optionSum+1] = option[sign];
-                    rb.setTextSize(19.0f);
+                    rb.setTextSize(fontSize);
                     rb.setTextColor(Color.BLACK);
+                    rb.setLineSpacing(0.8F,0.8F);
                     rb.setButtonTintList(ColorStateList.valueOf(Color.BLACK));
                     rb.setBackgroundResource(optionImg[optionSum]);
                     rb.setLayoutParams(params);
@@ -323,13 +336,13 @@ public class WorksheetActivity extends AppCompatActivity {
             title.setVisibility(View.GONE);
             mBtnChk.setVisibility(View.GONE);
             mBtnNextquest.setVisibility(View.GONE);
+            count = 0;
+            titleNumber =0;
             //-------------在這裡撰寫回首頁的程式碼
             Intent intent = new Intent();
             intent.setClass(WorksheetActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
-            index = 0;
-            count =0;
             //Toast.makeText(WorksheetActivity.this,"答題結束" , Toast.LENGTH_SHORT).show();
         }
           /*
@@ -429,6 +442,7 @@ public class WorksheetActivity extends AppCompatActivity {
         //Log.v("pCount ：", pCount + "");
         imgNo = pCount;
         index = pCount*3;
+        sign = -1;
     }
 
     public static void setOptionCheck(int whatOption){
@@ -437,6 +451,7 @@ public class WorksheetActivity extends AppCompatActivity {
         }
         setCheck[whatOption] = true;
     }
+
     public void showAns(){
         state = false;
         if(rg != null){
@@ -461,15 +476,71 @@ public class WorksheetActivity extends AppCompatActivity {
         }
     }
 
-    public static StringBuffer stringFormat(String str){
-        StringBuffer mstringBuffer = new StringBuffer();
-        mstringBuffer.append(str);
-        if(mstringBuffer.length() ==8){
-
-        }else if(mstringBuffer.length() >8){
-            mstringBuffer.insert(9,"\n　　");
+    public void fontSize(){
+        //中文字體大小:19 英文:15
+        if(nowLanguage.contains("zh")){
+            fontSize = 19;
+        }else {
+            fontSize = 14;
         }
+    }
+
+    public StringBuffer stringFormat(String str){
+        StringBuffer mstringBuffer = new StringBuffer();
+
+        if(nowLanguage.contains("zh")){
+            mstringBuffer.append(str);
+            if(mstringBuffer.length() ==8){
+            }else if(mstringBuffer.length() >8){
+                mstringBuffer.insert(9,"\n　");
+            }
+        }else{
+            String[] word;
+            //設定一行最多幾個字(不包括空白)
+            final int lineLength = 20;
+
+            //字串計數器，限制一行只能有30個英文字
+            int count = lineLength;
+            word = str.split(" ");
+            int wordIndex = 0 ;
+            while(word.length > wordIndex){
+                if( (count - word[wordIndex].length()) < 0 ){
+                    mstringBuffer.append("\n　　"+word[wordIndex] + "  ");
+                    /*Log.v("wordLength:",word[wordIndex].length()+"");
+                    Log.v("word:",word[wordIndex]+"");
+                    Log.v("count:",count+"");
+                    Log.v("none","---------------------------------------------");*/
+
+                    count = lineLength;
+                }else{
+                    mstringBuffer.append(word[wordIndex] + " ");
+                    /*Log.v("wordLength:",word[wordIndex].length()+"");
+                    Log.v("word:",word[wordIndex]+"");
+                    Log.v("count:",count+"");*/
+                }
+                count = count - word[wordIndex].length();
+                wordIndex++;
+            }
+        }
+    /*
+        for(int i = 0 ; i < word.length; i++){
+            Log.v("ABC " , (i%3)+"");
+            if(((i+1) % 3) ==0){
+                mstringBuffer.append(word[i]+"\n");
+            }else{
+                mstringBuffer.append(word[i] + " ");
+            }
+        }
+        */
+        /*
+        if(mstringBuffer.length() ==16){
+
+        }else if(mstringBuffer.length() >16){
+            mstringBuffer.insert(17,"\n　");
+        }
+        */
         return mstringBuffer;
     }
+
 
 }

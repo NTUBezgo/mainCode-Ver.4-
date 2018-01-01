@@ -13,6 +13,7 @@ public class Common {
     //--------------------------
     //Get
     public static String showQuest="http://ezgo.twjoin.com/showQuest/";
+    public static String showQuest_en="http://ezgo.twjoin.com/showQuest_en/";
     public static String getRecordDoneUrl="http://ezgo.twjoin.com/getRecordDone/";
     public static String downloadRewardDone="http://ezgo.twjoin.com/downloadRewardDone/";
     //Post
