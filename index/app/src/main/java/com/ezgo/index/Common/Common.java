@@ -12,8 +12,8 @@ public class Common {
     //(2) 若連結現有測試主機
     //--------------------------
     //Get
-    public static String showQuest="http://ezgo.twjoin.com/showQuest/";
     public static String showQuest_en="http://ezgo.twjoin.com/showQuest_en/";
+    public static String showQuest="http://ezgo.twjoin.com/showQuest/";
     public static String getRecordDoneUrl="http://ezgo.twjoin.com/getRecordDone/";
     public static String downloadRewardDone="http://ezgo.twjoin.com/downloadRewardDone/";
     //Post
@@ -21,4 +21,5 @@ public class Common {
     public static String updateAnsUrl="http://ezgo.twjoin.com/updateAns/";
     public static String updateRewardUrl="http://ezgo.twjoin.com//updateReward/";
     public static String resetRecord="http://ezgo.twjoin.com/resetRecord/";
+    public static String uploadLog="http://ezgo.twjoin.com/uploadLog";
 }

@@ -1,6 +1,7 @@
 package com.ezgo.index;
 
 
+import android.app.ActivityManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -276,24 +277,54 @@ public class MainFragment extends Fragment implements
             addTestCircle();  //-----------------------------------------測試用circle-------------------------------
 
         }catch (Exception e){
-            e.printStackTrace();
+            //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
+            WrongActivity mWrontAct = new WrongActivity();
+            String witchWrongBlock = "onMapReady";
+
+            ActivityManager activityManager=(ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+            String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+
+            mWrontAct.setError(e.toString(),witchWrongBlock,thisActivityName);
+
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), WrongActivity.class);
+            startActivity(intent);
+
+            getActivity().finish();
         }
     }
 
     //--------------------------------------------------開始導航----------------------------------------
     private void startAr(String targetPosition[]){
-        Intent intent=new Intent();
-        Bundle bundle = new Bundle();
+        try{
+            Intent intent=new Intent();
+            Bundle bundle = new Bundle();
 
-        bundle.putString("targetLat",targetPosition[0]);
-        bundle.putString("targetLng",targetPosition[1]);
-        bundle.putString("targetTitle",targetPosition[2]);
-        bundle.putIntArray("recordDone",recordDone); //每種動物是否答題過
-        bundle.putString("nowLanguage",getWorksheet.getLanguage()); //目前語言
+            bundle.putString("targetLat",targetPosition[0]);
+            bundle.putString("targetLng",targetPosition[1]);
+            bundle.putString("targetTitle",targetPosition[2]);
+            bundle.putIntArray("recordDone",recordDone); //每種動物是否答題過
+            bundle.putString("nowLanguage",getWorksheet.getLanguage()); //目前語言
 
-        intent.putExtras(bundle);
-        intent.setClass(getActivity(), ArActivity.class);
-        startActivity(intent);
+            intent.putExtras(bundle);
+            intent.setClass(getActivity(), ArActivity.class);
+            startActivity(intent);
+        }catch (Exception e){
+            //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
+            WrongActivity mWrontAct = new WrongActivity();
+            String witchWrongBlock = "startAr";
+
+            ActivityManager activityManager=(ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+            String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+
+            mWrontAct.setError(e.toString(),witchWrongBlock,thisActivityName);
+
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), WrongActivity.class);
+            startActivity(intent);
+
+            getActivity().finish();
+        }
     }
 
     //---------------1取得闖關單座標---------------
@@ -437,24 +468,22 @@ public class MainFragment extends Fragment implements
                         }
                     }
                 } catch (Exception e) {
-                    //Log.v("ABC", Log.getStackTraceString(e));
+                    //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
+                    WrongActivity mWrontAct = new WrongActivity();
+                    String witchWrongBlock = "mainFragment checkRecordDone";
+
+                    ActivityManager activityManager=(ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+                    String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+
+                    mWrontAct.setError(e.toString(),witchWrongBlock,thisActivityName);
+
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity(), WrongActivity.class);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });myAsyncTask.execute(Common.getRecordDoneUrl + getUser_id());
     }
-/*
-    public void onDestroyView() {
-        try {
-            Fragment fragment = (getChildFragmentManager().findFragmentById(R.id.mainMap));
-            if (fragment != null) {
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.remove(fragment);
-                ft.commit();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        super.onDestroyView();
-    }*/
 
 }

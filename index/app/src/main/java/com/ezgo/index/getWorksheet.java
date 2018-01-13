@@ -30,7 +30,6 @@ public class getWorksheet {
     private static int questionLength ;
     private static String nowLanguage ;
     private static String common = "";
-    //----------目前語言
 
 
     public static void getJSON() {
@@ -77,7 +76,6 @@ public class getWorksheet {
     }
     //-----------------使用者的題目清單maxIndex:15
     public static String getQuestion(int i){ return question[i];}
-
     public static int getAnswer(int i){ return Integer.valueOf(answer[i]); }
     public static String getDescription(int i){ return description[i]; }
     public static String getRecord_Question_id(int i){ return record_question_id[i]; }
@@ -94,8 +92,6 @@ public class getWorksheet {
     protected static String getLanguage(){ return nowLanguage; }
     protected static void postUser_id(String user){ user_id = user ; }
     protected static void postRecordDone(String sendRecordDone,int i){ recordDone[i] = sendRecordDone; }
-    protected static void postUserDone(String userDone){ userDone = userDone; }
-
-
+    protected static void postUserDone(String userdone){ userDone = userdone; }
 
 }

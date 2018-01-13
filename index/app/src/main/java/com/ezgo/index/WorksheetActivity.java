@@ -1,5 +1,7 @@
 package com.ezgo.index;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -109,9 +111,8 @@ public class WorksheetActivity extends AppCompatActivity {
         //------------------取得使用者ID
         user_id = getWorksheet.getUser_id();
         //------------------取得目前語系該用的字體
-        nowLanguage = getWorksheet.getLanguage();
-        fontSize();
-
+        nowLanguage =  getWorksheet.getLanguage();
+        setFontSize();
         //--------------------------------------------------
         rg  = (RadioGroup) findViewById(R.id.rg);
 
@@ -218,7 +219,7 @@ public class WorksheetActivity extends AppCompatActivity {
 
     protected void onResume() {
         super.onResume();
-
+        getWorksheet.getJSON();
     }
     protected void onStop() {
         super.onStop();
@@ -243,78 +244,93 @@ public class WorksheetActivity extends AppCompatActivity {
     }
     //-------------------顯示問答題內容
     private void showData(){
-
-        for(int i =0 ; i < optionLength;i++){
-            if(sign != -1)break;
-            if(optionQuestion_id[i].equals(recordQuestion_id[index])){
-                sign = i;
-                break;
-            }
-        }
-
-        if (option[index] != null) {
-            //設定題目的文字
-            title.setText(question[index]);
-            //顯示確認按鈕
-            mBtnChk.setVisibility(View.VISIBLE);
-            mBtnResume.setVisibility(View.GONE);
-            RadioButton rb;
-            OnClickListener mOnClickListener = new OnClickListener();
-            optionSum =0;
-
-            RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            while(optionQuestion_id[sign].equals(recordQuestion_id[index])){
-                rb = new RadioButton(this);
-                if(optionQuestion_id[sign + 1] == null){
-                    optionQuestion_id[sign + 1] = "100";
-                }
-                params.setMargins(0, 0, 0, 3);
-
-                if(optionQuestion_id[sign].equals(optionQuestion_id[sign + 1])){
-                    rb.setId(1 + optionSum);             //id = 1,2,3
-                    rb.setText("　　" +stringFormat(option[sign]));
-                    nowAnswer[optionSum+1] = option[sign];//nowAnswer[0] 使用範圍是1-4
-                    rb.setTextSize(fontSize);
-                    rb.setLineSpacing(0.8F,0.8F);
-                    rb.setTextColor(Color.BLACK);
-                    rb.setButtonTintList(ColorStateList.valueOf(Color.BLACK));
-                    rb.setBackgroundResource(optionImg[optionSum]);
-                    rb.setLayoutParams(params);
-                    rb.setGravity(Gravity.CENTER);
-                    rb.setButtonDrawable(null);
-                    if(optionSum ==0){
-                        rb.setChecked(true);
-                    }
-                    rb.setOnClickListener(mOnClickListener);
-                    rg.addView(rb);
-                    sign +=1;
-                }else{
-                    rb.setId(1 + optionSum);             //id = 1,2,3
-                    rb.setText("　　" +stringFormat(option[sign]));
-                    nowAnswer[optionSum+1] = option[sign];
-                    rb.setTextSize(fontSize);
-                    rb.setTextColor(Color.BLACK);
-                    rb.setLineSpacing(0.8F,0.8F);
-                    rb.setButtonTintList(ColorStateList.valueOf(Color.BLACK));
-                    rb.setBackgroundResource(optionImg[optionSum]);
-                    rb.setLayoutParams(params);
-                    rb.setGravity(Gravity.CENTER);
-                    rb.setButtonDrawable(null);
-                    rb.setOnClickListener(mOnClickListener);
-                    rg.addView(rb);
-                    sign +=1;
+        try {
+            for (int i = 0; i < optionLength; i++) {
+                if (sign != -1) break;
+                if (optionQuestion_id[i].equals(recordQuestion_id[index])) {
+                    sign = i;
                     break;
-
                 }
-                optionSum+=1;
             }
-        } else {
-            mBtnChk.setVisibility(View.GONE);
-            mBtnResume.setVisibility(View.VISIBLE);
-            title.setText(getString(R.string.worksheet_reload));
-        }
 
+            if (option[index] != null) {
+                //設定題目的文字
+                title.setText(question[index]);
+                //顯示確認按鈕
+                mBtnChk.setVisibility(View.VISIBLE);
+                mBtnResume.setVisibility(View.GONE);
+                RadioButton rb;
+                OnClickListener mOnClickListener = new OnClickListener();
+                optionSum = 0;
+
+                RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                while (optionQuestion_id[sign].equals(recordQuestion_id[index])) {
+                    rb = new RadioButton(this);
+                    if (optionQuestion_id[sign + 1] == null) {
+                        optionQuestion_id[sign + 1] = "100";
+                    }
+                    params.setMargins(0, 0, 0, 3);
+
+                    if (optionQuestion_id[sign].equals(optionQuestion_id[sign + 1])) {
+                        rb.setId(1 + optionSum);             //id = 1,2,3
+                        rb.setText("　　" + stringFormat(option[sign]));
+                        nowAnswer[optionSum + 1] = option[sign];//nowAnswer[0] 使用範圍是1-4
+                        rb.setTextSize(fontSize);
+                        rb.setLineSpacing(0.8F, 0.8F);
+                        rb.setTextColor(Color.BLACK);
+                        rb.setButtonTintList(ColorStateList.valueOf(Color.BLACK));
+                        rb.setBackgroundResource(optionImg[optionSum]);
+                        rb.setLayoutParams(params);
+                        rb.setGravity(Gravity.CENTER);
+                        rb.setButtonDrawable(null);
+                        if (optionSum == 0) {
+                            rb.setChecked(true);
+                        }
+                        rb.setOnClickListener(mOnClickListener);
+                        rg.addView(rb);
+                        sign += 1;
+                    } else {
+                        rb.setId(1 + optionSum);             //id = 1,2,3
+                        rb.setText("　　" + stringFormat(option[sign]));
+                        nowAnswer[optionSum + 1] = option[sign];
+                        rb.setTextSize(fontSize);
+                        rb.setTextColor(Color.BLACK);
+                        rb.setLineSpacing(0.8F, 0.8F);
+                        rb.setButtonTintList(ColorStateList.valueOf(Color.BLACK));
+                        rb.setBackgroundResource(optionImg[optionSum]);
+                        rb.setLayoutParams(params);
+                        rb.setGravity(Gravity.CENTER);
+                        rb.setButtonDrawable(null);
+                        rb.setOnClickListener(mOnClickListener);
+                        rg.addView(rb);
+                        sign += 1;
+                        break;
+
+                    }
+                    optionSum += 1;
+                }
+            } else {
+                mBtnChk.setVisibility(View.GONE);
+                mBtnResume.setVisibility(View.VISIBLE);
+                title.setText(getString(R.string.worksheet_reload));
+            }
+        }catch (Exception e){
+            //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
+            WrongActivity mWrontAct = new WrongActivity();
+            String witchWrongBlock = "updateUser data";
+
+            ActivityManager activityManager=(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+            String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+
+            mWrontAct.setError(e.toString(),witchWrongBlock,thisActivityName);
+
+            Intent intent = new Intent();
+            intent.setClass(WorksheetActivity.this, WrongActivity.class);
+            startActivity(intent);
+
+            finish();
+        }
     }
 
 
@@ -451,7 +467,6 @@ public class WorksheetActivity extends AppCompatActivity {
         }
         setCheck[whatOption] = true;
     }
-
     public void showAns(){
         state = false;
         if(rg != null){
@@ -475,8 +490,7 @@ public class WorksheetActivity extends AppCompatActivity {
                     "\n"+ getWorksheet.getDescription(index));
         }
     }
-
-    public void fontSize(){
+    public void setFontSize(){
         //中文字體大小:19 英文:15
         if(nowLanguage.contains("zh")){
             fontSize = 19;
@@ -506,17 +520,17 @@ public class WorksheetActivity extends AppCompatActivity {
             while(word.length > wordIndex){
                 if( (count - word[wordIndex].length()) < 0 ){
                     mstringBuffer.append("\n　　"+word[wordIndex] + "  ");
-                    /*Log.v("wordLength:",word[wordIndex].length()+"");
+                    Log.v("wordLength:",word[wordIndex].length()+"");
                     Log.v("word:",word[wordIndex]+"");
                     Log.v("count:",count+"");
-                    Log.v("none","---------------------------------------------");*/
+                    Log.v("none","---------------------------------------------");
 
                     count = lineLength;
                 }else{
                     mstringBuffer.append(word[wordIndex] + " ");
-                    /*Log.v("wordLength:",word[wordIndex].length()+"");
+                    Log.v("wordLength:",word[wordIndex].length()+"");
                     Log.v("word:",word[wordIndex]+"");
-                    Log.v("count:",count+"");*/
+                    Log.v("count:",count+"");
                 }
                 count = count - word[wordIndex].length();
                 wordIndex++;
@@ -541,6 +555,5 @@ public class WorksheetActivity extends AppCompatActivity {
         */
         return mstringBuffer;
     }
-
 
 }

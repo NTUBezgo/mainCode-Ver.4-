@@ -6,19 +6,32 @@
     android:background="@color/alertBackground">
 
     <TextView
-        android:id="@+id/id_name"
+        android:id="@+id/id_notice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24dp"
-        android:text="@string/alert_name"
+        android:text="@string/alert_notice"
         android:textColor="@color/alertTextt"
-        android:lineSpacingExtra="18dp"
-        android:padding="20dp"/>
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:id="@+id/id_notice1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="@string/alert_notice1"
+        android:textColor="@color/redColor"
+        android:layout_margin="20dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp">
 
         <Button
             android:id="@+id/btn_later"
@@ -28,7 +41,8 @@
             android:text="@string/alert_wait"
             android:textSize="24dp"
             android:textColor="#ffffff"
-            android:background="@drawable/btn_reward"/>
+            android:background="@drawable/btn_reward"
+            android:layout_marginRight="10dp"/>
 
         <Button
             android:id="@+id/btn_get"
@@ -41,5 +55,6 @@
             android:background="@drawable/btn_reward"/>
 
     </LinearLayout>
+
 
 </LinearLayout>

@@ -1,6 +1,8 @@
 package com.ezgo.index;
 
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
@@ -77,6 +79,7 @@ public class WorkSheetFragment extends Fragment {
             @Override
             public void onFinished(String result) {
                 try {
+                    chkEnd=0;
                     JSONObject object = new JSONObject(result);
                     JSONArray jsonArray = object.getJSONArray("ans");
                     textView.setText(getString(R.string.worksheet_correct) + jsonArray.getJSONObject(0).getString("ans"));
@@ -130,7 +133,19 @@ public class WorkSheetFragment extends Fragment {
                     }
 
                 } catch (Exception e) {
-                    //Log.v("ABC", Log.getStackTraceString(e));
+                    //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
+                    WrongActivity mWrontAct = new WrongActivity();
+                    String witchWrongBlock = "setAnimalCircle";
+
+                    ActivityManager activityManager=(ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+                    String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+
+                    mWrontAct.setError(e.toString(),witchWrongBlock,thisActivityName);
+
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity(), WrongActivity.class);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });myAsyncTask.execute(Common.getRecordDoneUrl + getUser_id());

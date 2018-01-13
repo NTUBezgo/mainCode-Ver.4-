@@ -1,5 +1,6 @@
 package com.ezgo.index;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -248,24 +249,41 @@ public class MainActivity extends AppCompatActivity
 
     //-------------------切換語言--------------------
     private void switchLanguage(String language){
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
+        try{
+            Resources res = getResources();
+            DisplayMetrics dm = res.getDisplayMetrics();
+            Configuration conf = res.getConfiguration();
 
-        if(language.equals("en")){
-            conf.setLocale(Locale.ENGLISH);
-        }else{
-            conf.setLocale(Locale.TRADITIONAL_CHINESE);
+            if(language.equals("zh")){
+                conf.setLocale(Locale.TRADITIONAL_CHINESE);
+            }else{
+                conf.setLocale(Locale.ENGLISH);
+            }
+            res.updateConfiguration(conf, dm);
+
+            getWorksheet.setLanguage(language);
+            getWorksheet.getJSON();
+
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, MainActivity.class);
+            startActivity(intent);
+            this.finish();
+        }catch (Exception e){
+            //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
+            WrongActivity mWrontAct = new WrongActivity();
+            String witchWrongBlock = "switchLanguage";
+
+            ActivityManager activityManager=(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+            String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+
+            mWrontAct.setError(e.toString(),witchWrongBlock,thisActivityName);
+
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, WrongActivity.class);
+            startActivity(intent);
+
+            finish();
         }
-        res.updateConfiguration(conf, dm);
-
-        getWorksheet.setLanguage(language);
-        getWorksheet.getJSON();
-
-        Intent intent = new Intent();
-        intent.setClass(MainActivity.this, MainActivity.class);
-        startActivity(intent);
-        this.finish();
     }
 
 

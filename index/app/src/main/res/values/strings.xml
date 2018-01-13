@@ -39,13 +39,14 @@
         <item>Visitor Center</item>
     </string-array>
 
-    <!-- WorksheetActivity.java -->
+    <!-- ArActivity.java -->
     <string name="ar_arrived">Arrive-</string>
     <string name="ar_arrived1"></string>
     <string name="ar_alreadyDone"></string>
     <string name="ar_distence"></string>
     <string name="ar_distence1">\nDistance</string>
     <string name="ar_meter">M</string>
+    <string name="ar_Ec">Visitor Center</string>
 
     <!-- activity_ar.xml 導航介面 -->
     <string name="ar_endBtn">End</string>
@@ -77,7 +78,7 @@
     <string name="main_startAr">Navigate</string>
 
     <!-- fragment_worksheet.xml 本期闖關單 -->
-    <string name="worksheet_btnStartExchange">Redeem prizes</string>
+    <string name="worksheet_btnStartExchange">Get Prize</string>
     <string name="worksheet_btnCantExchange">Undone</string>
     <string name="worksheet_exchangeNotice">Complete the entire questions to receive prizes</string>
 
@@ -89,13 +90,13 @@
     <string name="reward_text">Location:Visitor Center\nGet your prize by showing this page to our staff(until 2018/3/31)</string>
 
     <!-- reward_alert.xml 兌換彈出視窗 -->
-    <string name="alert_name"> If you click the button, that means you already got prizes.
-	Please make sure you are already at the Visitor Center.</string>
-    <string name="alert_wait">Later</string>
-    <string name="alert_go">Get prizes</string>
+    <string name="alert_notice">Please let a zoo staff handle the prize changing process. You will not get your prize if you tap on [GET PRIZE] by yourself.</string>
+    <string name="alert_notice1">Notice： Please tap on [CLOSE] if you are not a zoo staff.</string>
+    <string name="alert_wait">Close</string>
+    <string name="alert_go">Get Prize</string>
 
     <!-- reward_alert_1.xml 兌換彈出視窗1 -->
-    <string name="alert_name1">Congratulation! you already got your prize! If you want to get extra prize, tap on 「Play Again」 in your sidebar</string>
+    <string name="alert_name1">Congratulation! you already got your prize! If you want to get extra prize, tap on [Play Again] in your sidebar</string>
     <string name="alert_know">I got it.</string>
 
     <!-- fragmeny_worksheet_intro.xml 本期闖關單_查看某隻動物的題目-->
@@ -105,5 +106,9 @@
     <string name="reset_btn1">Continue</string>
     <string name="reset_btn2">Play Again</string>
     <string name="reset_notice">Continue: Keep all your task records.\nPlay Again: Replay the task to get the prize again.</string>
+
+    <!-- activity_wrong.xml 錯誤頁面-->
+    <string name="wrong_notice">Something wrong...</string>
+    <string name="wrong_etext">Please describe the error situation or suggest us</string>
 
 </resources>

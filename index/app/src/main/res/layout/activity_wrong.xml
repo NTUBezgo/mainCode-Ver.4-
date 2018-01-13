@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_wrong"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="50dp"
+    tools:context="com.ezgo.index.WrongActivity"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/knowledge_background">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wrong_notice"
+        android:textSize="30dp"
+        android:textColor="#000000"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/dog_cry"
+        android:layout_margin="10dp"/>
+
+    <EditText
+        android:id="@+id/wrong_et"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/drawer_background"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:textSize="25dp"
+        android:gravity="center"
+        android:hint="@string/wrong_etext"
+        android:scrollbars="vertical"/>
+
+    <Button
+        android:id="@+id/wrong_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/btn_reward"
+        android:text="@string/worksheet_btnChk"
+        android:textSize="28dp"/>
+
+
+</LinearLayout>

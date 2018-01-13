@@ -1,6 +1,7 @@
 package com.ezgo.index;
 
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -55,46 +56,61 @@ public class RewardFragment extends Fragment {
 
                     if (isConnected()) {    //檢查網路是否開啟
 
-                        //----提示-確認是否要兌換----
-                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-                        View view = LayoutInflater.from(getActivity()).inflate(R.layout.reward_alert, null);
-                        Button btn_later= (Button) view.findViewById(R.id.btn_later);
-                        Button btn_get= (Button) view.findViewById(R.id.btn_get);
+                            //----提示-確認是否要兌換----
+                            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                            View view = LayoutInflater.from(getActivity()).inflate(R.layout.reward_alert, null);
+                            Button btn_later= (Button) view.findViewById(R.id.btn_later);
+                            Button btn_get= (Button) view.findViewById(R.id.btn_get);
 
-                        btn_later.setOnClickListener(new View.OnClickListener() { //稍後
-                            @Override
-                            public void onClick(View view) {
-                                ad.dismiss();
-                            }
-                        });
-                        btn_get.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) { //立即兌換
-                                ad.dismiss();
-                                updateReward();
-                                downloadRewardDone();
+                            btn_later.setOnClickListener(new View.OnClickListener() { //稍後
+                                @Override
+                                public void onClick(View view) {
+                                    ad.dismiss();
+                                }
+                            });
+                            btn_get.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) { //立即兌換
+                                    try{
+                                        ad.dismiss();
+                                        updateReward();
+                                        downloadRewardDone();
 
-                                //----------提示-可重玩並重整MainActivity-------
-                                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-                                View v = LayoutInflater.from(getActivity()).inflate(R.layout.reward_alert_1, null);
-                                Button btn_know= (Button) v.findViewById(R.id.btn_know);
+                                        //----------提示-可重玩並重整MainActivity-------
+                                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                                        View v = LayoutInflater.from(getActivity()).inflate(R.layout.reward_alert_1, null);
+                                        Button btn_know= (Button) v.findViewById(R.id.btn_know);
 
-                                btn_know.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                                        btn_know.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                Intent intent = new Intent(getActivity(), MainActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
+
+                                        dialogBuilder.setView(v);
+                                        ad = dialogBuilder.show();
+                                    }catch (Exception e) {
+                                        //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
+                                        WrongActivity mWrontAct = new WrongActivity();
+                                        String witchWrongBlock = "click exchageBtn";
+
+                                        ActivityManager activityManager=(ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+                                        String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+
+                                        mWrontAct.setError(e.toString(),witchWrongBlock,thisActivityName);
+
+                                        Intent intent = new Intent();
+                                        intent.setClass(getActivity(), WrongActivity.class);
                                         startActivity(intent);
+                                        getActivity().finish();
                                     }
-                                });
+                                }
+                            });
 
-                                dialogBuilder.setView(v);
-                                ad = dialogBuilder.show();
-
-                            }
-                        });
-
-                        dialogBuilder.setView(view);
-                        ad = dialogBuilder.show();
+                            dialogBuilder.setView(view);
+                            ad = dialogBuilder.show();
 
                     }else{
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

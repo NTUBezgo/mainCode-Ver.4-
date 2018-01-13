@@ -71,16 +71,21 @@
             android:configChanges="orientation|keyboardHidden|screenSize" />
 
         <!-- 是否重玩畫面 -->
-        <activity android:name=".ResetActivity"></activity>
+        <activity android:name=".ResetActivity" />
 
         <!-- 動物介紹畫面 -->
         <activity android:name=".AnimalintroActivity" />
+
+        <!--錯誤頁面-->
+        <activity android:name=".WrongActivity"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".GeofenceTransitionsIntentService"
             android:enabled="true"
             android:exported="true"
             android:process="com.ezgo.index.unity" />
+
 
     </application>
 

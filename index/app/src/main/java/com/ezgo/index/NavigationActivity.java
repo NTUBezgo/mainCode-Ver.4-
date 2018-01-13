@@ -1,6 +1,7 @@
 package com.ezgo.index;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
@@ -98,7 +99,22 @@ public class NavigationActivity extends Activity {
                     }
                     //mHandler.sendEmptyMessageDelayed(GOTO_RESET_ACTIVITY, 3000); //秒跳轉
 
-                }catch(Exception e){}
+                }catch(Exception e){
+                    //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
+                    WrongActivity mWrontAct = new WrongActivity();
+                    String witchWrongBlock = "updateUser data";
+
+                    ActivityManager activityManager=(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                    String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+
+                    mWrontAct.setError(e.toString(),witchWrongBlock,thisActivityName);
+
+                    Intent intent = new Intent();
+                    intent.setClass(NavigationActivity.this, WrongActivity.class);
+                    startActivity(intent);
+
+                    finish();
+                }
             }
         });
 
@@ -135,6 +151,7 @@ public class NavigationActivity extends Activity {
                     bundle.putString("from", "NavigationActivity");
                     intent.putExtras(bundle);
                     //----------------------------
+                    //intent.setClass(NavigationActivity.this, LoadingActivity.class);
                     intent.setClass(NavigationActivity.this, LoadingActivity.class);
                     startActivity(intent);
                     finish();

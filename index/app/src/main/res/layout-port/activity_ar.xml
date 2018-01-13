@@ -36,7 +36,6 @@
             android:id="@+id/textDistence"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="距離"
             android:textSize="20dp"
             android:textColor="@color/whiteColor"
             android:layout_marginLeft="5dp"
@@ -68,7 +67,6 @@
             android:id="@+id/tv_arrival"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="作答"
             android:textSize="20dp"
             android:textColor="@color/whiteColor"
             android:layout_marginStart="5dp"
@@ -77,6 +75,6 @@
     </LinearLayout>
 
     <!-- Loading-->
-    <include android:id="@+id/loadingPage" layout="@layout/activity_loading" />
+    <include android:id="@+id/loadingPage" layout="@layout/activity_loading"/>
 
 </FrameLayout>

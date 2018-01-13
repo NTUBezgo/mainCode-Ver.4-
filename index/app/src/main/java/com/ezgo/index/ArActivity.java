@@ -1,6 +1,7 @@
 package com.ezgo.index;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -90,7 +91,12 @@ public class ArActivity extends UnityPlayerActivity implements
 
         setContentView(R.layout.activity_ar); //-----先改語系再setContentView
         context=this;
+
         myData=new MyData(getResources());
+        tv_arrival = (TextView) findViewById(R.id.tv_arrival); //顯示抵達哪一動物
+        mMarkers=myData.getWorkSheetMarkers();
+        tv_distance = (TextView) findViewById(R.id.textDistence);
+        linearLayout2 = (LinearLayout) findViewById(R.id.linear2);
 
 
         //------------開啟Unity----------------
@@ -145,13 +151,7 @@ public class ArActivity extends UnityPlayerActivity implements
             }
         });
 
-        //顯示抵達哪一動物
-        tv_arrival = (TextView) findViewById(R.id.tv_arrival);
 
-        mMarkers=myData.getWorkSheetMarkers();
-        tv_distance = (TextView) findViewById(R.id.textDistence);
-
-        linearLayout2 = (LinearLayout) findViewById(R.id.linear2);
 
         //接收地理圍欄intent
         LocalBroadcastManager lbc = LocalBroadcastManager.getInstance(this);
@@ -166,10 +166,10 @@ public class ArActivity extends UnityPlayerActivity implements
         DisplayMetrics dm = res.getDisplayMetrics();
         Configuration conf = res.getConfiguration();
 
-        if(language.contains("en")){
-            conf.setLocale(Locale.ENGLISH);
-        }else{
+        if(language.contains("zh")){
             conf.setLocale(Locale.TRADITIONAL_CHINESE);
+        }else{
+            conf.setLocale(Locale.ENGLISH);
         }
         res.updateConfiguration(conf, dm);
     }
@@ -213,54 +213,88 @@ public class ArActivity extends UnityPlayerActivity implements
             geoFrom=geobundle.getString("from");
             int where=GeofenceTransitionsIntentService.WHICHAREA;
 
-            if(geoFrom.equals("enter")){  //----------------------若進入範圍內
+            try {
+                if(geoFrom.equals("enter")){  //----------------------若進入範圍內
 
-                UnityPlayer.UnitySendMessage("Main Camera", "changeAni", "true");  //呼叫unity函式設定動作
+                    UnityPlayer.UnitySendMessage("Main Camera", "changeAni", "true");  //呼叫unity函式設定動作
 
-                if(where==6){
-                    tv_arrival.setText(getString(R.string.ar_arrived) +"教育中心");
-                }else{
+                    if(where==6){
+                        tv_arrival.setText(getString(R.string.ar_arrived) +getString(R.string.ar_Ec));
+                    }else{
 
-                    if(recordDone[where]==1){ //作答過
-                        sendBtn.setVisibility(View.GONE);
-                        tv_arrival.setText(getString(R.string.ar_arrived) + mMarkers[where][2] + getString(R.string.ar_alreadyDone));
-                    }else if(recordDone[where]==0){ //沒作答過
-                        sendBtn.setVisibility(View.VISIBLE);
-                        tv_arrival.setText(getString(R.string.ar_arrived) + mMarkers[where][2] + getString(R.string.ar_arrived1));
+                        if(recordDone[where]==1){ //作答過
+                            sendBtn.setVisibility(View.GONE);
+                            tv_arrival.setText(getString(R.string.ar_arrived) + mMarkers[where][2] + getString(R.string.ar_alreadyDone));
+                        }else if(recordDone[where]==0){ //沒作答過
+                            sendBtn.setVisibility(View.VISIBLE);
+                            tv_arrival.setText(getString(R.string.ar_arrived) + mMarkers[where][2] + getString(R.string.ar_arrived1));
+                        }
+
+                        linearLayout2.setVisibility(View.VISIBLE);
+
+                        ///Toast.makeText(ArActivity.this, R.string.ar_enterRange ,Toast.LENGTH_SHORT).show();
+
+                        sendBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startQuestion();
+                            }
+                        });
                     }
 
-                    linearLayout2.setVisibility(View.VISIBLE);
-
-                    ///Toast.makeText(ArActivity.this, R.string.ar_enterRange ,Toast.LENGTH_SHORT).show();
-
-                    sendBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            startQuestion();
-                        }
-                    });
+                }else if(geoFrom.equals("exit")){ //----------------------若離開範圍
+                    UnityPlayer.UnitySendMessage("Main Camera", "changeAni", "false"); //呼叫unity函式設定動作
+                    //Toast.makeText(ArActivity.this, R.string.ar_exitRange ,Toast.LENGTH_SHORT).show();
+                    linearLayout2.setVisibility(View.INVISIBLE);
                 }
 
-            }else if(geoFrom.equals("exit")){ //----------------------若離開範圍
-                UnityPlayer.UnitySendMessage("Main Camera", "changeAni", "false"); //呼叫unity函式設定動作
-                //Toast.makeText(ArActivity.this, R.string.ar_exitRange ,Toast.LENGTH_SHORT).show();
-                linearLayout2.setVisibility(View.INVISIBLE);
+            }catch (Exception e){
+                //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
+                WrongActivity mWrontAct = new WrongActivity();
+                String witchWrongBlock = "enter or exit geofence";
 
+                ActivityManager activityManager=(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+
+                mWrontAct.setError(e.toString(),witchWrongBlock,thisActivityName);
+
+                Intent intent = new Intent();
+                intent.setClass(ArActivity.this, WrongActivity.class);
+                startActivity(intent);
+
+                finish();
             }
         }
     }
 
     //----------------開始答題--------------------------
     public void startQuestion(){
-        Intent intent = new Intent();
-        intent.setClass(ArActivity.this, AnimalintroActivity.class);
+        try{
+            Intent intent = new Intent();
+            intent.setClass(ArActivity.this, AnimalintroActivity.class);
 
-        Bundle bundle = new Bundle();
-        bundle.putInt("index",GeofenceTransitionsIntentService.WHICHAREA); //存進入的地理圍欄id
-        intent.putExtras(bundle);
+            Bundle bundle = new Bundle();
+            bundle.putInt("index",GeofenceTransitionsIntentService.WHICHAREA); //存進入的地理圍欄id
+            intent.putExtras(bundle);
 
-        startActivity(intent);
-        mUnityPlayer.quit();
+            startActivity(intent);
+            mUnityPlayer.quit();
+        }catch (Exception e){
+            //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
+            WrongActivity mWrontAct = new WrongActivity();
+            String witchWrongBlock = "startQuestion";
+
+            ActivityManager activityManager=(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+            String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+
+            mWrontAct.setError(e.toString(),witchWrongBlock,thisActivityName);
+
+            Intent intent = new Intent();
+            intent.setClass(ArActivity.this, WrongActivity.class);
+            startActivity(intent);
+
+            finish();
+        }
     }
 
     //---------------加入Geofence--------------
