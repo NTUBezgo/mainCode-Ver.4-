@@ -25,12 +25,11 @@
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDledHYQ1ijpAf90lQMSelTgKdfQ0yJjPc" />
+            android:value="AIzaSyCLcFEkhYQGuSJwc-5UeIv5qh9j-0_prhw" />
         <!-- android:value="AIzaSyDledHYQ1ijpAf90lQMSelTgKdfQ0yJjPc" -->
         <!-- debug -->
         <!-- android:value="AIzaSyCLcFEkhYQGuSJwc-5UeIv5qh9j-0_prhw" -->
         <!-- release -->
-        <!-- android:value="AIzaSyDDJob0EBBF6-OBW3kfu2TvYG30P4raqXw"/> 組長的map -->
 
 
         <!-- 導引頁 -->
