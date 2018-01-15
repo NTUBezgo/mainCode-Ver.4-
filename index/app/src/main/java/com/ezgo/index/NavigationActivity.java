@@ -2,9 +2,14 @@ package com.ezgo.index;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -29,6 +34,7 @@ public class NavigationActivity extends Activity {
     Context context;
     String getId;
     public String user_id;
+    public String server_vision_no;
     public String userDone;
     public static String nowLanguage;
 
@@ -80,24 +86,51 @@ public class NavigationActivity extends Activity {
                             doneChk++;
                         };
                     }
+                    jsonArray = object.getJSONArray("vision");
+                    server_vision_no = jsonArray.getJSONObject(0).getString("vision_no");
                     jsonArray = object.getJSONArray("userID");
                     user_id = jsonArray.getJSONObject(0).getString("user_id");
                     getWorksheet.postUser_id(user_id);
                     jsonArray = object.getJSONArray("userDone");
                     userDone = jsonArray.getJSONObject(0).getString("user_done");
                     getWorksheet.postUserDone(userDone);
-                    //---------------------------跳轉頁面
-                    if(userDone.equals("1")){//跳轉至重新遊玩頁面
-                        mHandler.sendEmptyMessageDelayed(GOTO_RESET_ACTIVITY, 3000); //秒跳轉
-                    }else{
-                        if(doneChk >0) {
-                            mHandler.sendEmptyMessageDelayed(GOTO_LOADING_ACTIVITY, 3000); //秒跳轉
+
+                    //-----------------------------------------取得目前版本----------------------------------
+                    try {
+                        PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                        String myVersionName = packageInfo.versionName;
+                        //Log.v("vision_no",server_vision_no);
+                        if(!myVersionName.equals(server_vision_no)){ //若目前版本不是最新版本
+                            go2googleplay();
+                        }else{
+                            //---------------------------跳轉頁面
+                            if(userDone.equals("1")){//跳轉至重新遊玩頁面
+                                mHandler.sendEmptyMessageDelayed(GOTO_RESET_ACTIVITY, 3000); //秒跳轉
+                            }else{
+                                if(doneChk >0) {
+                                    mHandler.sendEmptyMessageDelayed(GOTO_LOADING_ACTIVITY, 3000); //秒跳轉
+                                }
+                                else{
+                                    mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 3000); //秒跳轉
+                                }
+                            }
                         }
-                        else{
-                            mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 3000); //秒跳轉
-                        }
+                    } catch (PackageManager.NameNotFoundException e) {
+                        //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
+                        WrongActivity mWrontAct = new WrongActivity();
+                        String witchWrongBlock = "版本型號出錯";
+
+                        ActivityManager activityManager=(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                        String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+
+                        mWrontAct.setError(e.toString(),witchWrongBlock,thisActivityName);
+
+                        Intent intent = new Intent();
+                        intent.setClass(NavigationActivity.this, WrongActivity.class);
+                        startActivity(intent);
+
+                        finish();
                     }
-                    //mHandler.sendEmptyMessageDelayed(GOTO_RESET_ACTIVITY, 3000); //秒跳轉
 
                 }catch(Exception e){
                     //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
@@ -172,5 +205,30 @@ public class NavigationActivity extends Activity {
         }
 
     };
-    //-------------------------------------------------------------------------------------------------
+
+    //--------------------------------------------------------更新版本dialog-------------------------------------------------
+    private void go2googleplay(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.check_message));
+        builder.setCancelable(false);
+        builder.setPositiveButton(getString(R.string.check_update), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                final String appPackageName = context.getPackageName();
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("market://details?id=" + appPackageName)));
+                } catch (android.content.ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                }
+            }
+        });
+        builder.setNegativeButton(getString(R.string.check_cancel), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                finish();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 }

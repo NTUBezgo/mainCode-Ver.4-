@@ -129,12 +129,13 @@ public class MainFragment extends Fragment implements
         return rootView;
     }
 
+    /*
     private void addTestCircle(){   //-----------------------------------------測試用circle-------------------------------
         Double geofenceList[][]=myData.getGeofenceList();
         for(int i=0; i<geofenceList.length; i++){
             addTestCircle(geofenceList[i][0], geofenceList[i][1]);
         }
-    }
+    }*/
 
     @Override
     public void onStart() {
@@ -274,7 +275,7 @@ public class MainFragment extends Fragment implements
                 }
             });
 
-            addTestCircle();  //-----------------------------------------測試用circle-------------------------------
+            //addTestCircle();  //-----------------------------------------測試用circle-------------------------------
 
         }catch (Exception e){
             //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
@@ -387,7 +388,7 @@ public class MainFragment extends Fragment implements
         markerList.clear();
     }
 
-    //-------------------地理圍欄 測試用-----------------------*********
+    /*-------------------地理圍欄 測試用----------------------
     private void addTestCircle(Double lat,Double lng){
         LatLng latLng = new LatLng(lat,lng);
 
@@ -398,7 +399,7 @@ public class MainFragment extends Fragment implements
                 .strokeColor(Color.argb(200, 255,0,0))
                 .fillColor( Color.argb(50, 255,0,0) );
         mMap.addCircle( circleOptions );
-    }
+    }*/
 
     //---------------------------------移動地圖到參數指定的位置-------------------------
     private void moveMap(LatLng place) {

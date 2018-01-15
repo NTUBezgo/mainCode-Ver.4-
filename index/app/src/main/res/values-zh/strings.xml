@@ -87,7 +87,9 @@
     <string name="worksheet_correct">目前答對題數: </string>
 
     <!-- fragment_reward.xml 獎品兌換 -->
-    <string name="reward_text">兌換地點:遊客服務中心\n請將本畫面出示給工作人員以領取獎品(107/3/31前有效)</string>
+    <!--<string name="reward_text">兌換地點:遊客服務中心\n請將本畫面出示給工作人員以領取獎品(107/3/31前有效)</string>-->
+    <string name="reward_text">兌換地點:遊客服務中心\n請將本畫面出示給工作人員以領取獎品(107/1/27 下午2時起)</string> <!--********************-->
+
 
     <!-- reward_alert.xml 兌換彈出視窗 -->
     <string name="alert_notice"> [完成兌換] 鈕請交由工作人員點選，若誤按則無法兌換獎品</string>
@@ -111,7 +113,9 @@
     <string name="wrong_notice">好像哪裡出錯了...</string>
     <string name="wrong_etext">請描述錯誤情況或給我們一些建議</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- NavigationActivity.java 導引頁-->
+    <string name="check_message">請更新至最新版本</string>
+    <string name="check_update">更新</string>
+    <string name="check_cancel">取消</string>
 
 </resources>

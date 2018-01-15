@@ -87,7 +87,9 @@
     <string name="worksheet_correct">The number of correct answers:</string>
 
     <!-- fragment_reward.xml 獎品兌換 -->
-    <string name="reward_text">Location:Visitor Center\nGet your prize by showing this page to our staff(until 2018/3/31)</string>
+    <!--<string name="reward_text">Location:Visitor Center\nGet your prize by showing this page to our staff(until 2018/3/31)</string>-->
+    <string name="reward_text">Location:Visitor Center\nGet your prize by showing this page to our staff(2018/1/27 14:00 start)</string> <!--********************-->
+
 
     <!-- reward_alert.xml 兌換彈出視窗 -->
     <string name="alert_notice">Please let a zoo staff handle the prize changing process. You will not get your prize if you tap on [GET PRIZE] by yourself.</string>
@@ -110,5 +112,10 @@
     <!-- activity_wrong.xml 錯誤頁面-->
     <string name="wrong_notice">Something wrong...</string>
     <string name="wrong_etext">Please describe the error situation or suggest us</string>
+
+    <!-- NavigationActivity.java 導引頁-->
+    <string name="check_message">Please update to the latest version</string>
+    <string name="check_update">Update</string>
+    <string name="check_cancel">Cancel</string>
 
 </resources>
