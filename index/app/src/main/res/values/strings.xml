@@ -22,7 +22,7 @@
     <string name="action_worksheet">Task</string>
 
     <!-- 提示用 -->
-    <string name="notice_gps">Please open gps</string>
+    <string name="notice_gps">Please open GPS</string>
     <string name="notice_end">Are you sure you want to end?</string>
     <string name="notice_sure">OK</string>
     <string name="notice_cancel">Cancel</string>
@@ -71,7 +71,6 @@
     <string name="worksheet_notice2">This question has been answered...</string>
 
     <!-- fragment_about.xml 關於 -->
-    <string name="about_zoo">Contact:02-2938-2300</string>
     <string name="about_imd">Contact:106505ezgo@gmail.com</string>
 
     <!-- fragment_main.xml 主畫面地圖 -->

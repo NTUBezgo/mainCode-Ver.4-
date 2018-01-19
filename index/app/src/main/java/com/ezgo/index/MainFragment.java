@@ -338,6 +338,9 @@ public class MainFragment extends Fragment implements
             }
         });
 
+        LatLng taiZoo = new LatLng(24.994909, 121.585132);
+        moveMap(taiZoo);//移動到動物園位置
+
         removeMarkers();
         mMarkers=myData.getWorkSheetMarkers();
         setMarkers(1);

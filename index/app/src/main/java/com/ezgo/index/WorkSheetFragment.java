@@ -75,6 +75,7 @@ public class WorkSheetFragment extends Fragment {
     }
 
     private void setAnimalCircle(){
+
         getRecordDoneAsyncTask myAsyncTask = new getRecordDoneAsyncTask(new getRecordDoneAsyncTask.TaskListener() {
             @Override
             public void onFinished(String result) {
@@ -133,19 +134,16 @@ public class WorkSheetFragment extends Fragment {
                     }
 
                 } catch (Exception e) {
-                    //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
+                   /*//在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
                     WrongActivity mWrontAct = new WrongActivity();
                     String witchWrongBlock = "setAnimalCircle";
 
-                    ActivityManager activityManager=(ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-                    String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
-
-                    mWrontAct.setError(e.toString(),witchWrongBlock,thisActivityName);
+                    mWrontAct.setError(e.toString(),witchWrongBlock,"WorkSheetFragment");
 
                     Intent intent = new Intent();
                     intent.setClass(getActivity(), WrongActivity.class);
                     startActivity(intent);
-                    getActivity().finish();
+                    getActivity().finish();*/
                 }
             }
         });myAsyncTask.execute(Common.getRecordDoneUrl + getUser_id());

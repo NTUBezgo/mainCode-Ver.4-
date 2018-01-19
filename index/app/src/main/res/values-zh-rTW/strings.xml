@@ -71,7 +71,6 @@
     <string name="worksheet_notice2">這題答過囉，...</string>
 
     <!-- fragment_about.xml 關於 -->
-    <string name="about_zoo">聯絡方式:02-2938-2300</string>
     <string name="about_imd">聯絡方式:106505ezgo@gmail.com</string>
 
     <!-- fragment_main.xml 主畫面地圖 -->

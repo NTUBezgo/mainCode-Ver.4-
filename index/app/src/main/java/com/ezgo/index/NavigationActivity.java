@@ -122,7 +122,6 @@ public class NavigationActivity extends Activity {
 
                         ActivityManager activityManager=(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
                         String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
-
                         mWrontAct.setError(e.toString(),witchWrongBlock,thisActivityName);
 
                         Intent intent = new Intent();
