@@ -18,15 +18,4 @@
         android:layout_marginBottom="50dp"
         android:src="@drawable/nav_pic"/>
 
-    <!--測試用-->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/test_text"
-        android:textSize="20dp"
-        android:textColor="@color/alertTextt"
-        android:layout_gravity="center_horizontal|bottom"
-        android:gravity="center_horizontal"/>
-
-
 </FrameLayout>

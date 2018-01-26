@@ -2,14 +2,18 @@ package com.ezgo.index;
 
 
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -298,18 +302,31 @@ public class MainFragment extends Fragment implements
     //--------------------------------------------------開始導航----------------------------------------
     private void startAr(String targetPosition[]){
         try{
-            Intent intent=new Intent();
-            Bundle bundle = new Bundle();
+            if(isConnected()){ //確認是否開啟網路及GPS
+                Intent intent=new Intent();
+                Bundle bundle = new Bundle();
 
-            bundle.putString("targetLat",targetPosition[0]);
-            bundle.putString("targetLng",targetPosition[1]);
-            bundle.putString("targetTitle",targetPosition[2]);
-            bundle.putIntArray("recordDone",recordDone); //每種動物是否答題過
-            bundle.putString("nowLanguage",getWorksheet.getLanguage()); //目前語言
+                bundle.putString("targetLat",targetPosition[0]);
+                bundle.putString("targetLng",targetPosition[1]);
+                bundle.putString("targetTitle",targetPosition[2]);
+                bundle.putIntArray("recordDone",recordDone); //每種動物是否答題過
+                bundle.putString("nowLanguage",getWorksheet.getLanguage()); //目前語言
 
-            intent.putExtras(bundle);
-            intent.setClass(getActivity(), ArActivity.class);
-            startActivity(intent);
+                intent.putExtras(bundle);
+                intent.setClass(getActivity(), ArActivity.class);
+                startActivity(intent);
+            }else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(getString(R.string.check_network));
+                builder.setCancelable(false);
+                builder.setPositiveButton(getString(R.string.notice_sure), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
         }catch (Exception e){
             //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
             WrongActivity mWrontAct = new WrongActivity();
@@ -488,6 +505,19 @@ public class MainFragment extends Fragment implements
                 }
             }
         });myAsyncTask.execute(Common.getRecordDoneUrl + getUser_id());
+    }
+
+
+    private boolean isConnected(){  //檢查網路及GPS是否開啟
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE); //gps
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE); //網路
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

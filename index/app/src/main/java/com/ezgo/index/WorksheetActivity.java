@@ -274,7 +274,7 @@ public class WorksheetActivity extends AppCompatActivity {
 
                     if (optionQuestion_id[sign].equals(optionQuestion_id[sign + 1])) {
                         rb.setId(1 + optionSum);             //id = 1,2,3
-                        rb.setText("　　" + stringFormat(option[sign]));
+                        rb.setText("　　" + stringOptionFormat(option[sign]));
                         nowAnswer[optionSum + 1] = option[sign];//nowAnswer[0] 使用範圍是1-4
                         rb.setTextSize(fontSize);
                         rb.setLineSpacing(0.8F, 0.8F);
@@ -292,7 +292,7 @@ public class WorksheetActivity extends AppCompatActivity {
                         sign += 1;
                     } else {
                         rb.setId(1 + optionSum);             //id = 1,2,3
-                        rb.setText("　　" + stringFormat(option[sign]));
+                        rb.setText("　　" + stringOptionFormat(option[sign]));
                         nowAnswer[optionSum + 1] = option[sign];
                         rb.setTextSize(fontSize);
                         rb.setTextColor(Color.BLACK);
@@ -316,9 +316,10 @@ public class WorksheetActivity extends AppCompatActivity {
                 title.setText(getString(R.string.worksheet_reload));
             }
         }catch (Exception e){
+            e.printStackTrace();
             //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
             WrongActivity mWrontAct = new WrongActivity();
-            String witchWrongBlock = "updateUser data";
+            String witchWrongBlock = "worksheetTitle";
 
             ActivityManager activityManager=(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
             String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
@@ -485,6 +486,8 @@ public class WorksheetActivity extends AppCompatActivity {
 
         //資料庫內預設沒有解釋的時候顯示無
         if(getWorksheet.getDescription(index).equals("無")){
+        }else if(getWorksheet.getDescription(index).equals("none")){
+
         }else{
             textDescription.setText(
                     "\n"+ getWorksheet.getDescription(index));
@@ -499,7 +502,7 @@ public class WorksheetActivity extends AppCompatActivity {
         }
     }
 
-    public StringBuffer stringFormat(String str){
+    public StringBuffer stringOptionFormat(String str){
         StringBuffer mstringBuffer = new StringBuffer();
 
         if(nowLanguage.contains("zh")){
@@ -536,23 +539,7 @@ public class WorksheetActivity extends AppCompatActivity {
                 wordIndex++;
             }
         }
-    /*
-        for(int i = 0 ; i < word.length; i++){
-            Log.v("ABC " , (i%3)+"");
-            if(((i+1) % 3) ==0){
-                mstringBuffer.append(word[i]+"\n");
-            }else{
-                mstringBuffer.append(word[i] + " ");
-            }
-        }
-        */
-        /*
-        if(mstringBuffer.length() ==16){
 
-        }else if(mstringBuffer.length() >16){
-            mstringBuffer.insert(17,"\n　");
-        }
-        */
         return mstringBuffer;
     }
 

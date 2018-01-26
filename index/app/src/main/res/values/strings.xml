@@ -5,9 +5,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <!-- 測試用 -->
-    <string name="test_text">(目前版本為測試用,無實際兌換效力)</string>
-
     <!-- activity_main_drawer.xml 側邊清單-->
     <string name="nav_map">Guide map</string>
     <string name="nav_worksheet">Record</string>
@@ -86,9 +83,7 @@
     <string name="worksheet_correct">The number of correct answers:</string>
 
     <!-- fragment_reward.xml 獎品兌換 -->
-    <!--<string name="reward_text">Location:Visitor Center\nGet your prize by showing this page to our staff(until 2018/3/31)</string>-->
-    <string name="reward_text">Location:Visitor Center\nGet your prize by showing this page to our staff(2018/1/27 14:00 start)</string> <!--********************-->
-
+    <string name="reward_text">Location:Visitor Center\nGet your prize by showing this page to our staff(Until 2018/3/31)</string>
 
     <!-- reward_alert.xml 兌換彈出視窗 -->
     <string name="alert_notice">Please let a zoo staff handle the prize changing process. You will not get your prize if you tap on [GET PRIZE] by yourself.</string>
@@ -116,5 +111,6 @@
     <string name="check_message">Please update to the latest version</string>
     <string name="check_update">Update</string>
     <string name="check_cancel">Cancel</string>
+    <string name="check_network">Please check your network and open GPS</string>
 
 </resources>

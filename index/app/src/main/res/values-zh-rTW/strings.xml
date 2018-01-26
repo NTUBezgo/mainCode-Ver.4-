@@ -5,9 +5,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <!-- 測試用 -->
-    <string name="test_text">(目前版本為測試用,無實際兌換效力)</string>
-
     <!-- activity_main_drawer.xml 側邊清單-->
     <string name="nav_map">地圖導覽</string>
     <string name="nav_worksheet">闖關進度</string>
@@ -60,7 +57,7 @@
 
     <!-- activity_worksheet.xml 闖關單題目 -->
     <string name="worksheet_btnResume">重新整理</string>
-    <string name="worksheet_btnNextquest">顯示下一題</string>
+    <string name="worksheet_btnNextquest">下一題</string>
     <string name="worksheet_btnChk">確定</string>
 
     <!--WorksheetActivity 闖關單題目 -->
@@ -86,9 +83,7 @@
     <string name="worksheet_correct">目前答對題數: </string>
 
     <!-- fragment_reward.xml 獎品兌換 -->
-    <!--<string name="reward_text">兌換地點:遊客服務中心\n請將本畫面出示給工作人員以領取獎品(107/3/31前有效)</string>-->
-    <string name="reward_text">兌換地點:遊客服務中心\n請將本畫面出示給工作人員以領取獎品(107/1/27 下午2時起)</string> <!--********************-->
-
+    <string name="reward_text">兌換地點:遊客服務中心\n請將本畫面出示給工作人員以領取獎品(107/3/31前有效)</string>
 
     <!-- reward_alert.xml 兌換彈出視窗 -->
     <string name="alert_notice"> [完成兌換] 鈕請交由工作人員點選，若誤按則無法兌換獎品</string>
@@ -116,5 +111,6 @@
     <string name="check_message">請更新至最新版本</string>
     <string name="check_update">更新</string>
     <string name="check_cancel">取消</string>
+    <string name="check_network">請確認網路通暢並開啟GPS</string>
 
 </resources>

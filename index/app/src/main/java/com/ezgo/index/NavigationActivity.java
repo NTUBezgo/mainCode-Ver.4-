@@ -12,6 +12,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -47,6 +48,8 @@ public class NavigationActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        String deviceName = Build.MANUFACTURER +"_"+ Build.DEVICE ;
+
         context = this;
 
         View decorView = getWindow().getDecorView();
@@ -54,7 +57,7 @@ public class NavigationActivity extends Activity {
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-        //WorksheetActivity.postCount(0);
+        WorksheetActivity.postCount(4);
         //取得目前系統語言
         getWorksheet.setLanguage(nowLanguage = getResources().getConfiguration().locale.toString());
 
@@ -88,13 +91,6 @@ public class NavigationActivity extends Activity {
                     }
                     jsonArray = object.getJSONArray("vision");
                     server_vision_no = jsonArray.getJSONObject(0).getString("vision_no");
-                    jsonArray = object.getJSONArray("userID");
-                    user_id = jsonArray.getJSONObject(0).getString("user_id");
-                    getWorksheet.postUser_id(user_id);
-                    jsonArray = object.getJSONArray("userDone");
-                    userDone = jsonArray.getJSONObject(0).getString("user_done");
-                    getWorksheet.postUserDone(userDone);
-
                     //-----------------------------------------取得目前版本----------------------------------
                     try {
                         PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -103,17 +99,7 @@ public class NavigationActivity extends Activity {
                         if(!myVersionName.equals(server_vision_no)){ //若目前版本不是最新版本
                             go2googleplay();
                         }else{
-                            //---------------------------跳轉頁面
-                            if(userDone.equals("1")){//跳轉至重新遊玩頁面
-                                mHandler.sendEmptyMessageDelayed(GOTO_RESET_ACTIVITY, 3000); //秒跳轉
-                            }else{
-                                if(doneChk >0) {
-                                    mHandler.sendEmptyMessageDelayed(GOTO_LOADING_ACTIVITY, 3000); //秒跳轉
-                                }
-                                else{
-                                    mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 3000); //秒跳轉
-                                }
-                            }
+                            //---- ....... ----
                         }
                     } catch (PackageManager.NameNotFoundException e) {
                         //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
@@ -122,6 +108,7 @@ public class NavigationActivity extends Activity {
 
                         ActivityManager activityManager=(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
                         String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+
                         mWrontAct.setError(e.toString(),witchWrongBlock,thisActivityName);
 
                         Intent intent = new Intent();
@@ -129,6 +116,23 @@ public class NavigationActivity extends Activity {
                         startActivity(intent);
 
                         finish();
+                    }
+                    jsonArray = object.getJSONArray("userID");
+                    user_id = jsonArray.getJSONObject(0).getString("user_id");
+                    getWorksheet.postUser_id(user_id);
+                    jsonArray = object.getJSONArray("userDone");
+                    userDone = jsonArray.getJSONObject(0).getString("user_done");
+                    getWorksheet.postUserDone(userDone);
+                    //---------------------------跳轉頁面
+                    if(userDone.equals("1")){//跳轉至重新遊玩頁面
+                        mHandler.sendEmptyMessageDelayed(GOTO_RESET_ACTIVITY, 3000); //秒跳轉
+                    }else{
+                        if(doneChk >0) {
+                            mHandler.sendEmptyMessageDelayed(GOTO_LOADING_ACTIVITY, 3000); //秒跳轉
+                        }
+                        else{
+                            mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 3000); //秒跳轉
+                        }
                     }
 
                 }catch(Exception e){
@@ -162,7 +166,7 @@ public class NavigationActivity extends Activity {
         } else {
             Toast.makeText(context, "The connection has been canceled", Toast.LENGTH_SHORT).show();
         }
-        myNavigationAsyncTask.execute(Common.updateUserUrl, getId); //第一個參數是Common的網址,第二個是要上傳的值
+        myNavigationAsyncTask.execute(Common.updateUserUrl, getId, deviceName); //第一個參數是Common的網址,第二個是要上傳的值
         //---------------------------上傳結束
 
     }

@@ -87,10 +87,14 @@
                 <Button
                     android:id="@+id/btnNextquest"
                     android:layout_width="120dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/nextquest"
-                    android:layout_gravity="right"
-                    android:textSize="30dp" />
+                    android:layout_height="60dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/worksheet_check"
+                    android:layout_gravity="center"
+                    android:paddingBottom="5dp"
+                    android:text="@string/worksheet_btnNextquest"
+                    android:textSize="26dp" />
             </LinearLayout>
 
         </ScrollView>

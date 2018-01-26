@@ -15,7 +15,7 @@ import com.ezgo.index.MyAsyncTask.uploadLogAsyncTask;
 public class WrongActivity extends AppCompatActivity {
 
     static String error = "";
-    static String witchBlock = "";
+    static String whichBlock = "";
     static String activityName = "";
     static String userName = "";
     static EditText mEditText ;
@@ -28,6 +28,7 @@ public class WrongActivity extends AppCompatActivity {
         mEditText = (EditText) findViewById(R.id.wrong_et);
         mBtn = (Button) findViewById(R.id.wrong_btn);
 
+        Toast.makeText(WrongActivity.this,R.string.check_network,Toast.LENGTH_SHORT).show();
 
         mBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,6 +37,7 @@ public class WrongActivity extends AppCompatActivity {
                     uploadLog();
                     finish();
                 }catch (Exception e){
+                    e.printStackTrace();
                     finish();
                 }
             }
@@ -45,7 +47,7 @@ public class WrongActivity extends AppCompatActivity {
 
     public void setError(String error, String witchBlock, String activityName){
         this.error = error;
-        this.witchBlock = witchBlock;
+        this.whichBlock = witchBlock;
         this.activityName = activityName;
     }
 
@@ -58,6 +60,6 @@ public class WrongActivity extends AppCompatActivity {
 
             }
         });
-        mUploadLogAsyncTask.execute(Common.uploadLog,error,witchBlock,activityName, userName);
+        mUploadLogAsyncTask.execute(Common.uploadLog,error,whichBlock,activityName, userName,String.valueOf(getWorksheet.getUser_id()));
     }
 }

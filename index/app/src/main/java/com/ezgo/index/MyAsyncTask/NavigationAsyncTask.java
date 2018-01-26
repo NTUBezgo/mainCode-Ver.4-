@@ -63,7 +63,8 @@ public class NavigationAsyncTask extends AsyncTask<String, Integer, String> {
             //----------------------------------------------
             //params[1] 是myNavigationAsyncTask.execute(Common.updateUrl, getId);的第二個參數
             String args =
-                    "device_id=" + URLEncoder.encode(params[1], "UTF-8") ;
+                    "device_id=" + URLEncoder.encode(params[1], "UTF-8") +
+                            "&device_name=" + URLEncoder.encode(params[2], "UTF-8");
 
             OutputStream os = conn.getOutputStream();
             BufferedWriter writer = new BufferedWriter(
