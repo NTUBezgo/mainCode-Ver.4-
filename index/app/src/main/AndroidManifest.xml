@@ -75,9 +75,13 @@
         <!-- 動物介紹畫面 -->
         <activity android:name=".AnimalintroActivity" />
 
-        <!--錯誤頁面-->
-        <activity android:name=".WrongActivity"
-            android:screenOrientation="portrait"/>
+        <!-- 錯誤頁面 -->
+        <activity
+            android:name=".WrongActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 維修頁面 -->
+        <activity android:name=".MaintainActivity"/>
 
         <service
             android:name=".GeofenceTransitionsIntentService"

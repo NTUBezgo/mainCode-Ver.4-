@@ -113,4 +113,8 @@
     <string name="check_cancel">Cancel</string>
     <string name="check_network">Please check your network and open GPS</string>
 
+    <!-- activity_maintain.xml 維修頁面-->
+    <string name="maintain_notice">System maintenance...</string>
+    <string name="maintain_btn">Close</string>
+
 </resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_wrong"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="50dp"
+    tools:context="com.ezgo.index.WrongActivity"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/knowledge_background">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/maintain_notice"
+        android:textSize="40dp"
+        android:textColor="#000000"
+        android:gravity="center"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/dog_curiou"
+        android:layout_margin="10dp"/>
+
+    <Button
+        android:id="@+id/maintain_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_reward"
+        android:text="@string/maintain_btn"
+        android:textSize="28dp"/>
+
+
+</LinearLayout>

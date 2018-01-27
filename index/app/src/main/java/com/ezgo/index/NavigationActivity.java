@@ -8,7 +8,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.media.Image;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -71,40 +74,78 @@ public class NavigationActivity extends Activity {
         imageView = (ImageView) findViewById(R.id.navDog);
         imageView.startAnimation(scaleAnimation);
 
-        //---------------------------上傳使用者的裝置ID及新增15筆record的紀錄
-        NavigationAsyncTask myNavigationAsyncTask = new NavigationAsyncTask(new NavigationAsyncTask.TaskListener() {
-            @Override
-            public void onFinished(String result) {
-                try{
-                    if(result==null){
-                        Toast.makeText(context, R.string.notice_network, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    JSONObject object = new JSONObject(result);
-                    JSONArray jsonArray = object.getJSONArray("result");
-
-                    for (int i = 0 ; i < jsonArray.length(); i++){
-                        getWorksheet.postRecordDone(jsonArray.getJSONObject(i).getString("record_done"),i);
-                        if((jsonArray.getJSONObject(i).getString("record_done").equals("1") )){
-                            doneChk++;
-                        };
-                    }
-                    jsonArray = object.getJSONArray("vision");
-                    server_vision_no = jsonArray.getJSONObject(0).getString("vision_no");
-                    //-----------------------------------------取得目前版本----------------------------------
-                    try {
-                        PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                        String myVersionName = packageInfo.versionName;
-                        //Log.v("vision_no",server_vision_no);
-                        if(!myVersionName.equals(server_vision_no)){ //若目前版本不是最新版本
-                            go2googleplay();
-                        }else{
-                            //---- ....... ----
+        if(isConnected()){ //檢查網路是否開啟
+            //---------------------------上傳使用者的裝置ID及新增15筆record的紀錄
+            NavigationAsyncTask myNavigationAsyncTask = new NavigationAsyncTask(new NavigationAsyncTask.TaskListener() {
+                @Override
+                public void onFinished(String result) {
+                    try{
+                        if(result==null){ //伺服器連線失敗跳維修頁
+                            Intent intent = new Intent();
+                            intent.setClass(NavigationActivity.this, MaintainActivity.class);
+                            startActivity(intent);
+                            finish();
+                            return;
                         }
-                    } catch (PackageManager.NameNotFoundException e) {
+                        JSONObject object = new JSONObject(result);
+                        JSONArray jsonArray = object.getJSONArray("result");
+
+                        for (int i = 0 ; i < jsonArray.length(); i++){
+                            getWorksheet.postRecordDone(jsonArray.getJSONObject(i).getString("record_done"),i);
+                            if((jsonArray.getJSONObject(i).getString("record_done").equals("1") )){
+                                doneChk++;
+                            };
+                        }
+                        jsonArray = object.getJSONArray("vision");
+                        server_vision_no = jsonArray.getJSONObject(0).getString("vision_no");
+                        //-----------------------------------------取得目前版本----------------------------------
+                        try {
+                            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                            String myVersionName = packageInfo.versionName;
+                            //Log.v("vision_no",server_vision_no);
+                            if(!myVersionName.equals(server_vision_no)){ //若目前版本不是最新版本
+                                go2googleplay();
+                            }else{
+                                //---- ....... ----
+                            }
+                        } catch (PackageManager.NameNotFoundException e) {
+                            //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
+                            WrongActivity mWrontAct = new WrongActivity();
+                            String witchWrongBlock = "版本型號出錯";
+
+                            ActivityManager activityManager=(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                            String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+
+                            mWrontAct.setError(e.toString(),witchWrongBlock,thisActivityName);
+
+                            Intent intent = new Intent();
+                            intent.setClass(NavigationActivity.this, WrongActivity.class);
+                            startActivity(intent);
+
+                            finish();
+                        }
+                        jsonArray = object.getJSONArray("userID");
+                        user_id = jsonArray.getJSONObject(0).getString("user_id");
+                        getWorksheet.postUser_id(user_id);
+                        jsonArray = object.getJSONArray("userDone");
+                        userDone = jsonArray.getJSONObject(0).getString("user_done");
+                        getWorksheet.postUserDone(userDone);
+                        //---------------------------跳轉頁面
+                        if(userDone.equals("1")){//跳轉至重新遊玩頁面
+                            mHandler.sendEmptyMessageDelayed(GOTO_RESET_ACTIVITY, 3000); //秒跳轉
+                        }else{
+                            if(doneChk >0) {
+                                mHandler.sendEmptyMessageDelayed(GOTO_LOADING_ACTIVITY, 3000); //秒跳轉
+                            }
+                            else{
+                                mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 3000); //秒跳轉
+                            }
+                        }
+
+                    }catch(Exception e){
                         //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
                         WrongActivity mWrontAct = new WrongActivity();
-                        String witchWrongBlock = "版本型號出錯";
+                        String witchWrongBlock = "updateUser data";
 
                         ActivityManager activityManager=(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
                         String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
@@ -117,57 +158,43 @@ public class NavigationActivity extends Activity {
 
                         finish();
                     }
-                    jsonArray = object.getJSONArray("userID");
-                    user_id = jsonArray.getJSONObject(0).getString("user_id");
-                    getWorksheet.postUser_id(user_id);
-                    jsonArray = object.getJSONArray("userDone");
-                    userDone = jsonArray.getJSONObject(0).getString("user_done");
-                    getWorksheet.postUserDone(userDone);
-                    //---------------------------跳轉頁面
-                    if(userDone.equals("1")){//跳轉至重新遊玩頁面
-                        mHandler.sendEmptyMessageDelayed(GOTO_RESET_ACTIVITY, 3000); //秒跳轉
-                    }else{
-                        if(doneChk >0) {
-                            mHandler.sendEmptyMessageDelayed(GOTO_LOADING_ACTIVITY, 3000); //秒跳轉
-                        }
-                        else{
-                            mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 3000); //秒跳轉
-                        }
+                }
+            });
+
+            if(!myNavigationAsyncTask.isCancelled()) {
+                if(getId==null){
+                    getId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID); //取得Android ID
+                    //Log.e("getId :" , getId);
+                    if(getId.equals("9774d56d682e549c")){
+                        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE); //取得Device ID
+                        getId = tm.getDeviceId();
                     }
-
-                }catch(Exception e){
-                    //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
-                    WrongActivity mWrontAct = new WrongActivity();
-                    String witchWrongBlock = "updateUser data";
-
-                    ActivityManager activityManager=(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-                    String thisActivityName=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
-
-                    mWrontAct.setError(e.toString(),witchWrongBlock,thisActivityName);
-
+                }
+            } else {
+                Toast.makeText(context, "The connection has been canceled", Toast.LENGTH_SHORT).show();
+            }
+            myNavigationAsyncTask.execute(Common.updateUserUrl, getId, deviceName); //第一個參數是Common的網址,第二個是要上傳的值
+            //---------------------------上傳結束
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.notice_network));
+            builder.setCancelable(false);
+            builder.setPositiveButton(getString(R.string.notice_sure), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
                     Intent intent = new Intent();
-                    intent.setClass(NavigationActivity.this, WrongActivity.class);
+                    intent.setClass(NavigationActivity.this, NavigationActivity.class);
                     startActivity(intent);
-
                     finish();
                 }
-            }
-        });
-
-        if(!myNavigationAsyncTask.isCancelled()) {
-            if(getId==null){
-                getId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID); //取得Android ID
-                //Log.e("getId :" , getId);
-                if(getId.equals("9774d56d682e549c")){
-                    TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE); //取得Device ID
-                    getId = tm.getDeviceId();
+            });
+            builder.setNegativeButton(getString(R.string.maintain_btn), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    finish();
                 }
-            }
-        } else {
-            Toast.makeText(context, "The connection has been canceled", Toast.LENGTH_SHORT).show();
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
-        myNavigationAsyncTask.execute(Common.updateUserUrl, getId, deviceName); //第一個參數是Common的網址,第二個是要上傳的值
-        //---------------------------上傳結束
 
     }
 
@@ -233,5 +260,15 @@ public class NavigationActivity extends Activity {
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    //-------------------------------------------------檢查網路是否開啟-----------------------------------------
+    private boolean isConnected(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE); //網路
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
     }
 }
