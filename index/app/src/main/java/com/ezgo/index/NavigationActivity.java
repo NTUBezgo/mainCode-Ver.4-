@@ -98,6 +98,13 @@ public class NavigationActivity extends Activity {
                         }
                         jsonArray = object.getJSONArray("vision");
                         server_vision_no = jsonArray.getJSONObject(0).getString("vision_no");
+                        jsonArray = object.getJSONArray("userID");
+                        user_id = jsonArray.getJSONObject(0).getString("user_id");
+                        getWorksheet.postUser_id(user_id);
+                        jsonArray = object.getJSONArray("userDone");
+                        userDone = jsonArray.getJSONObject(0).getString("user_done");
+                        getWorksheet.postUserDone(userDone);
+
                         //-----------------------------------------取得目前版本----------------------------------
                         try {
                             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -106,7 +113,17 @@ public class NavigationActivity extends Activity {
                             if(!myVersionName.equals(server_vision_no)){ //若目前版本不是最新版本
                                 go2googleplay();
                             }else{
-                                //---- ....... ----
+                                //---------------------------跳轉頁面
+                                if(userDone.equals("1")){//跳轉至重新遊玩頁面
+                                    mHandler.sendEmptyMessageDelayed(GOTO_RESET_ACTIVITY, 3000); //秒跳轉
+                                }else{
+                                    if(doneChk >0) {
+                                        mHandler.sendEmptyMessageDelayed(GOTO_LOADING_ACTIVITY, 3000); //秒跳轉
+                                    }
+                                    else{
+                                        mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 3000); //秒跳轉
+                                    }
+                                }
                             }
                         } catch (PackageManager.NameNotFoundException e) {
                             //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
@@ -124,24 +141,6 @@ public class NavigationActivity extends Activity {
 
                             finish();
                         }
-                        jsonArray = object.getJSONArray("userID");
-                        user_id = jsonArray.getJSONObject(0).getString("user_id");
-                        getWorksheet.postUser_id(user_id);
-                        jsonArray = object.getJSONArray("userDone");
-                        userDone = jsonArray.getJSONObject(0).getString("user_done");
-                        getWorksheet.postUserDone(userDone);
-                        //---------------------------跳轉頁面
-                        if(userDone.equals("1")){//跳轉至重新遊玩頁面
-                            mHandler.sendEmptyMessageDelayed(GOTO_RESET_ACTIVITY, 3000); //秒跳轉
-                        }else{
-                            if(doneChk >0) {
-                                mHandler.sendEmptyMessageDelayed(GOTO_LOADING_ACTIVITY, 3000); //秒跳轉
-                            }
-                            else{
-                                mHandler.sendEmptyMessageDelayed(GOTO_GUIDE_ACTIVITY, 3000); //秒跳轉
-                            }
-                        }
-
                     }catch(Exception e){
                         //在witchBlock寫入這裡是哪個測試區塊的標示 如：這裡是上傳使用者資料的區塊
                         WrongActivity mWrontAct = new WrongActivity();
